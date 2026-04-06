@@ -1,0 +1,68 @@
+{
+  "imageId": "product-reg-customs-info",
+  "annotations": [
+    {
+      "id": "customs-name",
+      "type": "box",
+      "number": 1,
+      "x": 2.0,
+      "y": 11.5,
+      "width": 27.0,
+      "height": 11.0,
+      "strokeColor": "#DC2626",
+      "label": {
+        "ko": "통관상품명 — 영문 대문자로 입력 필수"
+      }
+    },
+    {
+      "id": "hs-hsn",
+      "type": "box",
+      "number": 2,
+      "x": 2.0,
+      "y": 27.0,
+      "width": 96.0,
+      "height": 12.0,
+      "strokeColor": "#2563EB",
+      "label": {
+        "ko": "HS/HSN — 대분류 → 중분류 → 소분류 순서로 선택하거나 직접 입력"
+      }
+    },
+    {
+      "id": "china-name",
+      "type": "box",
+      "number": 3,
+      "x": 2.0,
+      "y": 60.0,
+      "width": 50.0,
+      "height": 11.5,
+      "strokeColor": "#7C3AED",
+      "label": {
+        "ko": "통관 상품명(zh-cn) — 중국 향 배송 시 중국어 품목명 입력"
+      }
+    },
+    {
+      "id": "gst-vat-eori",
+      "type": "box",
+      "number": 4,
+      "x": 2.0,
+      "y": 77.5,
+      "width": 72.0,
+      "height": 13.0,
+      "strokeColor": "#D97706",
+      "label": {
+        "ko": "GST 세율, VAT ID, EORI — 해당 국가 발송 시 입력"
+      }
+    },
+    {
+      "id": "register-button",
+      "type": "marker",
+      "number": 5,
+      "x": 50.5,
+      "y": 94.5,
+      "markerRadius": 1.8,
+      "label": {
+        "ko": "등록 버튼 — 클릭 시 상품 등록 완료"
+      }
+    }
+  ]
+}

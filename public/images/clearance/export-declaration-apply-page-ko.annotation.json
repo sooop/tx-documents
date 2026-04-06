@@ -1,0 +1,31 @@
+{
+  "imageId": "export-declaration-apply-page",
+  "annotations": [
+    {
+      "id": "customs-code-input",
+      "type": "box",
+      "number": 1,
+      "x": 1.5,
+      "y": 47.5,
+      "width": 97.0,
+      "height": 14.5,
+      "strokeColor": "#FF4444",
+      "label": {
+        "ko": "사업자 통관 고유부호 입력 (필수)"
+      }
+    },
+    {
+      "id": "submit-button",
+      "type": "box",
+      "number": 2,
+      "x": 1.5,
+      "y": 91.5,
+      "width": 97.0,
+      "height": 8.0,
+      "strokeColor": "#FF4444",
+      "label": {
+        "ko": "정식 수출 신고 서비스 신청 버튼"
+      }
+    }
+  ]
+}

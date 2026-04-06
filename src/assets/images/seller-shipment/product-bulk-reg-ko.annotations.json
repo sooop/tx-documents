@@ -1,0 +1,57 @@
+{
+  "imageId": "product-bulk-reg",
+  "annotations": [
+    {
+      "id": "xlsx-download",
+      "type": "box",
+      "number": 1,
+      "x": 79.0,
+      "y": 13.0,
+      "width": 20.0,
+      "height": 8.5,
+      "strokeColor": "#2563EB",
+      "label": {
+        "ko": "XLSX 포맷 다운로드 — 엑셀 양식 다운로드"
+      }
+    },
+    {
+      "id": "new-format-notice",
+      "type": "box",
+      "number": 2,
+      "x": 2.0,
+      "y": 21.5,
+      "width": 76.0,
+      "height": 8.0,
+      "strokeColor": "#D97706",
+      "label": {
+        "ko": "신규 포맷 안내 (24.7.11 적용) — 칼럼명 코드·괄호 삭제 금지"
+      }
+    },
+    {
+      "id": "mode-dropdown",
+      "type": "box",
+      "number": 3,
+      "x": 2.5,
+      "y": 55.0,
+      "width": 15.0,
+      "height": 10.0,
+      "strokeColor": "#16A34A",
+      "label": {
+        "ko": "처리 모드 선택 — 등록 또는 수정"
+      }
+    },
+    {
+      "id": "file-select",
+      "type": "box",
+      "number": 4,
+      "x": 80.0,
+      "y": 55.0,
+      "width": 18.0,
+      "height": 10.0,
+      "strokeColor": "#16A34A",
+      "label": {
+        "ko": "파일 선택하기 — 작성한 엑셀 파일 업로드"
+      }
+    }
+  ]
+}

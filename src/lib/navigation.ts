@@ -1,6 +1,7 @@
 export interface NavItem {
   slug: string;
   title: string;
+  devOnly?: boolean;
   children?: NavItem[];
 }
 
@@ -8,11 +9,20 @@ const navModules = import.meta.glob<NavItem[]>('/src/content/docs/**/_nav.json',
   import: 'default',
 });
 
+function filterDevItems(items: NavItem[]): NavItem[] {
+  return items
+    .filter((item) => !item.devOnly || import.meta.env.DEV)
+    .map((item) =>
+      item.children ? { ...item, children: filterDevItems(item.children) } : item,
+    );
+}
+
 export async function getNavTree(lang: string): Promise<NavItem[]> {
   const key = `/src/content/docs/${lang}/_nav.json`;
   const loader = navModules[key];
   if (!loader) return [];
-  return await loader();
+  const items = await loader();
+  return filterDevItems(items);
 }
 
 export interface BreadcrumbItem {

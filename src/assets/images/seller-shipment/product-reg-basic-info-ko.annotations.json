@@ -1,0 +1,68 @@
+{
+  "imageId": "product-reg-basic-info",
+  "annotations": [
+    {
+      "id": "tab-product-info",
+      "type": "box",
+      "number": 1,
+      "x": 33.0,
+      "y": 1.5,
+      "width": 14.0,
+      "height": 6.5,
+      "strokeColor": "#2563EB",
+      "label": {
+        "ko": "상품정보 탭 (현재 선택됨)"
+      }
+    },
+    {
+      "id": "product-name",
+      "type": "box",
+      "number": 2,
+      "x": 1.5,
+      "y": 29.5,
+      "width": 57.0,
+      "height": 14.0,
+      "strokeColor": "#DC2626",
+      "label": {
+        "ko": "상품명 (필수, 3자 이상 입력)"
+      }
+    },
+    {
+      "id": "weight-size",
+      "type": "box",
+      "number": 3,
+      "x": 1.5,
+      "y": 55.5,
+      "width": 75.0,
+      "height": 14.5,
+      "strokeColor": "#16A34A",
+      "label": {
+        "ko": "중량(kg)과 크기(cm) — 정확한 수치 입력 필요"
+      }
+    },
+    {
+      "id": "battery-sensitive",
+      "type": "box",
+      "number": 4,
+      "x": 1.5,
+      "y": 72.0,
+      "width": 75.0,
+      "height": 14.0,
+      "strokeColor": "#D97706",
+      "label": {
+        "ko": "배터리 포함 여부 및 민감상품 여부 — 정확히 선택"
+      }
+    },
+    {
+      "id": "add-button",
+      "type": "marker",
+      "number": 5,
+      "x": 57.5,
+      "y": 94.5,
+      "markerRadius": 1.8,
+      "label": {
+        "ko": "추가 버튼으로 상품 저장"
+      }
+    }
+  ]
+}

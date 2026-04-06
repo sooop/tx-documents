@@ -1,5 +1,5 @@
 [
-  { "slug": "authoring-guide", "title": "콘텐츠 작성 가이드" },
+  { "slug": "authoring-guide", "title": "콘텐츠 작성 가이드", "devOnly": true },
   { "slug": "intro", "title": "스마트십이란?" },
   { "slug": "signup", "title": "회원가입" },
   { "slug": "logistics", "title": "물류 운영 방식" },
@@ -7,7 +7,7 @@
     "slug": "settings",
     "title": "주문 등록 전 필수 설정",
     "children": [
-      { "slug": "settings/charge-shipping", "title": "배송비 충전하기" },
+      { "slug": "settings/topup-txmoney", "title": "배송비 충전하기" },
       { "slug": "settings/export-declaration", "title": "수출신고 방식 선택하기" },
       { "slug": "settings/shipping-fee-weight", "title": "배송비 및 무게" }
     ]
@@ -36,6 +36,7 @@
     "title": "판매자 출고 주문 및 발송 가이드",
     "children": [
       { "slug": "seller-shipment/basics", "title": "기본 안내" },
+      { "slug": "seller-shipment/register-product", "title": "상품 등록하기" },
       { "slug": "seller-shipment/gift-settings", "title": "판매자 출고 사은품 설정" },
       { "slug": "seller-shipment/copy-order", "title": "발송처리된 주문 건 복사하기" },
       { "slug": "seller-shipment/split-package", "title": "합포장건 분리하기" },
@@ -95,6 +96,13 @@
     ]
   },
   { "slug": "faq", "title": "자주 묻는 질문" },
+  {
+    "slug": "clearance",
+    "title": "통관",
+    "children": [
+      { "slug": "clearance/export-declaration-type", "title": "수출신고 방식 선택하기" }
+    ]
+  },
   {
     "slug": "country-notes",
     "title": "국가별 유의사항",

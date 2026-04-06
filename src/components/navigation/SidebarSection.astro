@@ -14,24 +14,71 @@ const isActive = currentSlug === item.slug;
 const isParentOfActive = currentSlug.startsWith(item.slug + '/');
 const hasChildren = item.children && item.children.length > 0;
 const href = `/${lang}/${item.slug}/`;
+const isOpen = isActive || isParentOfActive;
 ---
 
 <li class:list={['sidebar-item', { active: isActive, expanded: isParentOfActive }]}>
-  <a href={href} class:list={['sidebar-link', `depth-${depth}`, { current: isActive }]}>
-    {item.title}
-  </a>
+  <div class="sidebar-row">
+    <a href={href} class:list={['sidebar-link', `depth-${depth}`, { current: isActive }]}>
+      {item.title}
+    </a>
+    {
+      hasChildren && (
+        <button
+          class:list={['sidebar-toggle', { open: isOpen }]}
+          aria-expanded={String(isOpen)}
+          aria-label="하위 항목 펼치기/접기"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+      )
+    }
+  </div>
   {
-    hasChildren && (isActive || isParentOfActive) && (
-      <ul class="sidebar-children">
+    hasChildren && (
+      <ul
+        class:list={['sidebar-children', { 'sidebar-children--hidden': !isOpen }]}
+        data-sidebar-children
+      >
         {item.children!.map((child) => (
-          <Astro.self
-            item={child}
-            currentSlug={currentSlug}
-            lang={lang}
-            depth={depth + 1}
-          />
+          <Astro.self item={child} currentSlug={currentSlug} lang={lang} depth={depth + 1} />
         ))}
       </ul>
     )
   }
 </li>
+
+<script>
+  function initSidebarToggles() {
+    document.querySelectorAll<HTMLButtonElement>('.sidebar-toggle').forEach((toggle) => {
+      // 이미 리스너가 등록된 버튼은 건너뜀
+      if (toggle.dataset.initialized) return;
+      toggle.dataset.initialized = 'true';
+
+      toggle.addEventListener('click', () => {
+        const li = toggle.closest('.sidebar-item');
+        const children = li?.querySelector<HTMLElement>('[data-sidebar-children]');
+        const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+        toggle.setAttribute('aria-expanded', String(!isOpen));
+        toggle.classList.toggle('open', !isOpen);
+        children?.classList.toggle('sidebar-children--hidden', isOpen);
+      });
+    });
+  }
+
+  initSidebarToggles();
+  document.addEventListener('astro:page-load', initSidebarToggles);
+</script>

@@ -198,6 +198,14 @@
         marker-end="url(#arrowhead)"
         vector-effect="non-scaling-stroke"
       />
+    {:else if ann.type === 'line'}
+      <line
+        x1={px(ann.fromX, naturalWidth)} y1={px(ann.fromY, naturalHeight)}
+        x2={px(ann.toX, naturalWidth)} y2={px(ann.toY, naturalHeight)}
+        stroke={ann.strokeColor ?? DEFAULT_COLOR}
+        stroke-width={ann.strokeWidth ?? ARROW_STROKE_WIDTH}
+        vector-effect="non-scaling-stroke"
+      />
     {/if}
   {/each}
 {/snippet}
@@ -206,19 +214,22 @@
   /* 공통 */
   .annotated-image {
     margin: 1.5rem 0;
+    text-align: center;
   }
 
   .image-container {
     position: relative;
-    display: block;
-    width: 100%;
+    display: inline-block;
+    max-width: 100%;
     line-height: 0;
   }
 
   .image-container img {
-    width: 100%;
-    height: auto;
     display: block;
+    max-width: 100%;
+    max-height: 500px;
+    width: auto;
+    height: auto;
   }
 
   .annotation-overlay {
@@ -297,13 +308,14 @@
   }
 
   .modal-image-wrap .image-container {
-    width: auto;
-    min-width: 100%;
+    display: inline-block;
+    max-width: 100%;
   }
 
   .modal-image-wrap img {
     width: auto;
     max-width: 100%;
+    max-height: 80vh;
     height: auto;
     display: block;
   }

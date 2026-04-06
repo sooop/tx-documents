@@ -1,6 +1,6 @@
-import type { Lang } from './config';
+export type Lang = string;
 
-type LocalizedString = Partial<Record<Lang, string>>;
+export type LocalizedString = Partial<Record<Lang, string>>;
 
 export interface BoxAnnotation {
   id: string;
@@ -55,3 +55,26 @@ export interface AnnotationFile {
   imageId: string;
   annotations: Annotation[];
 }
+
+export type ToolMode = 'select' | 'marker' | 'box' | 'arrow' | 'line';
+
+export interface ImageEntry {
+  section: string;
+  filename: string;
+  name: string;
+  lang: string;
+}
+
+export interface CurrentImage {
+  section: string;
+  name: string;
+  lang: string;
+  url: string;
+  naturalWidth: number;
+  naturalHeight: number;
+}
+
+// 리사이즈 핸들 위치 (box: 8개, arrow/line: 2개)
+export type HandleId =
+  | 'nw' | 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' // box
+  | 'from' | 'to'; // arrow/line

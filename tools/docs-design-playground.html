@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartShip Docs — Design Playground</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard Variable', -apple-system, sans-serif;
+    background: #0f0f0f;
+    color: #e0e0e0;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ─── Controls Panel ─── */
+  .controls {
+    background: #1a1a1a;
+    border-right: 1px solid #2a2a2a;
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+  .controls h1 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 20px;
+  }
+
+  .control-group {
+    margin-bottom: 24px;
+  }
+
+  .control-group-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .control-row label {
+    font-size: 13px;
+    color: #bbb;
+  }
+
+  .control-row input[type="range"] {
+    width: 120px;
+    accent-color: #0d7377;
+  }
+
+  .control-row input[type="color"] {
+    width: 32px;
+    height: 24px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+  }
+
+  .control-row .val {
+    font-size: 11px;
+    color: #888;
+    font-family: 'Fira Code', monospace;
+    min-width: 48px;
+    text-align: right;
+  }
+
+  select {
+    background: #222;
+    color: #ccc;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-family: inherit;
+  }
+
+  .toggle {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: #333;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .toggle.on { background: #0d7377; }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  .toggle.on::after { transform: translateX(16px); }
+
+  /* ─── Presets ─── */
+  .presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+
+  .preset-btn {
+    padding: 5px 10px;
+    font-size: 11px;
+    font-family: inherit;
+    font-weight: 600;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background: #1f1f1f;
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .preset-btn:hover { border-color: #0d7377; color: #fff; }
+  .preset-btn.active { background: #0d7377; border-color: #0d7377; color: #fff; }
+
+  /* ─── Right Panel ─── */
+  .right-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ─── Preview ─── */
+  .preview-wrap {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .preview-frame {
+    width: 100%;
+    max-width: 780px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+
+  .preview-content {
+    padding: 40px 48px;
+    font-size: 15px;
+    line-height: 1.75;
+    word-break: keep-all;
+  }
+
+  .preview-content h1 {
+    margin-bottom: 24px;
+    line-height: 1.25;
+  }
+
+  .preview-content h2 {
+    margin-bottom: 12px;
+    line-height: 1.35;
+  }
+
+  .preview-content h3 {
+    margin-bottom: 8px;
+  }
+
+  .preview-content p {
+    margin-bottom: 16px;
+  }
+
+  /* Tables in preview */
+  .preview-content table {
+    width: 100%;
+    margin: 20px 0;
+    font-size: 0.9em;
+    line-height: 1.6;
+  }
+
+  .preview-content th {
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.85em;
+    letter-spacing: 0.01em;
+  }
+
+  .preview-content td {
+    vertical-align: top;
+  }
+
+  /* Lists in preview */
+  .preview-content ol, .preview-content ul {
+    margin-bottom: 16px;
+  }
+
+  .preview-content li {
+    margin-bottom: 6px;
+  }
+
+  .preview-content ol {
+    list-style: none;
+    padding-left: 0;
+    counter-reset: plist;
+  }
+  .preview-content ol > li {
+    counter-increment: plist;
+    position: relative;
+    padding-left: 36px;
+  }
+  .preview-content ol > li::before {
+    content: counter(plist);
+    position: absolute;
+    left: 0;
+    top: 0.15em;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    font-weight: 700;
+    border-radius: 50%;
+    line-height: 1;
+  }
+
+  .preview-content ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .preview-content ul > li {
+    position: relative;
+    padding-left: 24px;
+  }
+  .preview-content ul > li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 0.65em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  /* Callout */
+  .callout {
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 0.93em;
+  }
+  .callout-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-size: 0.95em;
+  }
+
+  /* Collapse */
+  .collapse-demo {
+    margin: 16px 0;
+    overflow: hidden;
+  }
+  .collapse-demo summary {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95em;
+  }
+  .collapse-demo .collapse-body {
+    padding: 16px;
+  }
+
+  /* Inline code */
+  .preview-content code {
+    font-family: 'Fira Code', Consolas, monospace;
+    font-size: 0.88em;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* Link */
+  .preview-content a {
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.15s;
+  }
+
+  .preview-content strong {
+    font-weight: 700;
+  }
+
+  /* ─── Prompt Output ─── */
+  .prompt-panel {
+    border-top: 1px solid #2a2a2a;
+    background: #141414;
+    padding: 16px 24px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .prompt-text {
+    flex: 1;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #999;
+    font-family: 'Fira Code', monospace;
+    max-height: 100px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+  }
+
+  .copy-btn {
+    padding: 6px 14px;
+    font-size: 11px;
+    font-family: inherit;
+    font-weight: 600;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background: #1f1f1f;
+    color: #aaa;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { border-color: #0d7377; color: #fff; }
+  .copy-btn.copied { background: #0d7377; border-color: #0d7377; color: #fff; }
+</style>
+</head>
+<body>
+
+<!-- ═══ Controls ═══ -->
+<div class="controls">
+  <h1>Docs Design</h1>
+
+  <div class="presets">
+    <button class="preset-btn" onclick="applyPreset('current')">현재 (Before)</button>
+    <button class="preset-btn" onclick="applyPreset('warmTeal')">Warm Teal</button>
+    <button class="preset-btn" onclick="applyPreset('editorial')">Editorial</button>
+    <button class="preset-btn" onclick="applyPreset('ink')">Ink & Paper</button>
+    <button class="preset-btn" onclick="applyPreset('forest')">Forest</button>
+  </div>
+
+  <!-- Color -->
+  <div class="control-group">
+    <div class="control-group-title">색상 팔레트</div>
+    <div class="control-row">
+      <label>배경</label>
+      <input type="color" id="colorBg" oninput="s('colorBg',this.value)">
+    </div>
+    <div class="control-row">
+      <label>본문 텍스트</label>
+      <input type="color" id="colorText" oninput="s('colorText',this.value)">
+    </div>
+    <div class="control-row">
+      <label>보조 텍스트</label>
+      <input type="color" id="colorMuted" oninput="s('colorMuted',this.value)">
+    </div>
+    <div class="control-row">
+      <label>테두리</label>
+      <input type="color" id="colorBorder" oninput="s('colorBorder',this.value)">
+    </div>
+    <div class="control-row">
+      <label>Primary (링크)</label>
+      <input type="color" id="colorPrimary" oninput="s('colorPrimary',this.value)">
+    </div>
+    <div class="control-row">
+      <label>제목 악센트</label>
+      <input type="color" id="colorHeadingAccent" oninput="s('colorHeadingAccent',this.value)">
+    </div>
+    <div class="control-row">
+      <label>표 헤더 배경</label>
+      <input type="color" id="colorSurfaceWarm" oninput="s('colorSurfaceWarm',this.value)">
+    </div>
+    <div class="control-row">
+      <label>OL 마커</label>
+      <input type="color" id="colorOlMarker" oninput="s('colorOlMarker',this.value)">
+    </div>
+  </div>
+
+  <!-- Headings -->
+  <div class="control-group">
+    <div class="control-group-title">제목 (Headings)</div>
+    <div class="control-row">
+      <label>h2 좌측 바</label>
+      <div class="toggle" id="h2LeftBar" onclick="toggleCtrl('h2LeftBar')"></div>
+    </div>
+    <div class="control-row">
+      <label>h2 배경 그라디언트</label>
+      <div class="toggle" id="h2Gradient" onclick="toggleCtrl('h2Gradient')"></div>
+    </div>
+    <div class="control-row">
+      <label>h2 하단 보더</label>
+      <div class="toggle" id="h2BottomBorder" onclick="toggleCtrl('h2BottomBorder')"></div>
+    </div>
+    <div class="control-row">
+      <label>h2 상단 여백</label>
+      <input type="range" min="16" max="64" id="h2MarginTop" oninput="s('h2MarginTop',+this.value)">
+      <span class="val" id="h2MarginTop_v"></span>
+    </div>
+    <div class="control-row">
+      <label>h3 악센트 색상</label>
+      <div class="toggle" id="h3AccentColor" onclick="toggleCtrl('h3AccentColor')"></div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="control-group">
+    <div class="control-group-title">표 (Table)</div>
+    <div class="control-row">
+      <label>라운드 테두리</label>
+      <div class="toggle" id="tableRounded" onclick="toggleCtrl('tableRounded')"></div>
+    </div>
+    <div class="control-row">
+      <label>외곽 테두리</label>
+      <div class="toggle" id="tableOuterBorder" onclick="toggleCtrl('tableOuterBorder')"></div>
+    </div>
+    <div class="control-row">
+      <label>Zebra Striping</label>
+      <div class="toggle" id="tableZebra" onclick="toggleCtrl('tableZebra')"></div>
+    </div>
+    <div class="control-row">
+      <label>헤더 배경</label>
+      <div class="toggle" id="tableHeaderBg" onclick="toggleCtrl('tableHeaderBg')"></div>
+    </div>
+  </div>
+
+  <!-- Lists -->
+  <div class="control-group">
+    <div class="control-group-title">목록 (Lists)</div>
+    <div class="control-row">
+      <label>OL 원형 마커</label>
+      <div class="toggle" id="olCircleMarker" onclick="toggleCtrl('olCircleMarker')"></div>
+    </div>
+    <div class="control-row">
+      <label>UL 커스텀 불릿</label>
+      <div class="toggle" id="ulCustomBullet" onclick="toggleCtrl('ulCustomBullet')"></div>
+    </div>
+  </div>
+
+  <!-- Callout -->
+  <div class="control-group">
+    <div class="control-group-title">콜아웃 (Callout)</div>
+    <div class="control-row">
+      <label>Border Radius</label>
+      <input type="range" min="0" max="16" id="calloutRadius" oninput="s('calloutRadius',+this.value)">
+      <span class="val" id="calloutRadius_v"></span>
+    </div>
+  </div>
+
+  <!-- Typography -->
+  <div class="control-group">
+    <div class="control-group-title">타이포그래피</div>
+    <div class="control-row">
+      <label>본문 크기</label>
+      <input type="range" min="13" max="18" step="0.5" id="fontSize" oninput="s('fontSize',+this.value)">
+      <span class="val" id="fontSize_v"></span>
+    </div>
+    <div class="control-row">
+      <label>줄 높이</label>
+      <input type="range" min="1.4" max="2.0" step="0.05" id="lineHeight" oninput="s('lineHeight',+this.value)">
+      <span class="val" id="lineHeight_v"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Right Panel ═══ -->
+<div class="right-panel">
+  <div class="preview-wrap">
+    <div class="preview-frame">
+      <div class="preview-content" id="preview">
+
+        <h1>배송비 충전하기</h1>
+        <p>SmartShip에서 배송비를 결제하려면 <strong>TxMoney</strong>를 먼저 충전해야 합니다. 자세한 내용은 <a href="#">TxMoney 안내</a> 페이지를 참고하세요.</p>
+
+        <div class="callout callout-info">
+          <div class="callout-title">TxMoney란 무엇인가요?</div>
+          <div>스마트십 사용 시 발생하는 배송비와 기타 비용을 결제하기 위한 화폐입니다. 센터에 화물이 입고될 때 배송비가 자동으로 <code>TxMoney</code> 계좌에서 차감됩니다.</div>
+        </div>
+
+        <h2>수출 신고 종류 비교</h2>
+        <table>
+          <thead>
+            <tr><th>구분</th><th>목록통관</th><th>수출목록변환신고</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>수출 신고 방법</strong></td><td>간소화된 절차로 진행</td><td>정식 수출 신고 절차를 통해 진행</td></tr>
+            <tr><td><strong>신고 명의</strong></td><td>특송 업체명 (트랙스로지스)</td><td>개인 또는 기업</td></tr>
+            <tr><td><strong>관세 환급</strong></td><td>적용되지 않음</td><td>적용 가능</td></tr>
+            <tr><td><strong>재수입 면세</strong></td><td>적용되지 않음</td><td>적용 가능</td></tr>
+            <tr><td><strong>부가세 영세율</strong></td><td>해외 소포 수령증 대체 가능</td><td>적용 가능</td></tr>
+            <tr><td><strong>비용</strong></td><td>별도 비용 없음</td><td>화물 건별 비용 발생</td></tr>
+          </tbody>
+        </table>
+
+        <h2>충전 방법</h2>
+        <p>원하시는 충전 금액을 선택한 후, 아래 결제 방식 중 하나를 선택해주세요.</p>
+
+        <ol>
+          <li><strong>나의 TxMoney 계좌</strong> — 현재 보유 잔액과 미결제 청구 금액을 확인할 수 있습니다.</li>
+          <li><strong>충전 금액 입력</strong> — 원하는 금액을 직접 입력하거나, 버튼을 눌러 빠르게 금액을 추가할 수 있습니다.</li>
+          <li><strong>무통장입금 충전</strong> — 가상 계좌를 발급받아 입금하는 방식입니다.</li>
+          <li><strong>Paynow / 신용·직불 카드결제</strong> — 카드로 즉시 결제하는 방식입니다.</li>
+        </ol>
+
+        <h3>카드 결제 절차</h3>
+        <ul>
+          <li><strong>[모든 카드 결제]</strong> 버튼을 클릭합니다.</li>
+          <li>카드번호, 유효기간, <code>CVC</code> 코드를 입력합니다.</li>
+          <li>카드 소유자 이름을 입력 후 <strong>[결제]</strong> 버튼을 클릭합니다.</li>
+        </ul>
+
+        <details class="collapse-demo">
+          <summary>무통장입금 (가상 계좌)</summary>
+          <div class="collapse-body">
+            <p><strong>[가상 계좌로 입금]</strong> 버튼을 클릭합니다. 표기된 가상 계좌 번호로 입금하면 자동으로 충전이 완료됩니다.</p>
+          </div>
+        </details>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">카드 결제 유의 사항</div>
+          <div>[모든 카드 결제]는 싱가포르의 Stripe PG를 사용하고 있으며, 카드사 정책에 따라 <strong>해외 거래 수수료</strong>가 부과될 수 있습니다.</div>
+        </div>
+
+        <h2>충전 및 사용 안내</h2>
+        <ul>
+          <li>센터에 화물이 도착하면 배송비가 자동으로 계산되어 TxMoney 잔고에서 차감됩니다.</li>
+          <li>TxMoney를 충전한 후 일부 금액을 사용한 후에는 <strong>환불이 불가</strong>합니다.</li>
+          <li>스마트십 서비스 탈퇴 시에는 보유 잔고의 5% 공제 후 환불 받을 수 있습니다.</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">팁</div>
+          <div>입고 시 TxMoney 잔고가 부족하면 입고에 실패하며 처리가 지연될 수 있습니다. 충분한 잔고를 유지해주세요.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Prompt -->
+  <div class="prompt-panel">
+    <div class="prompt-text" id="promptOutput"></div>
+    <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">Copy</button>
+  </div>
+</div>
+
+<script>
+const PRESETS = {
+  current: {
+    colorBg: '#ffffff', colorText: '#1a1a2e', colorMuted: '#6b7280',
+    colorBorder: '#e5e7eb', colorPrimary: '#2563eb', colorHeadingAccent: '#1a1a2e',
+    colorSurfaceWarm: '#f9fafb', colorOlMarker: '#6b7280',
+    h2LeftBar: false, h2Gradient: false, h2BottomBorder: true,
+    h2MarginTop: 40, h3AccentColor: false,
+    tableRounded: false, tableOuterBorder: false, tableZebra: false, tableHeaderBg: true,
+    olCircleMarker: false, ulCustomBullet: false,
+    calloutRadius: 6, fontSize: 15, lineHeight: 1.7,
+  },
+  warmTeal: {
+    colorBg: '#fafaf8', colorText: '#1c1917', colorMuted: '#78716c',
+    colorBorder: '#e7e5e4', colorPrimary: '#0d7377', colorHeadingAccent: '#115e59',
+    colorSurfaceWarm: '#fef7ed', colorOlMarker: '#b45309',
+    h2LeftBar: true, h2Gradient: true, h2BottomBorder: false,
+    h2MarginTop: 56, h3AccentColor: true,
+    tableRounded: true, tableOuterBorder: true, tableZebra: true, tableHeaderBg: true,
+    olCircleMarker: true, ulCustomBullet: true,
+    calloutRadius: 8, fontSize: 15, lineHeight: 1.75,
+  },
+  editorial: {
+    colorBg: '#f8f7f4', colorText: '#222018', colorMuted: '#8a8578',
+    colorBorder: '#ddd9d0', colorPrimary: '#8b4513', colorHeadingAccent: '#5c3010',
+    colorSurfaceWarm: '#f3ede3', colorOlMarker: '#8b4513',
+    h2LeftBar: true, h2Gradient: false, h2BottomBorder: false,
+    h2MarginTop: 56, h3AccentColor: true,
+    tableRounded: true, tableOuterBorder: true, tableZebra: false, tableHeaderBg: true,
+    olCircleMarker: true, ulCustomBullet: true,
+    calloutRadius: 4, fontSize: 15, lineHeight: 1.8,
+  },
+  ink: {
+    colorBg: '#fcfcfa', colorText: '#111111', colorMuted: '#71717a',
+    colorBorder: '#d4d4d8', colorPrimary: '#18181b', colorHeadingAccent: '#18181b',
+    colorSurfaceWarm: '#f4f4f5', colorOlMarker: '#18181b',
+    h2LeftBar: false, h2Gradient: false, h2BottomBorder: true,
+    h2MarginTop: 48, h3AccentColor: false,
+    tableRounded: false, tableOuterBorder: true, tableZebra: true, tableHeaderBg: true,
+    olCircleMarker: true, ulCustomBullet: true,
+    calloutRadius: 2, fontSize: 15, lineHeight: 1.75,
+  },
+  forest: {
+    colorBg: '#f7f9f5', colorText: '#1a2e1a', colorMuted: '#5f7a5f',
+    colorBorder: '#d4e0d4', colorPrimary: '#2d6a4f', colorHeadingAccent: '#1b4332',
+    colorSurfaceWarm: '#edf5e8', colorOlMarker: '#40916c',
+    h2LeftBar: true, h2Gradient: true, h2BottomBorder: false,
+    h2MarginTop: 56, h3AccentColor: true,
+    tableRounded: true, tableOuterBorder: true, tableZebra: true, tableHeaderBg: true,
+    olCircleMarker: true, ulCustomBullet: true,
+    calloutRadius: 10, fontSize: 15, lineHeight: 1.75,
+  },
+};
+
+let state = { ...PRESETS.warmTeal };
+let activePreset = 'warmTeal';
+
+function s(key, val) {
+  state[key] = val;
+  activePreset = null;
+  syncUI();
+  render();
+}
+
+function toggleCtrl(key) {
+  state[key] = !state[key];
+  activePreset = null;
+  syncUI();
+  render();
+}
+
+function applyPreset(name) {
+  state = { ...PRESETS[name] };
+  activePreset = name;
+  syncUI();
+  render();
+}
+
+function syncUI() {
+  // Color inputs
+  ['colorBg','colorText','colorMuted','colorBorder','colorPrimary','colorHeadingAccent','colorSurfaceWarm','colorOlMarker'].forEach(k => {
+    document.getElementById(k).value = state[k];
+  });
+  // Toggles
+  ['h2LeftBar','h2Gradient','h2BottomBorder','h3AccentColor','tableRounded','tableOuterBorder','tableZebra','tableHeaderBg','olCircleMarker','ulCustomBullet'].forEach(k => {
+    document.getElementById(k).classList.toggle('on', state[k]);
+  });
+  // Ranges
+  ['h2MarginTop','calloutRadius','fontSize','lineHeight'].forEach(k => {
+    const el = document.getElementById(k);
+    el.value = state[k];
+    const vEl = document.getElementById(k + '_v');
+    if (k === 'lineHeight') vEl.textContent = state[k].toFixed(2);
+    else if (k === 'fontSize') vEl.textContent = state[k] + 'px';
+    else if (k === 'calloutRadius') vEl.textContent = state[k] + 'px';
+    else vEl.textContent = state[k] + 'px';
+  });
+  // Presets
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    const name = btn.getAttribute('onclick').match(/'(\w+)'/)[1];
+    btn.classList.toggle('active', name === activePreset);
+  });
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return {r,g,b};
+}
+
+function render() {
+  const p = document.getElementById('preview');
+  const {r,g,b} = hexToRgb(state.colorHeadingAccent);
+
+  // Base
+  p.style.background = state.colorBg;
+  p.style.color = state.colorText;
+  p.style.fontSize = state.fontSize + 'px';
+  p.style.lineHeight = state.lineHeight;
+  p.style.fontFamily = "'Pretendard Variable', 'Noto Sans KR', sans-serif";
+
+  // h1
+  const h1 = p.querySelector('h1');
+  h1.style.fontSize = '2.1rem';
+  h1.style.fontWeight = '800';
+  h1.style.letterSpacing = '-0.02em';
+  h1.style.color = state.colorText;
+
+  // h2
+  p.querySelectorAll('h2').forEach(h2 => {
+    h2.style.fontSize = '1.45rem';
+    h2.style.fontWeight = '700';
+    h2.style.marginTop = state.h2MarginTop + 'px';
+    h2.style.letterSpacing = '-0.01em';
+    h2.style.color = state.colorText;
+    h2.style.borderBottom = state.h2BottomBorder ? `1px solid ${state.colorBorder}` : 'none';
+    h2.style.paddingBottom = state.h2BottomBorder ? '5px' : '0';
+    h2.style.borderLeft = state.h2LeftBar ? `4px solid ${state.colorHeadingAccent}` : 'none';
+    h2.style.paddingLeft = state.h2LeftBar ? '14px' : '0';
+    h2.style.paddingTop = state.h2LeftBar ? '8px' : '0';
+    h2.style.paddingBottom = (state.h2LeftBar || state.h2BottomBorder) ? '8px' : '0';
+    h2.style.background = state.h2Gradient
+      ? `linear-gradient(90deg, rgba(${r},${g},${b},0.06) 0%, transparent 70%)`
+      : 'none';
+    h2.style.borderRadius = (state.h2LeftBar && state.h2Gradient) ? '0 6px 6px 0' : '0';
+  });
+
+  // h3
+  p.querySelectorAll('h3').forEach(h3 => {
+    h3.style.fontSize = '1.15rem';
+    h3.style.fontWeight = '700';
+    h3.style.marginTop = '24px';
+    h3.style.color = state.h3AccentColor ? state.colorHeadingAccent : state.colorText;
+  });
+
+  // Table
+  const table = p.querySelector('table');
+  table.style.borderCollapse = state.tableRounded ? 'separate' : 'collapse';
+  table.style.borderSpacing = '0';
+  table.style.border = state.tableOuterBorder ? `1px solid ${state.colorBorder}` : 'none';
+  table.style.borderRadius = state.tableRounded ? '8px' : '0';
+  table.style.overflow = state.tableRounded ? 'hidden' : 'visible';
+
+  table.querySelectorAll('th').forEach(th => {
+    th.style.padding = '10px 14px';
+    th.style.background = state.tableHeaderBg ? state.colorSurfaceWarm : 'transparent';
+    th.style.borderBottom = `2px solid ${state.colorBorder}`;
+    th.style.color = state.colorText;
+  });
+
+  table.querySelectorAll('td').forEach(td => {
+    td.style.padding = '10px 14px';
+    td.style.borderBottom = `1px solid ${state.colorBorder}`;
+  });
+
+  const rows = table.querySelectorAll('tbody tr');
+  rows.forEach((tr, i) => {
+    if (state.tableZebra) {
+      tr.style.background = i % 2 === 1 ? `${state.colorBg}` : '#ffffff';
+    } else {
+      tr.style.background = 'transparent';
+    }
+    // Remove bottom border from last row
+    if (i === rows.length - 1) {
+      tr.querySelectorAll('td').forEach(td => td.style.borderBottom = 'none');
+    }
+  });
+
+  // OL markers
+  p.querySelectorAll('ol > li').forEach(li => {
+    if (state.olCircleMarker) {
+      li.style.paddingLeft = '36px';
+    } else {
+      li.style.paddingLeft = '24px';
+    }
+  });
+
+  // Style injected via sheet
+  updateDynamicStyles();
+
+  // Links
+  p.querySelectorAll('a').forEach(a => {
+    a.style.color = state.colorPrimary;
+    a.style.textDecoration = 'underline';
+    const {r:pr,g:pg,b:pb} = hexToRgb(state.colorPrimary);
+    a.style.textDecorationColor = `rgba(${pr},${pg},${pb},0.3)`;
+  });
+
+  // Strong
+  p.querySelectorAll('strong').forEach(s => {
+    s.style.color = state.colorText;
+  });
+
+  // Inline code
+  p.querySelectorAll('code').forEach(c => {
+    c.style.background = state.colorBorder + '44';
+    c.style.border = `1px solid ${state.colorBorder}`;
+    c.style.color = state.colorMuted;
+  });
+
+  // Callouts
+  const infoCallout = p.querySelector('.callout-info');
+  infoCallout.style.borderLeft = '4px solid #3b82f6';
+  infoCallout.style.background = '#eff6ff';
+  infoCallout.style.borderRadius = `0 ${state.calloutRadius}px ${state.calloutRadius}px 0`;
+  infoCallout.querySelector('.callout-title').style.color = '#1e40af';
+
+  const warnCallout = p.querySelector('.callout-warning');
+  warnCallout.style.borderLeft = '4px solid #f59e0b';
+  warnCallout.style.background = '#fffbeb';
+  warnCallout.style.borderRadius = `0 ${state.calloutRadius}px ${state.calloutRadius}px 0`;
+  warnCallout.querySelector('.callout-title').style.color = '#92400e';
+
+  const tipCallout = p.querySelector('.callout-tip');
+  tipCallout.style.borderLeft = '4px solid #10b981';
+  tipCallout.style.background = '#ecfdf5';
+  tipCallout.style.borderRadius = `0 ${state.calloutRadius}px ${state.calloutRadius}px 0`;
+  tipCallout.querySelector('.callout-title').style.color = '#065f46';
+
+  // Collapse
+  const collapse = p.querySelector('.collapse-demo');
+  collapse.style.border = `1px solid ${state.colorBorder}`;
+  collapse.style.borderRadius = state.calloutRadius + 'px';
+  collapse.querySelector('summary').style.background = state.colorBg === '#ffffff' ? '#f9fafb' : mixColor(state.colorBg, '#000000', 0.03);
+
+  updatePrompt();
+}
+
+let dynamicSheet = null;
+function updateDynamicStyles() {
+  if (!dynamicSheet) {
+    const s = document.createElement('style');
+    document.head.appendChild(s);
+    dynamicSheet = s.sheet;
+  }
+  while (dynamicSheet.cssRules.length) dynamicSheet.deleteRule(0);
+
+  if (state.olCircleMarker) {
+    dynamicSheet.insertRule(`
+      .preview-content ol > li::before {
+        color: #fff !important;
+        background: ${state.colorOlMarker} !important;
+        width: 24px; height: 24px; font-size: 0.8em;
+      }
+    `, 0);
+  } else {
+    dynamicSheet.insertRule(`
+      .preview-content ol > li::before {
+        color: ${state.colorMuted} !important;
+        background: transparent !important;
+        width: auto; height: auto; font-size: 0.95em;
+      }
+    `, 0);
+  }
+
+  if (state.ulCustomBullet) {
+    dynamicSheet.insertRule(`
+      .preview-content ul > li::before {
+        background: ${state.colorHeadingAccent} !important;
+      }
+    `, 0);
+  } else {
+    dynamicSheet.insertRule(`
+      .preview-content ul > li::before {
+        background: ${state.colorMuted} !important;
+      }
+    `, 0);
+  }
+}
+
+function mixColor(hex1, hex2, amount) {
+  const c1 = hexToRgb(hex1), c2 = hexToRgb(hex2);
+  const r = Math.round(c1.r * (1-amount) + c2.r * amount);
+  const g = Math.round(c1.g * (1-amount) + c2.g * amount);
+  const b = Math.round(c1.b * (1-amount) + c2.b * amount);
+  return `rgb(${r},${g},${b})`;
+}
+
+function updatePrompt() {
+  const parts = [];
+  const cur = PRESETS.current;
+
+  // Color changes
+  if (state.colorBg !== cur.colorBg) parts.push(`배경색을 ${state.colorBg} (warm off-white)로 변경`);
+  if (state.colorPrimary !== cur.colorPrimary) parts.push(`primary 색상을 ${state.colorPrimary}로 변경`);
+  if (state.colorHeadingAccent !== cur.colorHeadingAccent) parts.push(`제목 악센트 색상: ${state.colorHeadingAccent}`);
+  if (state.colorSurfaceWarm !== cur.colorSurfaceWarm) parts.push(`표 헤더 배경: ${state.colorSurfaceWarm}`);
+  if (state.colorOlMarker !== cur.colorOlMarker) parts.push(`순서 목록 마커 색상: ${state.colorOlMarker}`);
+
+  // Headings
+  const h2Parts = [];
+  if (state.h2LeftBar) h2Parts.push('좌측 4px 악센트 바');
+  if (state.h2Gradient) h2Parts.push('배경 그라디언트 워시');
+  if (!state.h2BottomBorder && cur.h2BottomBorder) h2Parts.push('하단 보더 제거');
+  if (state.h2MarginTop !== cur.h2MarginTop) h2Parts.push(`상단 여백 ${state.h2MarginTop}px`);
+  if (h2Parts.length) parts.push(`h2: ${h2Parts.join(', ')}`);
+  if (state.h3AccentColor) parts.push('h3 텍스트에 악센트 색상 적용');
+
+  // Table
+  const tParts = [];
+  if (state.tableRounded) tParts.push('라운드 테두리 8px');
+  if (state.tableOuterBorder) tParts.push('외곽 보더');
+  if (state.tableZebra) tParts.push('zebra striping');
+  if (tParts.length) parts.push(`표: ${tParts.join(', ')}`);
+
+  // Lists
+  if (state.olCircleMarker) parts.push(`순서 목록에 ${state.colorOlMarker} 원형 넘버 마커`);
+  if (state.ulCustomBullet) parts.push('비순서 목록에 악센트 색상 불릿');
+
+  if (state.calloutRadius !== cur.calloutRadius) parts.push(`콜아웃 border-radius ${state.calloutRadius}px`);
+  if (state.fontSize !== cur.fontSize) parts.push(`본문 ${state.fontSize}px`);
+  if (state.lineHeight !== cur.lineHeight) parts.push(`줄 높이 ${state.lineHeight}`);
+
+  const prompt = parts.length
+    ? `다음 디자인을 docs 사이트에 적용해주세요:\n\n${parts.map(p => '- ' + p).join('\n')}`
+    : '(변경 사항 없음 — 현재 디자인과 동일합니다)';
+
+  document.getElementById('promptOutput').textContent = prompt;
+}
+
+function copyPrompt() {
+  const text = document.getElementById('promptOutput').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+// Init
+syncUI();
+render();
+</script>
+</body>
+</html>

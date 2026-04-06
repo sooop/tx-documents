@@ -1,0 +1,44 @@
+{
+  "imageId": "product-management",
+  "annotations": [
+    {
+      "id": "search-area",
+      "type": "box",
+      "number": 1,
+      "x": 1.5,
+      "y": 28.0,
+      "width": 70.0,
+      "height": 14.0,
+      "strokeColor": "#2563EB",
+      "label": {
+        "ko": "키워드 검색 — 상품코드, 상품명 등으로 검색"
+      }
+    },
+    {
+      "id": "download-upload-buttons",
+      "type": "box",
+      "number": 2,
+      "x": 72.0,
+      "y": 10.0,
+      "width": 27.0,
+      "height": 10.5,
+      "strokeColor": "#16A34A",
+      "label": {
+        "ko": "조회내용 다운로드 / 엑셀업로드 버튼"
+      }
+    },
+    {
+      "id": "product-list",
+      "type": "box",
+      "number": 3,
+      "x": 1.5,
+      "y": 55.0,
+      "width": 97.0,
+      "height": 25.0,
+      "strokeColor": "#7C3AED",
+      "label": {
+        "ko": "등록된 상품 목록 — 이미지, 상품코드, 상품명, 가격, 옵션명 표시"
+      }
+    }
+  ]
+}

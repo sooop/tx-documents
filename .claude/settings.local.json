@@ -7,7 +7,17 @@
       "Bash(cp D:/Projects/tx-documents-temp/.* D:/Projects/tx-documents/)",
       "Bash(npx astro:*)",
       "Bash(curl -s http://localhost:4321/ko/intro/)",
-      "Bash(curl -s http://localhost:4321/ko/authoring-guide/)"
+      "Bash(curl -s http://localhost:4321/ko/authoring-guide/)",
+      "Bash(npx vite:*)",
+      "Bash(curl -s http://localhost:5174/__api/images)",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s http://localhost:5175/__api/images)",
+      "Bash(curl -s http://localhost:5175/__api/annotations)",
+      "Bash(curl -s http://localhost:5175/__api/annotations/settings/topup-txmoney-page/ko)",
+      "Bash(pkill -f \"vite.*517\")",
+      "Bash(cp:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:4321/ko/settings/topup-txmoney)",
+      "Bash(start:*)"
     ]
   },
   "enabledPlugins": {
