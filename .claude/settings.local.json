@@ -17,7 +17,13 @@
       "Bash(pkill -f \"vite.*517\")",
       "Bash(cp:*)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:4321/ko/settings/topup-txmoney)",
-      "Bash(start:*)"
+      "Bash(start:*)",
+      "Bash(git commit:*)",
+      "Bash(mkdir -p D:/Projects/tx-documents/public/images/delivery)",
+      "Bash(cp \"D:/Projects/tx-documents/public/temp-image/Screenshot_1.png\" \"D:/Projects/tx-documents/public/images/delivery/delivery-status-page-ko.png\")",
+      "Bash(cp \"D:/Projects/tx-documents/public/temp-image/Screenshot_2.png\" \"D:/Projects/tx-documents/public/images/delivery/delivery-status-search-ko.png\")",
+      "Bash(cp \"D:/Projects/tx-documents/public/temp-image/Screenshot_3.png\" \"D:/Projects/tx-documents/public/images/delivery/delivery-status-summary-ko.png\")",
+      "Bash(cp \"D:/Projects/tx-documents/public/temp-image/Screenshot_4.png\" \"D:/Projects/tx-documents/public/images/delivery/delivery-status-list-ko.png\")"
     ]
   },
   "enabledPlugins": {

@@ -1,0 +1,87 @@
+---
+title: "Delivery Status"
+description: "Learn how to check the delivery status of dispatched orders and view tracking information and shipping fee details in SmartShip."
+---
+
+The Delivery Status menu lets you view the delivery status of all dispatched orders at a glance, and check tracking history and shipping fee details for each order.
+
+<Callout type="info" title="Menu Path">
+**Delivery Management → Delivery Status**
+</Callout>
+
+## Searching Delivery Orders
+
+<AnnotatedImage src="delivery-status-page" section="delivery" alt="Delivery Status full page" caption="Delivery Management > Delivery Status" />
+
+### Setting Search Filters
+
+<AnnotatedImage src="delivery-status-search" section="delivery" alt="Delivery order search filters" caption="Search Delivery Orders — Filter Conditions" />
+
+| Filter | Description |
+|--------|-------------|
+| Date basis | Select a date type (order registration date, dispatch date, etc.) and specify the search period. Use the 1W / 1M buttons for quick selection. |
+| Delivery order type | Filter by all orders or a specific order type |
+| Dispatch warehouse | Filter by the warehouse that dispatched the order |
+| Shipping route | Select origin country → destination country |
+| Sales site | Filter by connected sales channel |
+| Order registration method | Filter by all orders or registration method |
+| Other conditions | Filter orders where the tracking number changed after pre-assignment, or orders exceeding $150 |
+| Keyword search | Search by QSP NO., order number, recipient name, etc. |
+
+### Delivery Status Summary
+
+<AnnotatedImage src="delivery-status-summary" section="delivery" alt="Delivery status summary panel" caption="Delivery Status — Order Count by Status" />
+
+The summary panel at the top of the page shows the number of orders in each status at a glance.
+
+| Status | Description |
+|--------|-------------|
+| Total Dispatched | Total number of orders where delivery has started |
+| In Transit | Number of orders currently being delivered |
+| Delivered | Number of orders with final delivery completed |
+| Delivery Failed | Number of orders that failed delivery |
+| Return in Transit | Number of orders currently being returned |
+| Return Completed | Number of orders where return is complete |
+
+Click any status item to immediately filter the order list to that status. Click the **Check Daily Dispatch Count** button in the top right to view daily dispatch statistics.
+
+### Order List
+
+<AnnotatedImage src="delivery-status-list" section="delivery" alt="Delivery status order list table" caption="Delivery Status — Order List" />
+
+The order list displays key information including QSP NO., tracking number, delivery status, and origin/destination countries. Click the **Excel** button at the bottom of the list to download the results as an Excel file.
+
+---
+
+## Viewing Order Details
+
+Click an order in the list to open the details panel below. It consists of three tabs: **Tracking Info**, **Shipping Fee Info**, and **Product Info**.
+
+### Tracking Info
+
+<AnnotatedImage src="delivery-status-tracking" section="delivery" alt="Tracking info tab" caption="Tracking Info — Step-by-step Processing History" />
+
+View the step-by-step processing history from order receipt to final delivery, displayed in chronological order.
+
+| Column | Description |
+|--------|-------------|
+| Status | Processing stage name (Order Received, Arrived at Hub, Dispatched from Hub, Customs Started/Completed at Destination, Handed to Carrier, etc.) |
+| Date | Date and time when the status changed |
+| Description | Additional notes (e.g., scheduled departure airport) |
+| Courier | Local courier information (if applicable) |
+
+Click the **Delivery Details** button to go to the carrier's original tracking page.
+
+### Shipping Fee Info
+
+<AnnotatedImage src="delivery-status-fee" section="delivery" alt="Shipping fee info tab" caption="Shipping Fee Info — Itemized Cost Breakdown" />
+
+View the itemized breakdown of shipping fees charged for the order.
+
+| Column | Description |
+|--------|-------------|
+| Fee Item | Item name (base shipping fee, fuel surcharge, EDI transfer fee, etc.) |
+| Currency | Billing currency unit |
+| Amount | Charged amount per item |
+
+The **Total Fee** row at the bottom shows the total shipping cost.

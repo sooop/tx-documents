@@ -56,3 +56,60 @@ const {
     }
   </div>
 </BaseLayout>
+
+<script>
+  // .prose 내 일반 img(어노테이션 뷰어 외부)에 클릭 줌 기능 부여
+  const backdrop = document.createElement('div');
+  backdrop.setAttribute('role', 'dialog');
+  backdrop.setAttribute('aria-modal', 'true');
+  Object.assign(backdrop.style, {
+    display: 'none',
+    position: 'fixed',
+    inset: '0',
+    background: 'rgba(0,0,0,0.8)',
+    zIndex: '1000',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '1.5rem',
+    backdropFilter: 'blur(2px)',
+    cursor: 'zoom-out',
+  });
+
+  const modalImg = document.createElement('img');
+  Object.assign(modalImg.style, {
+    maxWidth: 'min(90vw, 1200px)',
+    maxHeight: '90vh',
+    objectFit: 'contain',
+    borderRadius: '8px',
+    boxShadow: '0 24px 60px rgba(0,0,0,0.6)',
+    border: 'none',
+    margin: '0',
+  });
+
+  backdrop.appendChild(modalImg);
+  document.body.appendChild(backdrop);
+
+  function openZoom(src: string, alt: string) {
+    modalImg.src = src;
+    modalImg.alt = alt;
+    backdrop.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeZoom() {
+    backdrop.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  backdrop.addEventListener('click', closeZoom);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeZoom();
+  });
+
+  // .annotated-image 안에 있는 img는 ImageAnnotationViewer가 처리하므로 제외
+  document.querySelectorAll<HTMLImageElement>('.prose img').forEach((img) => {
+    if (img.closest('.annotated-image')) return;
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', () => openZoom(img.src, img.alt));
+  });
+</script>

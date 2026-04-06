@@ -55,23 +55,13 @@ async function resolveAnnotations(): Promise<{ data: AnnotationFile; resolvedLan
 
 const annotationResult = await resolveAnnotations();
 const annotations = annotationResult?.data ?? null;
-const annotationLang = annotationResult?.resolvedLang ?? lang;
 ---
 
-{
-  annotations ? (
-    <ImageAnnotationViewer
-      client:visible
-      imageSrc={imagePath}
-      annotations={annotations.annotations}
-      alt={alt}
-      caption={caption}
-      lang={lang}
-    />
-  ) : (
-    <figure class="plain-image">
-      <img src={imagePath} alt={alt} loading="lazy" />
-      {caption && <figcaption>{caption}</figcaption>}
-    </figure>
-  )
-}
+<ImageAnnotationViewer
+  client:visible
+  imageSrc={imagePath}
+  annotations={annotations?.annotations ?? []}
+  alt={alt}
+  caption={caption}
+  lang={lang}
+/>

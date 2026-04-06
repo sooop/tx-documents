@@ -1,0 +1,138 @@
+---
+title: "Registering Products"
+description: "Before registering seller-dispatched orders, you must first register your products in SmartShip. This guide covers both individual registration and bulk Excel upload."
+---
+
+To register orders in SmartShip, you must first register the products you intend to ship. Two registration methods are supported: **individual registration** and **bulk Excel upload**.
+
+<Callout type="info" title="How to Access Product Registration">
+Go to **Product Management** from the top menu, then click the **+ Register** button to open the individual registration screen. For bulk registration, use the **Excel Upload** button on the same page.
+</Callout>
+
+## Individual Product Registration
+
+The product registration screen consists of three tabs: **Product Info**, **Overseas Customs Info**, and **Sales Channel Info**. Fill in each tab in order, then click the **Register** button.
+
+### Step 1: Product Info
+
+Enter basic item details in the **Product Info** tab.
+
+<AnnotatedImage src="product-reg-basic-info" section="seller-shipment" alt="Product Info tab — basic item information entry screen" caption="Product Info tab — basic item information" />
+
+| Field | Required | Description |
+|-------|:--------:|-------------|
+| TX Product Code | — | Auto-assigned by the system; not editable |
+| Seller-Defined Code | | Internal management code set by the seller |
+| Product Barcode | | Enter a barcode number and click **Confirm** to auto-fill existing product info |
+| Product Name | ✓ | Minimum 3 characters |
+| Option Name | | Enter if options such as color or size apply |
+| Price / Currency | | Unit price and currency (default: KRW) |
+| Weight (kg) | | Numeric value of 0.1 or greater |
+| Dimensions (cm × cm × cm) | | Width × Length × Height |
+| Country of Origin | | Select from dropdown |
+| Material | | Select material type or enter manually |
+| Contains Battery | | Select whether battery is included (default: Not included) |
+| Sensitive Product | | Select applicable / not applicable |
+| HS Code | | Enter customs classification code manually |
+
+### Step 2: Overseas Customs Info
+
+Enter the information required for export customs clearance in the **Overseas Customs Info** tab.
+
+<AnnotatedImage src="product-reg-customs-info" section="seller-shipment" alt="Overseas Customs Info tab entry screen" caption="Overseas Customs Info tab — product customs information" />
+
+| Field | Description |
+|-------|-------------|
+| Customs Product Name | English product name used for export declaration. Must be entered in **UPPERCASE** |
+| Product Barcode | Barcode number |
+| Sales Site URL | URL of the product listing page |
+| HS / HSN | Select from major → mid → sub category, or enter code directly |
+| Material | Material type and composition ratio |
+| Contains Battery | Whether battery is included |
+| Sensitive Product | Whether the product is a sensitive item |
+| Model Name / Brand | Product model name and brand |
+| Country of Origin / Manufacturer | Country of production and manufacturer name |
+| Customs Name (zh-cn) | Chinese product name for shipments to China |
+| Product Tariff Number | Tariff code for customs declaration |
+| GST Rate (%) | Enter for shipments to GST-applicable countries (e.g. Australia). Default: 0 |
+| VAT ID | VAT registration number |
+| EORI | EORI number for shipments to Europe |
+
+<Callout type="warning" title="Customs Product Name">
+The customs product name must be entered in **UPPERCASE ENGLISH**. Using Korean characters or special symbols may cause customs clearance errors.
+</Callout>
+
+### Step 3: Sales Channel Info
+
+In the **Sales Channel Info** tab, you can review and map product information for each connected sales channel.
+
+After filling in all information, click the **Register** button to complete product registration.
+
+---
+
+## Bulk Product Registration (Excel Upload)
+
+Use the Excel upload feature to register multiple products at once.
+
+<AnnotatedImage src="product-bulk-reg" section="seller-shipment" alt="Bulk shipping product registration — Excel upload screen" caption="Bulk shipping product registration screen" />
+
+### Download the Excel Template
+
+1. Click the **Download XLSX Format** button in the upper right of the bulk registration screen.
+2. Open the downloaded Excel file and fill in your product information.
+
+<Callout type="warning" title="New Template Notice (Applied from July 11, 2024)">
+The new template includes codes and parentheses in the column names. **Do not delete** these codes or parentheses — doing so will cause the upload to fail.
+</Callout>
+
+### Column Guide
+
+<Collapse title="View all column descriptions">
+
+| Column Name | Code | Description |
+|-------------|------|-------------|
+| Product Name | M00 | Product name (required) |
+| Shipping Quantity | M01 | Quantity per shipping unit |
+| Unit Price | M02 | Unit price of the product |
+| Currency | M03 | Currency code (e.g. KRW, USD, JPY) |
+| Subcategory | M04 | Product subcategory |
+| Option | M05 | Option details (color, size, etc.) |
+| Product URL | M06 | Sales page URL |
+| Material (Components) | M07 | Material and composition details |
+| HS/JAL | M08 | HS code or JAL code |
+| Overseas / Trade Code | — | Overseas trade code (HS Code, JAL, etc.) |
+| Brand | M10 | Brand name |
+| Shop Name | M11 | Sales site name |
+| Barcode | M12 | Product barcode number |
+| Small-packet Tax | M13 | Whether small-packet tax applies |
+| Small-packet Tax Code (suffix) | M14 | Suffix portion of small-packet tax code |
+| Seller-Defined Product Code | M15 | Internal management code |
+| GST Rate | M16 | GST rate (%) |
+
+</Collapse>
+
+### Uploading the File
+
+1. Select **Register** from the dropdown.
+2. Click the **Select File** button and choose your completed Excel file.
+3. After uploading, check the **Processing Result (ST0)** and **Detail Info (ST1)** columns to confirm the registration outcome.
+
+<Callout type="tip" title="If the Upload Fails">
+If the processing result (ST0) shows an error, check the detail info (ST1) to identify the cause, correct the relevant entries, and re-upload the file.
+</Callout>
+
+---
+
+## Viewing and Managing Registered Products
+
+After registration, go to **Product Management** to view the product list.
+
+<AnnotatedImage src="product-management" section="seller-shipment" alt="Product Management — product list screen" caption="Product Management — product list" />
+
+- **Keyword Search**: Filter by product code, product name, and other criteria
+- **Download List**: Export the current search results as an Excel file
+- **Excel Upload**: Use this to bulk-edit registered product information
+
+<Callout type="tip" title="Bulk Edit Product Info">
+To edit registered products, click **Excel Upload**, select **Edit** from the dropdown, download the current product data using the **Download Edit Format** button, make your changes, and re-upload the file.
+</Callout>

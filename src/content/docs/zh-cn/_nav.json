@@ -5,5 +5,12 @@
     "children": [
       { "slug": "settings/charge-shipping", "title": "充值运费余额" }
     ]
+  },
+  {
+    "slug": "delivery",
+    "title": "配送管理",
+    "children": [
+      { "slug": "delivery/status", "title": "配送状态" }
+    ]
   }
 ]

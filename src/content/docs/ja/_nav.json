@@ -5,5 +5,12 @@
     "children": [
       { "slug": "settings/charge-shipping", "title": "TxMoneyのチャージ" }
     ]
+  },
+  {
+    "slug": "delivery",
+    "title": "配送管理",
+    "children": [
+      { "slug": "delivery/status", "title": "配送状況" }
+    ]
   }
 ]

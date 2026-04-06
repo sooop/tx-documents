@@ -5,5 +5,12 @@
     "children": [
       { "slug": "settings/charge-shipping", "title": "Topping Up Your Balance" }
     ]
+  },
+  {
+    "slug": "delivery",
+    "title": "Delivery Management",
+    "children": [
+      { "slug": "delivery/status", "title": "Delivery Status" }
+    ]
   }
 ]
