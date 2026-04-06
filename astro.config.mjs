@@ -10,5 +10,10 @@ export default defineConfig({
   integrations: [mdx(), svelte()],
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      watch: {
+        usePolling: true,
+      },
+    },
   },
 });
