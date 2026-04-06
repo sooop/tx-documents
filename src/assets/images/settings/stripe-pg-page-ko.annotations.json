@@ -1,0 +1,47 @@
+{
+  "imageId": "stripe-pg-page",
+  "annotations": [
+    {
+      "id": "card-info",
+      "type": "box",
+      "number": 3,
+      "x": 4,
+      "y": 14,
+      "width": 89,
+      "height": 22,
+      "label": {
+        "ko": "카드번호, 유효기간(MM/YY), 보안 코드(CVC) 입력"
+      }
+    },
+    {
+      "id": "card-holder-country",
+      "type": "box",
+      "number": 4,
+      "x": 4,
+      "y": 37,
+      "width": 89,
+      "height": 28,
+      "label": {
+        "ko": "카드 소유자 이름 및 국가 입력"
+      }
+    },
+    {
+      "id": "flow-arrow",
+      "type": "arrow",
+      "fromX": 50,
+      "fromY": 67,
+      "toX": 50,
+      "toY": 88
+    },
+    {
+      "id": "pay-button",
+      "type": "marker",
+      "number": 5,
+      "x": 50,
+      "y": 94,
+      "label": {
+        "ko": "결제 버튼 클릭"
+      }
+    }
+  ]
+}

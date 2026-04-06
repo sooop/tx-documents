@@ -1,0 +1,586 @@
+---
+title: "콘텐츠 작성 가이드"
+description: "SmartShip Guide 문서를 작성하고 관리하는 방법을 안내합니다. 파일 구조, 이미지 삽입, 커스텀 컴포넌트 사용법 등을 포함합니다."
+---
+
+이 문서는 SmartShip Guide 사이트의 콘텐츠를 작성하는 방법을 설명합니다.
+문서 작성자가 알아야 할 파일 구조, 마크다운 문법, 이미지 관리, 커스텀 컴포넌트 사용법을 모두 다룹니다.
+
+## 전체 구조 한눈에 보기
+
+```
+src/content/docs/
+  └── {언어코드}/          ← ko, en, ja, zh-hk, zh-cn
+       ├── _nav.json       ← 이 언어의 사이드바 네비게이션 정의
+       ├── intro/
+       │   └── index.mdx   ← "스마트십이란?" 페이지
+       ├── signup/
+       │   └── index.mdx   ← "회원가입" 페이지
+       └── settings/
+           ├── index.mdx   ← "주문 등록 전 필수 설정" 목차 페이지
+           └── charge-shipping/
+               └── index.mdx  ← "배송비 충전하기" 하위 페이지
+```
+
+<Callout type="info" title="핵심 규칙">
+  모든 문서 파일의 이름은 반드시 `index.mdx`입니다.
+  파일이 위치한 **폴더 이름**이 곧 URL 경로가 됩니다.
+</Callout>
+
+## MDX 파일 작성하기
+
+### 새 문서 만들기
+
+새로운 문서를 추가하려면 다음 3단계를 따릅니다.
+
+**1단계: 폴더 생성**
+
+문서의 URL 경로에 해당하는 폴더를 만듭니다.
+
+예를 들어 `/ko/delivery/status/` 페이지를 만들려면:
+
+```
+src/content/docs/ko/delivery/status/
+```
+
+**2단계: index.mdx 파일 작성**
+
+해당 폴더 안에 `index.mdx` 파일을 만들고, 반드시 **frontmatter**(머리말)로 시작합니다:
+
+```mdx
+---
+title: "배송 현황"
+description: "배송 상태를 확인하고 관리하는 방법을 안내합니다."
+---
+
+여기부터 본문을 작성합니다.
+```
+
+**3단계: 네비게이션에 등록** (아래 "네비게이션 관리" 섹션 참고)
+
+### Frontmatter 항목
+
+파일 최상단의 `---` 블록 안에 작성하는 메타 정보입니다.
+
+| 항목 | 필수 | 설명 | 예시 |
+|------|------|------|------|
+| `title` | 필수 | 페이지 제목. 본문 최상단에 h1으로 표시됨 | `"배송 현황"` |
+| `description` | 선택 | 페이지 설명. 검색엔진 메타태그에 사용 | `"배송 상태를 확인하는 방법"` |
+| `draft` | 선택 | `true`로 설정하면 개발 서버에서만 보이고, 실제 빌드에서는 제외됨 | `true` |
+| `updatedAt` | 선택 | 마지막 수정일 | `2026-04-06` |
+
+<Collapse title="draft 기능 활용 예시">
+
+아직 작성 중인 문서를 미리 올려두고 싶을 때 사용합니다:
+
+```yaml
+---
+title: "새로운 기능 안내"
+draft: true
+---
+```
+
+- `npm run dev` (개발 서버) → 문서가 보이며, 상단에 "초안" 배지가 표시됩니다
+- `npm run build` (프로덕션 빌드) → 문서가 빌드에서 완전히 제외됩니다
+
+작성이 완료되면 `draft: true` 줄을 삭제하거나 `draft: false`로 변경합니다.
+
+</Collapse>
+
+### 마크다운 기본 문법
+
+MDX는 일반 마크다운 문법을 그대로 사용할 수 있습니다.
+
+```markdown
+## 제목 2 (h2)
+### 제목 3 (h3)
+
+일반 텍스트를 작성합니다. **굵게**, *기울임*, `인라인 코드`를 사용할 수 있습니다.
+
+- 순서 없는 목록
+- 두 번째 항목
+  - 들여쓰기 항목
+
+1. 순서 있는 목록
+2. 두 번째 항목
+
+[링크 텍스트](https://example.com)
+
+| 열1 | 열2 | 열3 |
+|-----|-----|-----|
+| 값1 | 값2 | 값3 |
+```
+
+<Callout type="warning" title="h1은 사용하지 마세요">
+  본문에서 `# 제목` (h1)은 사용하지 않습니다. h1은 frontmatter의 `title`로 자동 생성됩니다.
+  본문은 `## 제목` (h2)부터 시작하세요. h2와 h3는 오른쪽 목차(TOC)에 자동으로 표시됩니다.
+</Callout>
+
+---
+
+## 커스텀 컴포넌트
+
+일반 마크다운 외에, 문서에 특별한 UI 요소를 삽입할 수 있는 컴포넌트를 제공합니다.
+별도의 import 없이 바로 사용 가능합니다.
+
+### Callout (강조 박스)
+
+중요한 정보를 눈에 띄게 표시할 때 사용합니다. 4가지 유형이 있습니다.
+
+```mdx
+<Callout type="info" title="참고">
+  일반적인 안내 사항을 적습니다.
+</Callout>
+
+<Callout type="tip" title="팁">
+  유용한 팁이나 추천 사항을 적습니다.
+</Callout>
+
+<Callout type="warning" title="주의">
+  주의가 필요한 내용을 적습니다.
+</Callout>
+
+<Callout type="danger" title="중요">
+  반드시 지켜야 할 위험/필수 사항을 적습니다.
+</Callout>
+```
+
+**실제 렌더링 결과:**
+
+<Callout type="info" title="참고">
+  일반적인 안내 사항을 적습니다.
+</Callout>
+
+<Callout type="tip" title="팁">
+  유용한 팁이나 추천 사항을 적습니다.
+</Callout>
+
+<Callout type="warning" title="주의">
+  주의가 필요한 내용을 적습니다.
+</Callout>
+
+<Callout type="danger" title="중요">
+  반드시 지켜야 할 위험/필수 사항을 적습니다.
+</Callout>
+
+`title`은 생략할 수 있습니다. 생략하면 제목 없이 내용만 표시됩니다.
+
+### Collapse (접기/펼치기)
+
+긴 내용을 접어두고 필요할 때 펼쳐 볼 수 있게 합니다.
+
+```mdx
+<Collapse title="자세히 보기">
+  여기에 접힌 상태에서 보이지 않는 내용을 작성합니다.
+  마크다운 문법도 사용 가능합니다.
+
+  - 목록 항목 1
+  - 목록 항목 2
+</Collapse>
+```
+
+**실제 렌더링 결과:**
+
+<Collapse title="자세히 보기">
+  여기에 접힌 상태에서 보이지 않는 내용을 작성합니다.
+  마크다운 문법도 사용 가능합니다.
+
+  - 목록 항목 1
+  - 목록 항목 2
+</Collapse>
+
+처음부터 펼쳐진 상태로 보여주고 싶다면 `open` 속성을 추가합니다:
+
+```mdx
+<Collapse title="기본으로 펼쳐진 영역" open>
+  이 내용은 처음부터 보입니다.
+</Collapse>
+```
+
+### AnnotatedImage (주석이 달린 이미지)
+
+스크린샷 위에 번호, 박스, 화살표 등을 오버레이하여 표시합니다.
+자세한 사용법은 아래 "이미지 관리" 섹션에서 설명합니다.
+
+```mdx
+<AnnotatedImage src="이미지이름" section="섹션폴더" alt="대체 텍스트" />
+```
+
+---
+
+## 이미지 관리
+
+### 이미지 저장 위치
+
+이미지는 **용도에 따라** 두 곳에 저장합니다:
+
+```
+프로젝트 루트/
+├── public/images/{섹션}/        ← 실제 이미지 파일 (PNG, JPG 등)
+└── src/assets/images/{섹션}/    ← 어노테이션 메타데이터 (JSON)
+```
+
+| 파일 종류 | 저장 경로 | 예시 |
+|-----------|-----------|------|
+| 스크린샷 이미지 | `public/images/{섹션}/` | `public/images/settings/charge-screen-ko.png` |
+| 어노테이션 데이터 | `src/assets/images/{섹션}/` | `src/assets/images/settings/charge-screen-ko.annotations.json` |
+
+<Callout type="info" title="섹션 폴더 이름">
+  `{섹션}`은 문서의 최상위 분류명과 동일하게 맞추는 것을 권장합니다.
+  예: `settings`, `api-guide`, `fulfillment`, `delivery` 등
+</Callout>
+
+### 이미지 파일명 규칙
+
+이미지 파일명은 다음 형식을 따릅니다:
+
+```
+{이미지이름}-{언어코드}.{확장자}
+```
+
+| 구성 요소 | 설명 | 예시 |
+|-----------|------|------|
+| 이미지이름 | 화면이나 기능을 설명하는 이름 (영문 소문자, 하이픈 구분) | `charge-screen`, `order-list`, `api-settings` |
+| 언어코드 | `ko`, `en`, `ja`, `zh-hk`, `zh-cn` 중 하나 | `ko` |
+| 확장자 | `png` 권장 | `png` |
+
+**같은 화면의 언어별 스크린샷 예시:**
+
+```
+public/images/settings/
+  charge-screen-ko.png      ← 한국어 화면 캡처
+  charge-screen-en.png      ← 영어 화면 캡처
+  charge-screen-ja.png      ← 일본어 화면 캡처
+  charge-screen-zh-hk.png   ← 번체중문 화면 캡처
+  charge-screen-zh-cn.png   ← 간체중문 화면 캡처
+```
+
+<Callout type="tip" title="이미지 폴백">
+  모든 언어의 스크린샷을 준비하지 않아도 됩니다. 현재 언어 이미지가 없으면 자동으로 `en` → `ko` 순으로 폴백됩니다.
+  처음에는 한국어(`-ko`)만 준비해도 모든 언어 페이지에서 이미지가 표시됩니다.
+</Callout>
+
+### 방법 1: 단순 이미지 삽입
+
+어노테이션(번호, 박스 등)이 필요 없는 단순 이미지는 마크다운 문법을 사용합니다:
+
+```markdown
+![대체 텍스트](/images/settings/charge-screen-ko.png)
+```
+
+이 방식은 언어별로 수동 관리해야 합니다. 한국어 문서에는 `-ko` 이미지를, 영어 문서에는 `-en` 이미지를 직접 지정합니다.
+
+### 방법 2: AnnotatedImage 컴포넌트 사용
+
+스크린샷에 번호 마커, 영역 박스, 화살표를 오버레이하려면 `AnnotatedImage` 컴포넌트를 사용합니다.
+
+```mdx
+<AnnotatedImage src="charge-screen" section="settings" alt="TxMoney 충전 화면" />
+```
+
+| 속성 | 필수 | 설명 |
+|------|------|------|
+| `src` | 필수 | 이미지 이름 (언어코드와 확장자 제외) |
+| `section` | 필수 | 이미지가 저장된 섹션 폴더명 |
+| `alt` | 선택 | 이미지 대체 텍스트 (접근성용) |
+
+이 컴포넌트는 자동으로:
+
+1. 현재 페이지의 언어를 감지합니다
+2. `lang → en → ko` 순으로 이미지 파일을 찾아 첫 번째 존재하는 파일을 사용합니다
+3. 같은 순서로 어노테이션 JSON 파일을 찾아 오버레이합니다
+
+<Callout type="info" title="이미지와 어노테이션 폴백 규칙">
+  - 이미지: `{src}-{lang}.png` → `{src}-en.png` → `{src}-ko.png` 순으로 탐색
+  - 어노테이션: 이미지와 동일한 언어를 우선, 그 다음 `en` → `ko` 순으로 탐색
+  - 언어마다 화면 크기나 레이아웃이 다를 수 있으므로, 어노테이션도 언어별로 별도 작성 가능
+</Callout>
+
+### 어노테이션 JSON 작성법
+
+어노테이션 파일은 이미지 위에 그려질 시각적 요소들을 정의합니다. **파일명에 언어 코드를 포함**합니다.
+
+**파일 경로:** `src/assets/images/{섹션}/{이미지이름}-{언어}.annotations.json`
+
+```
+src/assets/images/settings/
+  charge-screen-ko.annotations.json   ← 한국어 이미지용 어노테이션
+  charge-screen-en.annotations.json   ← 영어 이미지용 어노테이션 (좌표가 다를 수 있음)
+  charge-screen-ja.annotations.json   ← 일본어 이미지용 어노테이션
+```
+
+**기본 구조:**
+
+```json
+{
+  "imageId": "charge-screen",
+  "annotations": [
+    { ... },
+    { ... }
+  ]
+}
+```
+
+<Callout type="tip" title="언어별 어노테이션이 필요한 경우">
+  동일한 화면이라도 언어마다 UI 텍스트 길이 차이로 레이아웃이 달라지거나, 강조할 영역의 위치가 다를 수 있습니다.
+  이 경우 언어별로 별도 어노테이션 파일을 만들어 각각 정확한 좌표를 지정합니다.
+  언어별 파일이 없으면 자동으로 `en` → `ko` 순으로 폴백됩니다.
+</Callout>
+
+#### 좌표 체계
+
+모든 좌표값은 **이미지 크기 대비 퍼센트(0~100)** 입니다.
+
+```
+(0, 0) ────────────────────── (100, 0)
+  │                              │
+  │         이미지 영역           │
+  │                              │
+  │     (50, 50) = 정중앙         │
+  │                              │
+(0, 100) ─────────────────── (100, 100)
+```
+
+퍼센트 기반이므로 이미지 해상도가 달라져도 어노테이션 위치가 유지됩니다.
+
+#### 유형 1: box (영역 박스)
+
+화면의 특정 영역을 사각형으로 강조합니다.
+
+```json
+{
+  "id": "ann-1",
+  "type": "box",
+  "number": 1,
+  "x": 10,
+  "y": 20,
+  "width": 30,
+  "height": 8,
+  "strokeColor": "#FF4444",
+  "label": {
+    "ko": "충전 금액 입력란",
+    "en": "Amount input field"
+  }
+}
+```
+
+| 필드 | 필수 | 설명 |
+|------|------|------|
+| `id` | 필수 | 고유 식별자 |
+| `type` | 필수 | `"box"` 고정 |
+| `x`, `y` | 필수 | 좌상단 모서리 위치 (%) |
+| `width`, `height` | 필수 | 박스 크기 (%) |
+| `number` | 선택 | 좌상단에 표시할 번호 |
+| `strokeColor` | 선택 | 테두리 색상 (기본: `#FF4444`) |
+| `label` | 선택 | 언어별 설명 텍스트 |
+
+#### 유형 2: marker (번호 마커)
+
+특정 지점에 동그란 번호 마커를 표시합니다.
+
+```json
+{
+  "id": "ann-2",
+  "type": "marker",
+  "number": 2,
+  "x": 75,
+  "y": 45
+}
+```
+
+| 필드 | 필수 | 설명 |
+|------|------|------|
+| `id` | 필수 | 고유 식별자 |
+| `type` | 필수 | `"marker"` 고정 |
+| `number` | 필수 | 마커에 표시할 번호 |
+| `x`, `y` | 필수 | 마커 중심 위치 (%) |
+| `markerRadius` | 선택 | 마커 크기 (%, 기본: 1.5) |
+| `label` | 선택 | 언어별 설명 텍스트 |
+
+#### 유형 3: arrow (화살표)
+
+시작점에서 끝점까지 화살표를 그립니다.
+
+```json
+{
+  "id": "ann-3",
+  "type": "arrow",
+  "fromX": 50,
+  "fromY": 30,
+  "toX": 70,
+  "toY": 15,
+  "strokeColor": "#FF4444"
+}
+```
+
+| 필드 | 필수 | 설명 |
+|------|------|------|
+| `id` | 필수 | 고유 식별자 |
+| `type` | 필수 | `"arrow"` 고정 |
+| `fromX`, `fromY` | 필수 | 시작점 위치 (%) |
+| `toX`, `toY` | 필수 | 끝점 (화살표 머리) 위치 (%) |
+| `strokeColor` | 선택 | 선 색상 (기본: `#FF4444`) |
+| `label` | 선택 | 언어별 설명 텍스트 |
+
+<Collapse title="완성된 어노테이션 JSON 예시">
+
+```json
+{
+  "imageId": "charge-screen",
+  "annotations": [
+    {
+      "id": "amt-input",
+      "type": "box",
+      "number": 1,
+      "x": 15,
+      "y": 35,
+      "width": 40,
+      "height": 6,
+      "strokeColor": "#FF4444",
+      "label": {
+        "ko": "충전 금액 입력란",
+        "en": "Amount input field",
+        "ja": "チャージ金額入力欄"
+      }
+    },
+    {
+      "id": "card-btn",
+      "type": "marker",
+      "number": 2,
+      "x": 35,
+      "y": 55,
+      "label": {
+        "ko": "신용카드 결제 버튼",
+        "en": "Credit card payment button",
+        "ja": "クレジットカード決済ボタン"
+      }
+    },
+    {
+      "id": "flow-arrow",
+      "type": "arrow",
+      "fromX": 35,
+      "fromY": 62,
+      "toX": 35,
+      "toY": 75,
+      "label": {
+        "ko": "결제 진행",
+        "en": "Proceed to payment"
+      }
+    }
+  ]
+}
+```
+
+</Collapse>
+
+### 어노테이션과 다국어
+
+어노테이션 JSON은 **모든 언어가 공유**합니다. 즉, 한 번만 작성하면 됩니다.
+
+- 좌표(`x`, `y` 등)는 화면 레이아웃이 동일하므로 언어별로 같습니다
+- `label` 필드에 각 언어별 텍스트를 넣으면, 현재 페이지 언어에 맞는 텍스트가 자동 표시됩니다
+- 이미지 파일만 언어별로 준비하면 (`-ko.png`, `-en.png`, ...) 나머지는 자동 처리됩니다
+
+---
+
+## 네비게이션 관리
+
+### `_nav.json` 파일
+
+각 언어 폴더의 루트에 `_nav.json` 파일이 있습니다. 이 파일이 좌측 사이드바의 메뉴 구조를 결정합니다.
+
+**파일 위치:** `src/content/docs/{언어}/_nav.json`
+
+**구조:**
+
+```json
+[
+  { "slug": "intro", "title": "스마트십이란?" },
+  { "slug": "signup", "title": "회원가입" },
+  {
+    "slug": "settings",
+    "title": "주문 등록 전 필수 설정",
+    "children": [
+      { "slug": "settings/charge-shipping", "title": "배송비 충전하기" },
+      { "slug": "settings/export-declaration", "title": "수출신고 방식 선택하기" }
+    ]
+  }
+]
+```
+
+| 필드 | 필수 | 설명 |
+|------|------|------|
+| `slug` | 필수 | 문서의 폴더 경로 (언어코드 제외). URL의 `/{언어}/` 뒤에 오는 부분 |
+| `title` | 필수 | 사이드바에 표시되는 제목 |
+| `children` | 선택 | 하위 메뉴 항목 배열. 같은 구조를 중첩할 수 있음 |
+
+### 새 문서를 네비게이션에 추가하기
+
+새 문서를 만들었다면, 반드시 `_nav.json`에도 해당 항목을 추가해야 사이드바에 나타납니다.
+
+예를 들어 `src/content/docs/ko/delivery/status/index.mdx`를 만들었다면:
+
+```json
+{
+  "slug": "delivery",
+  "title": "배송 관리",
+  "children": [
+    { "slug": "delivery/status", "title": "배송 현황" }
+  ]
+}
+```
+
+<Callout type="warning" title="주의">
+  `slug`는 `index.mdx` 파일이 위치한 폴더 경로와 정확히 일치해야 합니다.
+  언어코드(`ko/`, `en/` 등)는 slug에 포함하지 않습니다.
+</Callout>
+
+### 항목 순서
+
+`_nav.json` 배열에 나열된 순서가 곧 사이드바에 표시되는 순서입니다.
+순서를 바꾸려면 JSON 배열 내에서 항목의 위치를 변경하면 됩니다.
+
+---
+
+## 다국어 문서 작성
+
+### 다른 언어 문서 추가하기
+
+한국어 문서를 기준으로, 동일한 폴더 구조를 다른 언어 폴더에 만듭니다:
+
+```
+src/content/docs/
+  ├── ko/settings/charge-shipping/index.mdx   ← 한국어 원본
+  ├── en/settings/charge-shipping/index.mdx   ← 영어 번역본
+  ├── ja/settings/charge-shipping/index.mdx   ← 일본어 번역본
+  └── ...
+```
+
+각 언어의 `_nav.json`도 별도로 관리합니다:
+- `ko/_nav.json` — 한국어 제목
+- `en/_nav.json` — 영어 제목
+- `ja/_nav.json` — 일본어 제목
+
+폴더 구조(slug)는 모든 언어에서 동일하게 유지해야 언어 전환이 정상 동작합니다.
+
+### 언어 전환기
+
+페이지 상단의 언어 전환기는 현재 보고 있는 페이지와 동일한 경로의 다른 언어 페이지로 이동합니다.
+예: `/ko/settings/charge-shipping/` → `/en/settings/charge-shipping/`
+
+해당 언어의 페이지가 아직 없으면 404가 표시되므로, 번역이 완료된 후에 해당 언어의 `_nav.json`에 추가하는 것을 권장합니다.
+
+---
+
+## 작성 체크리스트
+
+새 문서를 추가할 때 다음 항목을 확인하세요:
+
+1. `src/content/docs/{언어}/{경로}/index.mdx` 파일을 생성했는가?
+2. frontmatter에 `title`을 작성했는가?
+3. `_nav.json`에 해당 문서의 `slug`과 `title`을 추가했는가?
+4. 이미지가 있다면 `public/images/{섹션}/{이름}-{lang}.png` 형식으로 저장했는가?
+5. 어노테이션이 필요하다면 `src/assets/images/{섹션}/{이름}-{lang}.annotations.json` 파일을 만들었는가?
+   - 모든 언어를 준비하지 않아도 됨 — 없는 경우 `en` → `ko` 순으로 자동 폴백됨
+   - 언어별로 레이아웃이 다르면 언어별 어노테이션 파일을 별도 작성
+6. `npm run dev`로 로컬에서 페이지가 정상 표시되는지 확인했는가?

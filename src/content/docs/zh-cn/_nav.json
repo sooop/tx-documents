@@ -1,0 +1,9 @@
+[
+  {
+    "slug": "settings",
+    "title": "必要设置",
+    "children": [
+      { "slug": "settings/charge-shipping", "title": "充值运费余额" }
+    ]
+  }
+]

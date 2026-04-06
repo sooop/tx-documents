@@ -1,0 +1,32 @@
+---
+import type { BreadcrumbItem } from '../../lib/navigation';
+import type { Lang } from '../../lib/config';
+
+interface Props {
+  items: BreadcrumbItem[];
+  lang: Lang;
+}
+
+const { items, lang } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <nav class="breadcrumbs" aria-label="breadcrumb">
+      <ol>
+        {items.map((item, i) => (
+          <li>
+            {i < items.length - 1 ? (
+              <>
+                <a href={`/${lang}/${item.slug}/`}>{item.title}</a>
+                <span class="separator" aria-hidden="true">/</span>
+              </>
+            ) : (
+              <span aria-current="page">{item.title}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}

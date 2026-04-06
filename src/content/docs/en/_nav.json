@@ -1,0 +1,9 @@
+[
+  {
+    "slug": "settings",
+    "title": "Required Settings",
+    "children": [
+      { "slug": "settings/charge-shipping", "title": "Topping Up Your Balance" }
+    ]
+  }
+]

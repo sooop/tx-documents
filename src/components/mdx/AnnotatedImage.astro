@@ -1,0 +1,77 @@
+---
+import { existsSync } from 'fs';
+import { join } from 'path';
+import ImageAnnotationViewer from '../svelte/ImageAnnotationViewer.svelte';
+import type { AnnotationFile } from '../../lib/annotations';
+
+interface Props {
+  src: string;
+  section: string;
+  alt?: string;
+  caption?: string;
+}
+
+const { src, section, alt = '', caption } = Astro.props;
+const lang = Astro.params.lang ?? 'ko';
+
+// ── 이미지 폴백: lang → en → ko ──────────────────────────────────────────
+const FALLBACK_LANGS = [lang, 'en', 'ko'];
+
+function resolveImagePath(section: string, src: string): { url: string; resolvedLang: string } {
+  for (const l of FALLBACK_LANGS) {
+    const file = join(process.cwd(), 'public', 'images', section, `${src}-${l}.png`);
+    if (existsSync(file)) {
+      return { url: `/images/${section}/${src}-${l}.png`, resolvedLang: l };
+    }
+  }
+  // 아무것도 없으면 원래 언어 경로를 반환 (404 허용)
+  return { url: `/images/${section}/${src}-${lang}.png`, resolvedLang: lang };
+}
+
+const { url: imagePath, resolvedLang: imageLang } = resolveImagePath(section, src);
+
+// ── 어노테이션 폴백: lang → en → ko ─────────────────────────────────────
+// 파일명 규칙: {name}-{lang}.annotations.json
+const annotationModules = import.meta.glob<AnnotationFile>(
+  '/src/assets/images/**/*.annotations.json',
+  { import: 'default' },
+);
+
+async function resolveAnnotations(): Promise<{ data: AnnotationFile; resolvedLang: string } | null> {
+  // 이미지가 폴백된 경우, 어노테이션도 같은 언어 우선 시도
+  const order = imageLang === lang
+    ? FALLBACK_LANGS
+    : [imageLang, ...FALLBACK_LANGS.filter(l => l !== imageLang)];
+
+  for (const l of order) {
+    const key = `/src/assets/images/${section}/${src}-${l}.annotations.json`;
+    if (key in annotationModules) {
+      const data = await annotationModules[key]();
+      return { data, resolvedLang: l };
+    }
+  }
+  return null;
+}
+
+const annotationResult = await resolveAnnotations();
+const annotations = annotationResult?.data ?? null;
+const annotationLang = annotationResult?.resolvedLang ?? lang;
+---
+
+{
+  annotations ? (
+    <ImageAnnotationViewer
+      client:visible
+      imageSrc={imagePath}
+      annotations={annotations.annotations}
+      alt={alt}
+      caption={caption}
+      lang={lang}
+    />
+  ) : (
+    <figure class="plain-image">
+      <img src={imagePath} alt={alt} loading="lazy" />
+      {caption && <figcaption>{caption}</figcaption>}
+    </figure>
+  )
+}

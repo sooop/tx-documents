@@ -1,0 +1,9 @@
+[
+  {
+    "slug": "settings",
+    "title": "必須設定",
+    "children": [
+      { "slug": "settings/charge-shipping", "title": "TxMoneyのチャージ" }
+    ]
+  }
+]

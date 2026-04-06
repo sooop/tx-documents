@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C D:/Projects/tx-documents log --oneline -5)",
+      "WebFetch(domain:docs.astro.build)",
+      "Bash(cp -r D:/Projects/tx-documents-temp/* D:/Projects/tx-documents/)",
+      "Bash(cp D:/Projects/tx-documents-temp/.* D:/Projects/tx-documents/)",
+      "Bash(npx astro:*)",
+      "Bash(curl -s http://localhost:4321/ko/intro/)",
+      "Bash(curl -s http://localhost:4321/ko/authoring-guide/)"
+    ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
+  }
+}

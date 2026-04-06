@@ -1,0 +1,23 @@
+---
+import SidebarSection from './SidebarSection.astro';
+import type { NavItem } from '../../lib/navigation';
+import type { Lang } from '../../lib/config';
+
+interface Props {
+  navTree: NavItem[];
+  currentSlug: string;
+  lang: Lang;
+}
+
+const { navTree, currentSlug, lang } = Astro.props;
+---
+
+<nav class="sidebar-nav" aria-label="Documentation">
+  <ul class="sidebar-list">
+    {
+      navTree.map((item) => (
+        <SidebarSection item={item} currentSlug={currentSlug} lang={lang} />
+      ))
+    }
+  </ul>
+</nav>

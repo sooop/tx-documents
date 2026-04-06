@@ -1,0 +1,37 @@
+---
+import type { NavItem } from '../../lib/navigation';
+import type { Lang } from '../../lib/config';
+
+interface Props {
+  item: NavItem;
+  currentSlug: string;
+  lang: Lang;
+  depth?: number;
+}
+
+const { item, currentSlug, lang, depth = 0 } = Astro.props;
+const isActive = currentSlug === item.slug;
+const isParentOfActive = currentSlug.startsWith(item.slug + '/');
+const hasChildren = item.children && item.children.length > 0;
+const href = `/${lang}/${item.slug}/`;
+---
+
+<li class:list={['sidebar-item', { active: isActive, expanded: isParentOfActive }]}>
+  <a href={href} class:list={['sidebar-link', `depth-${depth}`, { current: isActive }]}>
+    {item.title}
+  </a>
+  {
+    hasChildren && (isActive || isParentOfActive) && (
+      <ul class="sidebar-children">
+        {item.children!.map((child) => (
+          <Astro.self
+            item={child}
+            currentSlug={currentSlug}
+            lang={lang}
+            depth={depth + 1}
+          />
+        ))}
+      </ul>
+    )
+  }
+</li>

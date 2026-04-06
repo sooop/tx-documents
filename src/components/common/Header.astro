@@ -1,0 +1,18 @@
+---
+import { SITE_TITLE, LANGUAGES } from '../../lib/config';
+import type { Lang } from '../../lib/config';
+import LanguageSwitcher from '../navigation/LanguageSwitcher.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href={`/${lang}/`} class="site-logo">{SITE_TITLE}</a>
+    <LanguageSwitcher lang={lang} currentPath={Astro.url.pathname} />
+  </div>
+</header>

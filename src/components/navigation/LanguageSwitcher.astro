@@ -1,0 +1,35 @@
+---
+import { LANGUAGES } from '../../lib/config';
+import type { Lang } from '../../lib/config';
+import { t } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  currentPath: string;
+}
+
+const { lang, currentPath } = Astro.props;
+
+function getLocalizedPath(targetLang: string): string {
+  const parts = currentPath.split('/').filter(Boolean);
+  if (parts.length > 0) {
+    parts[0] = targetLang;
+  }
+  return '/' + parts.join('/') + '/';
+}
+---
+
+<nav class="lang-switcher" aria-label={t(lang, 'lang.switch')}>
+  <select
+    onchange="window.location.href = this.value"
+    aria-label={t(lang, 'lang.switch')}
+  >
+    {
+      Object.entries(LANGUAGES).map(([code, name]) => (
+        <option value={getLocalizedPath(code)} selected={code === lang}>
+          {name}
+        </option>
+      ))
+    }
+  </select>
+</nav>

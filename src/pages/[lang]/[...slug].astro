@@ -1,0 +1,43 @@
+---
+import { getCollection, render } from 'astro:content';
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import Callout from '../../components/mdx/Callout.astro';
+import Collapse from '../../components/mdx/Collapse.astro';
+import AnnotatedImage from '../../components/mdx/AnnotatedImage.astro';
+import { getNavTree, getBreadcrumbs } from '../../lib/navigation';
+import { LANGUAGES, type Lang } from '../../lib/config';
+
+export async function getStaticPaths() {
+  const allDocs = await getCollection('docs', ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+  });
+
+  return allDocs.map((doc) => {
+    const parts = doc.id.split('/');
+    const lang = parts[0];
+    const slug = parts.slice(1).join('/').replace(/\/index$/, '') || undefined;
+    return { params: { lang, slug }, props: { doc } };
+  });
+}
+
+const { doc } = Astro.props;
+const { lang } = Astro.params as { lang: Lang };
+const slug = Astro.params.slug ?? '';
+
+const navTree = await getNavTree(lang);
+const breadcrumbs = getBreadcrumbs(navTree, slug);
+const { Content, headings } = await render(doc);
+---
+
+<DocsLayout
+  title={doc.data.title}
+  description={doc.data.description}
+  lang={lang}
+  currentSlug={slug}
+  navTree={navTree}
+  breadcrumbs={breadcrumbs}
+  headings={headings}
+  draft={doc.data.draft}
+>
+  <Content components={{ Callout, Collapse, AnnotatedImage }} />
+</DocsLayout>

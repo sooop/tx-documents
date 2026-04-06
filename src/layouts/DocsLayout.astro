@@ -1,0 +1,58 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/common/Header.astro';
+import Sidebar from '../components/navigation/Sidebar.astro';
+import Breadcrumbs from '../components/navigation/Breadcrumbs.astro';
+import TableOfContents from '../components/navigation/TableOfContents.astro';
+import type { Lang } from '../lib/config';
+import type { NavItem, BreadcrumbItem } from '../lib/navigation';
+import type { MarkdownHeading } from 'astro';
+import { t } from '../i18n/ui';
+import '../styles/docs.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang: Lang;
+  currentSlug: string;
+  navTree: NavItem[];
+  breadcrumbs: BreadcrumbItem[];
+  headings: MarkdownHeading[];
+  draft?: boolean;
+}
+
+const {
+  title,
+  description,
+  lang,
+  currentSlug,
+  navTree,
+  breadcrumbs,
+  headings,
+  draft,
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <Header lang={lang} />
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <Sidebar navTree={navTree} currentSlug={currentSlug} lang={lang} />
+    </aside>
+    <main class="docs-content">
+      <Breadcrumbs items={breadcrumbs} lang={lang} />
+      {draft && <div class="draft-banner">{t(lang, 'draft.label')}</div>}
+      <article class="prose">
+        <h1>{title}</h1>
+        <slot />
+      </article>
+    </main>
+    {
+      headings.length > 0 && (
+        <aside class="docs-toc">
+          <TableOfContents headings={headings} lang={lang} />
+        </aside>
+      )
+    }
+  </div>
+</BaseLayout>

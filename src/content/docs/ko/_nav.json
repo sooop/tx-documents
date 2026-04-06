@@ -1,0 +1,129 @@
+[
+  { "slug": "authoring-guide", "title": "콘텐츠 작성 가이드" },
+  { "slug": "intro", "title": "스마트십이란?" },
+  { "slug": "signup", "title": "회원가입" },
+  { "slug": "logistics", "title": "물류 운영 방식" },
+  {
+    "slug": "settings",
+    "title": "주문 등록 전 필수 설정",
+    "children": [
+      { "slug": "settings/charge-shipping", "title": "배송비 충전하기" },
+      { "slug": "settings/export-declaration", "title": "수출신고 방식 선택하기" },
+      { "slug": "settings/shipping-fee-weight", "title": "배송비 및 무게" }
+    ]
+  },
+  {
+    "slug": "api-guide",
+    "title": "API 연동 가이드",
+    "children": [
+      {
+        "slug": "api-guide/sites",
+        "title": "사이트별 API 연동 방법",
+        "children": [
+          { "slug": "api-guide/sites/qoo10-jp", "title": "Qoo10 JP" },
+          { "slug": "api-guide/sites/yahoo-jp", "title": "Yahoo JP" },
+          { "slug": "api-guide/sites/shopify", "title": "Shopify" },
+          { "slug": "api-guide/sites/shopee-sg", "title": "Shopee SG" }
+        ]
+      },
+      { "slug": "api-guide/order-options", "title": "API 연동 시 주문 처리 옵션 가이드" },
+      { "slug": "api-guide/seller-sheet", "title": "API 연결 후 판매상시트 설정 방법" },
+      { "slug": "api-guide/faq", "title": "쇼핑몰 API 관련 자주 묻는 질문" }
+    ]
+  },
+  {
+    "slug": "seller-shipment",
+    "title": "판매자 출고 주문 및 발송 가이드",
+    "children": [
+      { "slug": "seller-shipment/basics", "title": "기본 안내" },
+      { "slug": "seller-shipment/gift-settings", "title": "판매자 출고 사은품 설정" },
+      { "slug": "seller-shipment/copy-order", "title": "발송처리된 주문 건 복사하기" },
+      { "slug": "seller-shipment/split-package", "title": "합포장건 분리하기" },
+      { "slug": "seller-shipment/product-mapping", "title": "판매사이트 - SmartShip 상품맵핑" },
+      { "slug": "seller-shipment/bulk-replace", "title": "상품 일괄 교체" },
+      { "slug": "seller-shipment/edit-order", "title": "주문 건 수정하기" },
+      { "slug": "seller-shipment/packing-notes", "title": "포장 시 유의사항" },
+      { "slug": "seller-shipment/jp-export-notes", "title": "JP향 수출입 시 주의사항" }
+    ]
+  },
+  {
+    "slug": "fulfillment",
+    "title": "풀필먼트 입고 및 주문 등록 가이드",
+    "children": [
+      { "slug": "fulfillment/basics", "title": "기본 안내" },
+      { "slug": "fulfillment/apply-warehouse", "title": "풀필먼트 창고 신청하기" },
+      { "slug": "fulfillment/create-sku", "title": "SKU 생성하기" },
+      { "slug": "fulfillment/request-inbound", "title": "입고 신청하기" },
+      { "slug": "fulfillment/center-inbound", "title": "센터로 상품 입고" },
+      { "slug": "fulfillment/register-order", "title": "풀필먼트 주문 등록하기" },
+      { "slug": "fulfillment/check-inventory", "title": "재고 확인하기" },
+      { "slug": "fulfillment/request-export", "title": "재고 반출 요청 방법" },
+      { "slug": "fulfillment/copy-order", "title": "발송처리된 주문 건 복사하기" },
+      { "slug": "fulfillment/gift-settings", "title": "풀필먼트 사은품 설정" },
+      { "slug": "fulfillment/product-sku-mapping", "title": "판매채널 상품 - SKU 맵핑" },
+      { "slug": "fulfillment/bulk-replace", "title": "상품 일괄 교체" }
+    ]
+  },
+  {
+    "slug": "delivery",
+    "title": "배송 관리",
+    "children": [
+      { "slug": "delivery/status", "title": "배송 현황" },
+      { "slug": "delivery/failed-delivery", "title": "배송 실패 메뉴 활용하기" },
+      { "slug": "delivery/shipping-fee-history", "title": "배송비 사용 내역" }
+    ]
+  },
+  {
+    "slug": "returns",
+    "title": "반품 관리 / 클레임 처리",
+    "children": [
+      { "slug": "returns/basics", "title": "기본 안내" },
+      { "slug": "returns/storage-period", "title": "반품 화물 보관 기간 안내" },
+      { "slug": "returns/pickup-request", "title": "반품 픽업 신청" },
+      { "slug": "returns/direct-return", "title": "직접 발송 반품 신청" },
+      { "slug": "returns/return-management", "title": "반품 주문 관리" },
+      { "slug": "returns/claim-management", "title": "쇼핑몰 클레임 관리 메뉴 활용하기" }
+    ]
+  },
+  {
+    "slug": "invoices",
+    "title": "청구서 및 해외소포 수령증 발급",
+    "children": [
+      { "slug": "invoices/invoice", "title": "청구서 조회" },
+      { "slug": "invoices/tax-invoice", "title": "세금 계산서 조회 (한국)" },
+      { "slug": "invoices/overseas-receipt", "title": "해외소포 수령증 (한국)" }
+    ]
+  },
+  { "slug": "faq", "title": "자주 묻는 질문" },
+  {
+    "slug": "country-notes",
+    "title": "국가별 유의사항",
+    "children": [
+      { "slug": "country-notes/common", "title": "공통" },
+      { "slug": "country-notes/japan", "title": "수출입 주의사항 : 일본" },
+      { "slug": "country-notes/usa", "title": "수출입 주의사항 : 미국" },
+      { "slug": "country-notes/singapore", "title": "수출입 주의사항 : 싱가포르" },
+      { "slug": "country-notes/taiwan", "title": "수출입 주의사항 : 대만" },
+      { "slug": "country-notes/china", "title": "수출입 주의사항 : 중국" },
+      { "slug": "country-notes/hong-kong", "title": "수출입 주의사항 : 홍콩" },
+      { "slug": "country-notes/others", "title": "수출입 주의사항 : 기타국가" }
+    ]
+  },
+  {
+    "slug": "smart-post",
+    "title": "스마트 포스트",
+    "children": [
+      { "slug": "smart-post/basics", "title": "기본 안내" },
+      { "slug": "smart-post/apply", "title": "택배신청하기" },
+      { "slug": "smart-post/product-info", "title": "상품정보입력하기" },
+      { "slug": "smart-post/payment", "title": "배송비결제" },
+      { "slug": "smart-post/packing", "title": "박스포장" },
+      { "slug": "smart-post/additional-payment", "title": "추가 배송비 결제" },
+      { "slug": "smart-post/precautions", "title": "이용 시 주의사항" },
+      { "slug": "smart-post/customs-tax", "title": "통관 및 세금 안내" },
+      { "slug": "smart-post/kimchi-guide", "title": "김치 포장 가이드" },
+      { "slug": "smart-post/prohibited-items", "title": "발송 금지 및 제한 품목" },
+      { "slug": "smart-post/faq", "title": "자주 묻는 질문" }
+    ]
+  }
+]
