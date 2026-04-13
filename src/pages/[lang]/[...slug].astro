@@ -7,6 +7,9 @@ import AnnotatedImage from '../../components/mdx/AnnotatedImage.astro';
 import LogisticsFlowDiagram from '../../components/mdx/LogisticsFlowDiagram.astro';
 import { getNavTree, getBreadcrumbs } from '../../lib/navigation';
 import { LANGUAGES, type Lang } from '../../lib/config';
+import CommonFooter from '../../components/mdx/CommonFooter.astro';
+
+const FOOTER_LANGS: Lang[] = ['ko', 'ja', 'en'];
 
 export async function getStaticPaths() {
   const allDocs = await getCollection('docs', ({ data }) => {
@@ -41,4 +44,7 @@ const { Content, headings } = await render(doc);
   draft={doc.data.draft}
 >
   <Content components={{ Callout, Collapse, AnnotatedImage, LogisticsFlowDiagram }} />
+  {doc.data.footer !== 'none' && FOOTER_LANGS.includes(lang) && (
+    <CommonFooter lang={lang} />
+  )}
 </DocsLayout>

@@ -106,6 +106,14 @@ const {
     if (e.key === 'Escape') closeZoom();
   });
 
+  // 외부 링크는 새 창으로 열기
+  document.querySelectorAll<HTMLAnchorElement>('.prose a[href]').forEach((a) => {
+    if (/^https?:\/\//.test(a.getAttribute('href') ?? '')) {
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+    }
+  });
+
   // .annotated-image 안에 있는 img는 ImageAnnotationViewer가 처리하므로 제외
   document.querySelectorAll<HTMLImageElement>('.prose img').forEach((img) => {
     if (img.closest('.annotated-image')) return;

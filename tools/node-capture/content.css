@@ -1,0 +1,78 @@
+/* Node Capture Extension Styles */
+/* 모든 클래스/ID에 __nc- 접두사 사용하여 페이지 스타일과 충돌 방지 */
+
+/* 선택 모드 중 전체 커서 변경 */
+body.__nc-selecting,
+body.__nc-selecting * {
+  cursor: crosshair !important;
+}
+
+/* 마우스오버 하이라이트 */
+.__nc-highlight {
+  outline: 2px solid #4f9cf9 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(79, 156, 249, 0.25), 0 0 16px rgba(79, 156, 249, 0.4) !important;
+  transition: outline 0.05s, box-shadow 0.05s !important;
+}
+
+/* 확정 선택된 노드 */
+.__nc-selected {
+  outline: 2px solid #22c55e !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25), 0 0 12px rgba(34, 197, 94, 0.3) !important;
+}
+
+/* 상단 안내 오버레이 */
+#__nc-overlay {
+  position: fixed !important;
+  top: 16px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(15, 15, 25, 0.92) !important;
+  color: #e2e8f0 !important;
+  padding: 9px 18px !important;
+  border-radius: 8px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  z-index: 2147483647 !important;
+  pointer-events: none !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  white-space: nowrap !important;
+}
+
+/* 상태 알림 (우하단, 캡쳐 진행 중 페이지에 표시) */
+#__nc-status {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  background: rgba(15, 15, 25, 0.95) !important;
+  color: #c0caf5 !important;
+  padding: 10px 16px !important;
+  border-radius: 8px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  z-index: 2147483647 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  display: none !important;
+  max-width: 320px !important;
+  line-height: 1.4 !important;
+}
+
+#__nc-status.__nc-status-visible {
+  display: block !important;
+}
+
+#__nc-status.__nc-status-error {
+  border-color: rgba(247, 118, 142, 0.4) !important;
+  color: #f7768e !important;
+}
+
+#__nc-status.__nc-status-success {
+  border-color: rgba(158, 206, 106, 0.4) !important;
+  color: #9ece6a !important;
+}

@@ -1,0 +1,134 @@
+---
+import type { Lang } from '../../lib/config';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const strings = {
+  ko: {
+    centersTitle: '센터 정보',
+    centerCol: '센터',
+    addressCol: '주소',
+    centers: [
+      { name: '한국 센터', address: '(22362) 인천 중구 영종순환로 900번길 30 영종아레나스 물류센터 3층 트랙스로지스' },
+      { name: '일본 센터', address: '(273-0017) 千葉県船橋市西浦3-4-2、北エントランス2F' },
+    ],
+    contactTitle: '문의하기',
+    contactNote: '채팅 상담 시 찾으시는 내용이 없으면 <strong>출발국 기준</strong>으로 문의해 주세요.',
+    regionCol: '지역',
+    chatCol: '채팅 상담',
+    emailCol: '이메일',
+    contacts: [
+      { region: '한국 (배송 및 기타)', email: 'help-kr@tracxlogis.com' },
+      { region: '한국 센터', email: 'yjc@tracxlogis.com' },
+      { region: '일본', email: 'help-jp@tracxlogis.com' },
+      { region: '싱가포르', email: 'help-sg@tracxlogis.com' },
+    ],
+    chatLabel: '채팅 상담',
+    noChat: '—',
+  },
+  ja: {
+    centersTitle: 'センター情報',
+    centerCol: 'センター',
+    addressCol: '住所',
+    centers: [
+      { name: '韓国センター', address: '(22362) 仁川広域市中区永宗循環路900番ギル30 永宗アレーナス物流センター3F TracX Logis' },
+      { name: '日本センター', address: '(273-0017) 千葉県船橋市西浦3-4-2、北エントランス2F' },
+    ],
+    contactTitle: 'お問い合わせ',
+    contactNote: 'チャットサポートで内容が見つからない場合は、<strong>出発国を基準</strong>にお問い合わせください。',
+    regionCol: '地域',
+    chatCol: 'チャットサポート',
+    emailCol: 'メール',
+    contacts: [
+      { region: '韓国（配送・その他）', email: 'help-kr@tracxlogis.com' },
+      { region: '韓国センター', email: 'yjc@tracxlogis.com' },
+      { region: '日本', email: 'help-jp@tracxlogis.com' },
+      { region: 'シンガポール', email: 'help-sg@tracxlogis.com' },
+    ],
+    chatLabel: 'チャットサポート',
+    noChat: '—',
+  },
+  en: {
+    centersTitle: 'Center Information',
+    centerCol: 'Center',
+    addressCol: 'Address',
+    centers: [
+      { name: 'Korea Center', address: '(22362) 3F TracX Logis, Yongjong Arenas Logistics Center, 30, Yongjong-sunhwan-ro 900beon-gil, Jung-gu, Incheon' },
+      { name: 'Japan Center', address: '(273-0017) 千葉県船橋市西浦3-4-2、北エントランス2F' },
+    ],
+    contactTitle: 'Contact Us',
+    contactNote: 'If you cannot find what you are looking for in the chat, please contact us based on your <strong>country of departure</strong>.',
+    regionCol: 'Region',
+    chatCol: 'Chat Support',
+    emailCol: 'Email',
+    contacts: [
+      { region: 'Korea (Shipping & Others)', email: 'help-kr@tracxlogis.com' },
+      { region: 'Korea Center', email: 'yjc@tracxlogis.com' },
+      { region: 'Japan', email: 'help-jp@tracxlogis.com' },
+      { region: 'Singapore', email: 'help-sg@tracxlogis.com' },
+    ],
+    chatLabel: 'Chat Support',
+    noChat: '—',
+  },
+} as const;
+
+// 채팅 상담 링크가 없는 지역 (싱가포르)
+const NO_CHAT_INDEX = 3;
+
+const s = strings[lang as keyof typeof strings];
+---
+
+<hr />
+
+<h2>{s.centersTitle}</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>{s.centerCol}</th>
+      <th>{s.addressCol}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {s.centers.map((c) => (
+      <tr>
+        <td><strong>{c.name}</strong></td>
+        <td>{c.address}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<hr />
+
+<h2>{s.contactTitle}</h2>
+
+<p set:html={s.contactNote} />
+
+<table>
+  <thead>
+    <tr>
+      <th>{s.regionCol}</th>
+      <th>{s.chatCol}</th>
+      <th>{s.emailCol}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {s.contacts.map((c, i) => (
+      <tr>
+        <td>{c.region}</td>
+        <td>
+          {i === NO_CHAT_INDEX
+            ? s.noChat
+            : <a href="https://livechat.tracxlogis.com" target="_blank" rel="noopener noreferrer">{s.chatLabel}</a>
+          }
+        </td>
+        <td>{c.email}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>

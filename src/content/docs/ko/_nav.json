@@ -100,7 +100,7 @@
     "slug": "clearance",
     "title": "통관",
     "children": [
-      { "slug": "clearance/export-declaration-type", "title": "수출신고 방식 선택하기" }
+      { "slug": "clearance/customs-unique-code", "title": "통관고유부호 발급 방법" }
     ]
   },
   {

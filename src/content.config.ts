@@ -12,6 +12,7 @@ const docs = defineCollection({
     description: z.string().optional(),
     draft: z.boolean().default(false),
     updatedAt: z.coerce.date().optional(),
+    footer: z.string().optional(),
   }),
 });
 

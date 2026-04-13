@@ -1,0 +1,19 @@
+{
+  "imageId": "unipass-address-input",
+  "annotations": [
+    {
+      "id": "marker-1776055878117-1",
+      "type": "marker",
+      "number": 1,
+      "x": 3.501945525291829,
+      "y": 13.563829787234042
+    },
+    {
+      "id": "marker-1776055880838-2",
+      "type": "marker",
+      "number": 2,
+      "x": 84.95460440985732,
+      "y": 75.79787234042553
+    }
+  ]
+}

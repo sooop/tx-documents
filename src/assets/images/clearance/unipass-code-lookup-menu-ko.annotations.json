@@ -1,0 +1,19 @@
+{
+  "imageId": "unipass-code-lookup-menu",
+  "annotations": [
+    {
+      "id": "marker-1776055910867-5",
+      "type": "marker",
+      "number": 1,
+      "x": 10.977701543739279,
+      "y": 63.78504672897196
+    },
+    {
+      "id": "marker-1776055912066-6",
+      "type": "marker",
+      "number": 2,
+      "x": 48.713550600343055,
+      "y": 14.953271028037381
+    }
+  ]
+}

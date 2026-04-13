@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      font-size: 13px;
+      background: #1a1b26;
+      color: #c0caf5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── 헤더 ── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 16px;
+      border-bottom: 1px solid #2a2d3e;
+      flex-shrink: 0;
+    }
+    .header-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+    .header-title {
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #7aa2f7;
+    }
+
+    /* ── 본문 ── */
+    .body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 16px;
+      gap: 12px;
+      overflow-y: auto;
+    }
+
+    /* ── 뷰 전환 ── */
+    .view { display: none; flex-direction: column; gap: 12px; }
+    .view.active { display: flex; }
+
+    /* ── 안내 텍스트 ── */
+    .hint {
+      color: #565f89;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .hint kbd {
+      display: inline-block;
+      background: #24283b;
+      border: 1px solid #414868;
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-size: 11px;
+      color: #a9b1d6;
+      font-family: inherit;
+    }
+
+    /* ── 상태 뱃지 ── */
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: #24283b;
+      border-radius: 6px;
+      border: 1px solid #414868;
+      color: #a9b1d6;
+      font-size: 12px;
+    }
+    .status-badge .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-blue   { background: #7aa2f7; animation: pulse 1.4s ease-in-out infinite; }
+    .dot-green  { background: #9ece6a; }
+    .dot-orange { background: #ff9e64; animation: pulse 1.4s ease-in-out infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ── 폼 ── */
+    .field-row { display: flex; gap: 8px; align-items: flex-end; }
+    .field-grow { flex: 1; min-width: 0; }
+    .field-seq { width: 64px; flex-shrink: 0; }
+    .field-seq input { text-align: center; }
+    input[type="number"] {
+      background: #24283b;
+      border: 1px solid #414868;
+      border-radius: 5px;
+      color: #c0caf5;
+      padding: 7px 6px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input[type="number"]:focus {
+      border-color: #7aa2f7;
+      box-shadow: 0 0 0 2px rgba(122, 162, 247, 0.18);
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { opacity: 0.4; }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #565f89;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    input[type="text"] {
+      background: #24283b;
+      border: 1px solid #414868;
+      border-radius: 5px;
+      color: #c0caf5;
+      padding: 7px 9px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input[type="text"]:focus {
+      border-color: #7aa2f7;
+      box-shadow: 0 0 0 2px rgba(122, 162, 247, 0.18);
+    }
+
+    /* ── 버튼 ── */
+    .btn-row { display: flex; gap: 8px; justify-content: flex-end; }
+    .nav-row  { display: flex; gap: 6px; }
+    .btn-nav  { flex: 1; justify-content: center; }
+    button {
+      padding: 7px 14px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .btn-primary   { background: #7aa2f7; color: #1a1b26; }
+    .btn-primary:hover { background: #89b4fa; }
+    .btn-secondary { background: #24283b; color: #737aa2; }
+    .btn-secondary:hover { background: #414868; color: #c0caf5; }
+    .btn-full { width: 100%; justify-content: center; }
+
+    /* ── 오류 ── */
+    #error-box {
+      display: none;
+      padding: 9px 12px;
+      background: rgba(247, 118, 142, 0.1);
+      border: 1px solid rgba(247, 118, 142, 0.3);
+      border-radius: 6px;
+      color: #f7768e;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    #error-box.visible { display: block; }
+
+    /* ── 성공 ── */
+    .done-icon { font-size: 28px; text-align: center; padding: 8px 0; }
+    .done-files {
+      font-size: 12px;
+      color: #9ece6a;
+      line-height: 1.7;
+      background: rgba(158, 206, 106, 0.08);
+      border: 1px solid rgba(158, 206, 106, 0.2);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+
+    /* ── 진행 상태 ── */
+    #progress-text {
+      font-size: 12px;
+      color: #a9b1d6;
+      line-height: 1.6;
+    }
+    .progress-bar-wrap {
+      height: 4px;
+      background: #24283b;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #7aa2f7;
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="header-icon">◎</span>
+    <span class="header-title">Node Capture</span>
+  </div>
+
+  <div class="body">
+    <!-- 오류 공통 표시 -->
+    <div id="error-box"></div>
+
+    <!-- 상태: idle -->
+    <div id="view-idle" class="view">
+      <p class="hint">캡쳐할 노드를 선택하려면 아래 버튼을 누르세요.</p>
+      <button id="btn-start" class="btn-primary btn-full">노드 선택 시작</button>
+    </div>
+
+    <!-- 상태: selecting -->
+    <div id="view-selecting" class="view">
+      <div class="status-badge">
+        <span class="dot dot-blue"></span>
+        <span>페이지에서 노드를 선택 중...</span>
+      </div>
+      <p class="hint">마우스오버로 노드를 강조한 뒤 클릭하거나 아래 버튼으로 확정하세요.</p>
+      <div class="nav-row">
+        <button id="btn-nav-up"   class="btn-secondary btn-nav">↑ 부모</button>
+        <button id="btn-nav-down" class="btn-secondary btn-nav">↓ 자식</button>
+        <button id="btn-confirm"  class="btn-primary  btn-nav">확정</button>
+      </div>
+      <button id="btn-cancel-selecting" class="btn-secondary btn-full">취소</button>
+    </div>
+
+    <!-- 상태: input -->
+    <div id="view-input" class="view">
+      <div class="status-badge">
+        <span class="dot dot-green"></span>
+        <span>노드가 선택되었습니다</span>
+      </div>
+      <div class="field">
+        <label>페이지명</label>
+        <input id="page-name" type="text" autocomplete="off" spellcheck="false" />
+      </div>
+      <div class="field-row">
+        <div class="field field-grow">
+          <label>노드명</label>
+          <input id="node-name" type="text" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="field field-seq">
+          <label>번호</label>
+          <input id="seq-num" type="number" min="1" autocomplete="off" />
+        </div>
+      </div>
+      <div class="btn-row">
+        <button id="btn-cancel-input" class="btn-secondary">취소</button>
+        <button id="btn-capture" class="btn-primary">캡쳐 시작</button>
+      </div>
+    </div>
+
+    <!-- 상태: capturing -->
+    <div id="view-capturing" class="view">
+      <div class="status-badge">
+        <span class="dot dot-orange"></span>
+        <span id="progress-text">캡쳐 준비 중...</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+    </div>
+
+    <!-- 상태: done -->
+    <div id="view-done" class="view">
+      <div class="done-icon">✓</div>
+      <div id="done-files" class="done-files"></div>
+      <button id="btn-retry" class="btn-primary btn-full">다시 캡쳐</button>
+    </div>
+  </div>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>

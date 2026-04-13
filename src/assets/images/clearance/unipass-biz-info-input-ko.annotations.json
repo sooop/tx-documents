@@ -1,0 +1,19 @@
+{
+  "imageId": "unipass-biz-info-input",
+  "annotations": [
+    {
+      "id": "marker-1776055891320-3",
+      "type": "marker",
+      "number": 1,
+      "x": 6.880189798339265,
+      "y": 43.613707165109034
+    },
+    {
+      "id": "marker-1776055892747-4",
+      "type": "marker",
+      "number": 2,
+      "x": 87.06998813760379,
+      "y": 24.299065420560748
+    }
+  ]
+}
