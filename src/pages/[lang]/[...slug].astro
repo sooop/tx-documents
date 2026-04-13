@@ -4,6 +4,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 import Callout from '../../components/mdx/Callout.astro';
 import Collapse from '../../components/mdx/Collapse.astro';
 import AnnotatedImage from '../../components/mdx/AnnotatedImage.astro';
+import LogisticsFlowDiagram from '../../components/mdx/LogisticsFlowDiagram.astro';
 import { getNavTree, getBreadcrumbs } from '../../lib/navigation';
 import { LANGUAGES, type Lang } from '../../lib/config';
 
@@ -39,5 +40,5 @@ const { Content, headings } = await render(doc);
   headings={headings}
   draft={doc.data.draft}
 >
-  <Content components={{ Callout, Collapse, AnnotatedImage }} />
+  <Content components={{ Callout, Collapse, AnnotatedImage, LogisticsFlowDiagram }} />
 </DocsLayout>
