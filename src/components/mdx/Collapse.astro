@@ -7,9 +7,9 @@ interface Props {
 const { title, open = false } = Astro.props;
 ---
 
-<details class="collapse" open={open}>
-  <summary class="collapse-title">{title}</summary>
-  <div class="collapse-content">
+<details class="details-block" open={open}>
+  <summary class="details-block-title">{title}</summary>
+  <div class="details-block-content">
     <slot />
   </div>
 </details>

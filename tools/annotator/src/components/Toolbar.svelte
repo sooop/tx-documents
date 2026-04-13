@@ -2,6 +2,7 @@
   import { state as appState } from '../lib/state.svelte';
   import { saveAnnotation } from '../lib/api';
   import type { ToolMode } from '../lib/types';
+  import { PALETTE } from '../lib/constants';
 
   interface Props {
     onSaved?: () => void;
@@ -67,6 +68,21 @@
         <span class="icon">{tool.icon}</span>
       </button>
     {/each}
+  </div>
+
+  <div class="tool-group">
+    <span class="label">색상</span>
+    <div class="palette">
+      {#each PALETTE as color}
+        <button
+          class="swatch"
+          class:active={appState.activeColor === color}
+          style="background: {color}"
+          onclick={() => { appState.activeColor = color; }}
+          title={color}
+        ></button>
+      {/each}
+    </div>
   </div>
 
   <div class="tool-group">
@@ -152,6 +168,25 @@
     color: #888;
     margin-right: 4px;
   }
+
+  .palette {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: border-color 0.1s, transform 0.1s;
+  }
+  .swatch:hover { transform: scale(1.2); }
+  .swatch.active { border-color: #fff; }
 
   .number-input {
     width: 48px;

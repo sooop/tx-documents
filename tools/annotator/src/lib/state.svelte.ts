@@ -1,10 +1,12 @@
 import type { Annotation, CurrentImage, ToolMode } from './types';
+import { PALETTE } from './constants';
 
 interface AppState {
   currentImage: CurrentImage | null;
   annotations: Annotation[];
   selectedId: string | null;
   activeTool: ToolMode;
+  activeColor: string;
   startingNumber: number;
   zoom: number;
   panX: number;
@@ -17,6 +19,7 @@ export const state: AppState = $state({
   annotations: [],
   selectedId: null,
   activeTool: 'select',
+  activeColor: PALETTE[0],
   startingNumber: 1,
   zoom: 1,
   panX: 0,

@@ -1,7 +1,16 @@
+// 색상 팔레트 (첫 번째가 기본 색상)
+export const PALETTE = [
+  'oklch(51.4% 0.222 16.935)',
+  'oklch(45.7% 0.24 277.023)',
+  'oklch(60% 0.118 184.704)',
+  'oklch(66.6% 0.179 58.318)',
+  'oklch(50% 0.134 242.749)',
+] as const;
+
 // 프로덕션 뷰어와 동일한 렌더링 상수
 export const MARKER_RADIUS = 14;
 export const MARKER_FONT_SIZE = 13;
-export const DEFAULT_COLOR = '#FF4444';
+export const DEFAULT_COLOR = PALETTE[0];
 export const BOX_STROKE_WIDTH = 4;
 export const ARROW_STROKE_WIDTH = 3;
 export const ARROW_HEAD_SIZE = 16;

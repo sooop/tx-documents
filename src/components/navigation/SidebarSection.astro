@@ -15,11 +15,12 @@ const isParentOfActive = currentSlug.startsWith(item.slug + '/');
 const hasChildren = item.children && item.children.length > 0;
 const href = `/${lang}/${item.slug}/`;
 const isOpen = isActive || isParentOfActive;
+const isMissingContent = import.meta.env.DEV && item.hasContent === false && !hasChildren;
 ---
 
 <li class:list={['sidebar-item', { active: isActive, expanded: isParentOfActive }]}>
   <div class="sidebar-row">
-    <a href={href} class:list={['sidebar-link', `depth-${depth}`, { current: isActive }]}>
+    <a href={href} class:list={['sidebar-link', `depth-${depth}`, { current: isActive, 'no-content': isMissingContent }]}>
       {item.title}
     </a>
     {

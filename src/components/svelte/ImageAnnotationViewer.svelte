@@ -19,7 +19,7 @@
 
   const MARKER_RADIUS = 14;
   const MARKER_FONT_SIZE = 13;
-  const DEFAULT_COLOR = '#FF4444';
+  const DEFAULT_COLOR = 'oklch(51.4% 0.222 16.935)';
   const BOX_STROKE_WIDTH = 4;
   const ARROW_STROKE_WIDTH = 3;
   // 화살표 마커 크기 (이미지 좌표계 기준 px)

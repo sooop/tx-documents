@@ -87,7 +87,7 @@
       const { x, y } = svgToPct(svgX, svgY, nw, nh);
       const id = generateId('box');
       pushHistory(appState.annotations);
-      addAnnotation({ id, type: 'box', x, y, width: 0, height: 0 } as BoxAnnotation);
+      addAnnotation({ id, type: 'box', x, y, width: 0, height: 0, strokeColor: appState.activeColor } as BoxAnnotation);
       appState.selectedId = id;
       dragState = { mode: 'draw-box', startSvgX: svgX, startSvgY: svgY, lastSvgX: svgX, lastSvgY: svgY, drawingId: id };
       e.preventDefault();
@@ -99,9 +99,9 @@
       const id = generateId(tool);
       pushHistory(appState.annotations);
       if (tool === 'arrow') {
-        addAnnotation({ id, type: 'arrow', fromX: x, fromY: y, toX: x, toY: y } as ArrowAnnotation);
+        addAnnotation({ id, type: 'arrow', fromX: x, fromY: y, toX: x, toY: y, strokeColor: appState.activeColor } as ArrowAnnotation);
       } else {
-        addAnnotation({ id, type: 'line', fromX: x, fromY: y, toX: x, toY: y } as LineAnnotation);
+        addAnnotation({ id, type: 'line', fromX: x, fromY: y, toX: x, toY: y, strokeColor: appState.activeColor } as LineAnnotation);
       }
       appState.selectedId = id;
       dragState = {

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { state as appState, updateAnnotation } from '../lib/state.svelte';
   import type { Annotation, BoxAnnotation, MarkerAnnotation, ArrowAnnotation, LineAnnotation } from '../lib/types';
+  import { PALETTE, DEFAULT_COLOR } from '../lib/constants';
 
   const LANGS = ['ko', 'en', 'ja', 'zh-hk', 'zh-cn'];
 
@@ -93,7 +94,17 @@
       </div>
       <div class="field">
         <label>색상</label>
-        <input class="inp color" type="color" value={ann.strokeColor ?? '#FF4444'} oninput={(e) => update({ strokeColor: (e.target as HTMLInputElement).value })} />
+        <div class="palette">
+          {#each PALETTE as color}
+            <button
+              class="swatch"
+              class:selected={( ann.strokeColor ?? DEFAULT_COLOR) === color}
+              style="background: {color}"
+              onclick={() => update({ strokeColor: color })}
+              title={color}
+            ></button>
+          {/each}
+        </div>
       </div>
 
     {:else if selected.type === 'arrow' || selected.type === 'line'}
@@ -109,7 +120,17 @@
       </div>
       <div class="field">
         <label>색상</label>
-        <input class="inp color" type="color" value={ann.strokeColor ?? '#FF4444'} oninput={(e) => update({ strokeColor: (e.target as HTMLInputElement).value })} />
+        <div class="palette">
+          {#each PALETTE as color}
+            <button
+              class="swatch"
+              class:selected={(ann.strokeColor ?? DEFAULT_COLOR) === color}
+              style="background: {color}"
+              onclick={() => update({ strokeColor: color })}
+              title={color}
+            ></button>
+          {/each}
+        </div>
       </div>
       <div class="field">
         <label>굵기</label>
@@ -174,5 +195,23 @@
   }
   .inp:read-only { color: #666; }
   .inp.num { text-align: right; }
-  .inp.color { padding: 1px 3px; height: 24px; cursor: pointer; }
+
+  .palette {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: border-color 0.1s, transform 0.1s;
+  }
+  .swatch:hover { transform: scale(1.15); }
+  .swatch.selected { border-color: #fff; }
 </style>
