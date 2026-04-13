@@ -49,7 +49,17 @@ export interface LineAnnotation {
   strokeWidth?: number;
 }
 
-export type Annotation = BoxAnnotation | MarkerAnnotation | ArrowAnnotation | LineAnnotation;
+export interface MosaicAnnotation {
+  id: string;
+  type: 'mosaic';
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  pixelSize: number;
+}
+
+export type Annotation = BoxAnnotation | MarkerAnnotation | ArrowAnnotation | LineAnnotation | MosaicAnnotation;
 
 export interface AnnotationFile {
   imageId: string;

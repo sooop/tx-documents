@@ -1,5 +1,13 @@
 [
-  { "slug": "authoring-guide", "title": "콘텐츠 작성 가이드", "devOnly": true },
+  {
+    "slug": "admin",
+    "title": "관리자 자료",
+    "devOnly": true,
+    "children": [
+      { "slug": "authoring-guide", "title": "콘텐츠 작성 가이드" },
+      { "slug": "agent-guide", "title": "Agent 콘텐츠 작성 방법" }
+    ]
+  },
   { "slug": "intro", "title": "스마트십이란?" },
   { "slug": "signup", "title": "회원가입" },
   { "slug": "logistics", "title": "물류 운영 방식" },
@@ -27,7 +35,7 @@
         ]
       },
       { "slug": "api-guide/order-options", "title": "API 연동 시 주문 처리 옵션 가이드" },
-      { "slug": "api-guide/seller-sheet", "title": "API 연결 후 판매상시트 설정 방법" },
+      { "slug": "api-guide/site-settings", "title": "API 연결 후 판매사이트 설정 방법" },
       { "slug": "api-guide/faq", "title": "쇼핑몰 API 관련 자주 묻는 질문" }
     ]
   },

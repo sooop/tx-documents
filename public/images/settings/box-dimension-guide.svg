@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="-5 -10 460 325" width="460" height="325">
+
+  <defs>
+
+    <marker id="arr-e" markerWidth="9" markerHeight="7"
+            refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#444"/>
+    </marker>
+    <marker id="arr-s" markerWidth="9" markerHeight="7"
+            refX="1" refY="3.5" orient="auto-start-reverse">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#444"/>
+    </marker>
+
+    <clipPath id="c-top">
+      <path d="M148 0L386.5 53.5L235 127L0 55Z"/>
+    </clipPath>
+
+    <linearGradient id="g-front" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#EECC9C"/>
+      <stop offset="100%" stop-color="#D9A870"/>
+    </linearGradient>
+
+    <linearGradient id="g-side" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#C4A07C"/>
+      <stop offset="100%" stop-color="#A87C54"/>
+    </linearGradient>
+
+    <linearGradient id="g-top" x1="100%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%"   stop-color="#E0BA84"/>
+      <stop offset="100%" stop-color="#F6D4B0"/>
+    </linearGradient>
+
+    <linearGradient id="g-tape" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#F0E898" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#DDD070" stop-opacity="0.96"/>
+    </linearGradient>
+
+  </defs>
+
+  <rect x="-5" y="-10" width="460" height="325" fill="white"/>
+
+  <!-- 우측면 -->
+  <path d="M234 123L386 53L380 194L234 275Z"
+        fill="url(#g-side)" stroke="#8A5C28" stroke-width="1.5" stroke-linejoin="round"/>
+
+  <!-- 정면 -->
+  <path d="M2 55L234 125V277L7 198.5Z"
+        fill="url(#g-front)" stroke="#8A5C28" stroke-width="1.5" stroke-linejoin="round"/>
+
+  <!-- 정면 골판지 결 -->
+  <g stroke="#C8882A" stroke-width="0.5" opacity="0.18">
+    <line x1="62"  y1="64"  x2="65"  y2="212"/>
+    <line x1="122" y1="80"  x2="125" y2="245"/>
+    <line x1="182" y1="97"  x2="185" y2="263"/>
+  </g>
+
+  <!-- 상단면 -->
+  <path d="M148 0L386.5 53.5L235 127L0 55Z"
+        fill="url(#g-top)" stroke="#8A5C28" stroke-width="1.5" stroke-linejoin="round"/>
+
+  <!-- 테이프 -->
+  <g clip-path="url(#c-top)">
+    <polygon points="64,31 300,95 321,85 84,24"
+             fill="url(#g-tape)" stroke="#C4B020" stroke-width="0.7"/>
+    <line x1="64"  y1="31" x2="300" y2="95" stroke="#A89010" stroke-width="0.6" opacity="0.75"/>
+    <line x1="84"  y1="24" x2="321" y2="85" stroke="#A89010" stroke-width="0.6" opacity="0.75"/>
+  </g>
+
+  <!-- 가로 치수선 -->
+  <line x1="7"   y1="199" x2="0"   y2="220"
+        stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="234" y1="277" x2="227" y2="298"
+        stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="2"   y1="220" x2="225" y2="297"
+        stroke="#444" stroke-width="1.6"
+        marker-start="url(#arr-s)" marker-end="url(#arr-e)"/>
+
+  <!-- 높이 치수선 -->
+  <line x1="386" y1="53"  x2="418" y2="53"
+        stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="380" y1="194" x2="418" y2="194"
+        stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="415" y1="55"  x2="415" y2="192"
+        stroke="#444" stroke-width="1.6"
+        marker-start="url(#arr-s)" marker-end="url(#arr-e)"/>
+
+  <!-- 세로 치수선 -->
+  <line x1="234" y1="277" x2="244" y2="294"
+        stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="380" y1="194" x2="390" y2="211"
+        stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="244" y1="292" x2="388" y2="213"
+        stroke="#444" stroke-width="1.6"
+        marker-start="url(#arr-s)" marker-end="url(#arr-e)"/>
+
+  <!-- 라벨 -->
+  <text id="label-width"
+        x="107" y="278"
+        font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',Arial,sans-serif"
+        font-size="14.5" font-weight="700" fill="#333" text-anchor="middle">가로</text>
+
+  <text id="label-height"
+        x="430" y="128"
+        font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',Arial,sans-serif"
+        font-size="14.5" font-weight="700" fill="#333" text-anchor="start">높이</text>
+
+  <text id="label-depth"
+        x="325" y="270"
+        font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',Arial,sans-serif"
+        font-size="14.5" font-weight="700" fill="#333" text-anchor="middle">세로</text>
+
+</svg>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { state as appState, updateAnnotation } from '../lib/state.svelte';
-  import type { Annotation, BoxAnnotation, MarkerAnnotation, ArrowAnnotation, LineAnnotation } from '../lib/types';
+  import type { Annotation, BoxAnnotation, MarkerAnnotation, ArrowAnnotation, LineAnnotation, MosaicAnnotation } from '../lib/types';
   import { PALETTE, DEFAULT_COLOR } from '../lib/constants';
 
   const LANGS = ['ko', 'en', 'ja', 'zh-hk', 'zh-cn'];
@@ -104,6 +104,32 @@
               title={color}
             ></button>
           {/each}
+        </div>
+      </div>
+
+    {:else if selected.type === 'mosaic'}
+      {@const ann = selected as MosaicAnnotation}
+      <div class="section-title">모자이크</div>
+      <div class="field-row">
+        <div class="field"><label>X</label><input class="inp num" type="number" step="0.1" value={ann.x.toFixed(2)} oninput={(e) => numericUpdate('x', (e.target as HTMLInputElement).value)} /></div>
+        <div class="field"><label>Y</label><input class="inp num" type="number" step="0.1" value={ann.y.toFixed(2)} oninput={(e) => numericUpdate('y', (e.target as HTMLInputElement).value)} /></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>W</label><input class="inp num" type="number" step="0.1" value={ann.width.toFixed(2)} oninput={(e) => numericUpdate('width', (e.target as HTMLInputElement).value)} /></div>
+        <div class="field"><label>H</label><input class="inp num" type="number" step="0.1" value={ann.height.toFixed(2)} oninput={(e) => numericUpdate('height', (e.target as HTMLInputElement).value)} /></div>
+      </div>
+      <div class="field">
+        <label>픽셀 크기 (1–20px)</label>
+        <div class="slider-row">
+          <input
+            type="range"
+            class="slider"
+            min="1"
+            max="20"
+            value={ann.pixelSize}
+            oninput={(e) => numericUpdate('pixelSize', (e.target as HTMLInputElement).value)}
+          />
+          <span class="slider-val">{ann.pixelSize}px</span>
         </div>
       </div>
 
@@ -214,4 +240,23 @@
   }
   .swatch:hover { transform: scale(1.15); }
   .swatch.selected { border-color: #fff; }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .slider {
+    flex: 1;
+    accent-color: #4a9eff;
+    cursor: pointer;
+  }
+
+  .slider-val {
+    font-size: 11px;
+    color: #aaa;
+    min-width: 28px;
+    text-align: right;
+  }
 </style>

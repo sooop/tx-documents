@@ -8,6 +8,7 @@
 
   let savedMsg = $state('');
   let savedTimer: ReturnType<typeof setTimeout> | null = null;
+  let getProcessedBlob: (() => Promise<Blob | null>) | undefined = $state();
 
   function onSaved() {
     savedMsg = '저장됨!';
@@ -26,7 +27,7 @@
 />
 
 <div class="app">
-  <Toolbar {onSaved} />
+  <Toolbar {onSaved} {getProcessedBlob} />
 
   {#if savedMsg}
     <div class="saved-toast">{savedMsg}</div>
@@ -34,7 +35,7 @@
 
   <div class="main">
     <ImageBrowser />
-    <Canvas />
+    <Canvas bind:getProcessedBlob />
 
     <aside class="right-panel">
       <PropertyPanel />

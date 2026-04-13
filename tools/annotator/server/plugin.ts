@@ -22,9 +22,31 @@ function parsePath(pathname: string) {
   const annotMatch = pathname.match(/^\/__api\/annotations\/([^/]+)\/([^/]+)\/([^/]+)$/);
   if (annotMatch) return { type: 'annotation', section: annotMatch[1], name: annotMatch[2], lang: annotMatch[3] };
 
+  // /__api/images/:section/:name/:lang  (처리된 이미지 저장)
+  const imageMatch = pathname.match(/^\/__api\/images\/([^/]+)\/([^/]+)\/([^/]+)$/);
+  if (imageMatch) return { type: 'image-save', section: imageMatch[1], name: imageMatch[2], lang: imageMatch[3] };
+
   if (pathname === '/__api/annotations') return { type: 'annotations-list' };
   if (pathname === '/__api/images') return { type: 'images-list' };
   if (pathname === '/__api/images/upload') return { type: 'image-upload' };
+  return null;
+}
+
+/** multipart body에서 파일 데이터 추출 */
+function extractFileFromMultipart(body: Buffer, contentType: string): Buffer | null {
+  const boundaryMatch = contentType.match(/boundary=(.+)$/);
+  if (!boundaryMatch) return null;
+  const boundary = Buffer.from('--' + boundaryMatch[1]);
+  const parts = splitBuffer(body, boundary);
+  for (const part of parts) {
+    if (part.length === 0) continue;
+    const headerEnd = indexOfSequence(part, Buffer.from('\r\n\r\n'));
+    if (headerEnd === -1) continue;
+    const headerStr = part.slice(0, headerEnd).toString('utf-8');
+    if (!headerStr.includes('filename=')) continue;
+    const data = part.slice(headerEnd + 4);
+    return data.slice(0, data.length - 2); // trim trailing \r\n
+  }
   return null;
 }
 
@@ -41,30 +63,39 @@ export function annotatorPlugin(): Plugin {
         res.setHeader('Access-Control-Allow-Origin', '*');
 
         try {
+          // ── GET /__api/images ────────────────────────────────────────────
           if (parsed.type === 'images-list') {
-            // GET /__api/images — public/images/ 아래 전체 이미지 목록
-            const result: Array<{ section: string; filename: string; name: string; lang: string }> = [];
+            const result: Array<{
+              section: string;
+              filename: string;
+              name: string;
+              lang: string;
+              hasOriginal: boolean;
+            }> = [];
             const sections = await fs.readdir(IMAGES_DIR, { withFileTypes: true });
             for (const sect of sections) {
               if (!sect.isDirectory()) continue;
               const files = await fs.readdir(path.join(IMAGES_DIR, sect.name));
               for (const f of files) {
                 if (!f.endsWith('.png') && !f.endsWith('.jpg') && !f.endsWith('.webp')) continue;
-                // filename format: {name}-{lang}.png
                 const base = f.replace(/\.(png|jpg|webp)$/, '');
                 const langMatch = base.match(/-([a-z]{2}(?:-[a-z]{2})?)$/);
                 if (!langMatch) continue;
                 const lang = langMatch[1];
                 const name = base.slice(0, -lang.length - 1);
-                result.push({ section: sect.name, filename: f, name, lang });
+                const ext = f.split('.').pop()!;
+                const originalPath = path.join(IMAGES_DIR, sect.name, '.originals', `${name}-${lang}.${ext}`);
+                let hasOriginal = false;
+                try { await fs.access(originalPath); hasOriginal = true; } catch { /* 없음 */ }
+                result.push({ section: sect.name, filename: f, name, lang, hasOriginal });
               }
             }
             res.end(JSON.stringify(result));
             return;
           }
 
+          // ── GET/PUT /__api/annotations/:section/:name/:lang ──────────────
           if (parsed.type === 'annotations-list') {
-            // GET /__api/annotations — src/assets/images/ 아래 전체 어노테이션 목록
             const result: Array<{ section: string; filename: string; name: string; lang: string }> = [];
             const sections = await fs.readdir(ANNOTATIONS_DIR, { withFileTypes: true });
             for (const sect of sections) {
@@ -108,8 +139,55 @@ export function annotatorPlugin(): Plugin {
             }
           }
 
+          // ── PUT /__api/images/:section/:name/:lang ───────────────────────
+          // 브라우저가 canvas로 합성한 PNG를 받아 public/images에 저장
+          if (parsed.type === 'image-save' && req.method === 'PUT') {
+            const { section = '', name = '', lang = '' } = parsed;
+            const contentType = req.headers['content-type'] ?? '';
+            const body = await readBody(req);
+
+            let imgBuf: Buffer;
+            if (contentType.includes('multipart/form-data')) {
+              const extracted = extractFileFromMultipart(body, contentType);
+              if (!extracted) {
+                res.statusCode = 400;
+                res.end(JSON.stringify({ error: 'No file in multipart' }));
+                return;
+              }
+              imgBuf = extracted;
+            } else {
+              // Content-Type: image/png 등 raw binary
+              imgBuf = body;
+            }
+
+            const destDir = path.join(IMAGES_DIR, section);
+            const destFile = path.join(destDir, `${name}-${lang}.png`);
+            const originalDir = path.join(destDir, '.originals');
+            const originalFile = path.join(originalDir, `${name}-${lang}.png`);
+
+            await fs.mkdir(destDir, { recursive: true });
+            await fs.mkdir(originalDir, { recursive: true });
+
+            // 원본 백업이 없으면 현재 파일을 원본으로 저장
+            try {
+              await fs.access(originalFile);
+            } catch {
+              // 현재 public 이미지가 원본 (아직 모자이크 미적용)
+              try {
+                await fs.copyFile(destFile, originalFile);
+              } catch {
+                // 파일 자체가 없는 경우 (새 이미지) — 무시
+              }
+            }
+
+            // 처리된 이미지 저장
+            await fs.writeFile(destFile, imgBuf);
+            res.end(JSON.stringify({ ok: true }));
+            return;
+          }
+
+          // ── POST /__api/images/upload ────────────────────────────────────
           if (parsed.type === 'image-upload' && req.method === 'POST') {
-            // multipart/form-data 파싱 (간이 구현)
             const body = await readBody(req);
             const contentType = req.headers['content-type'] ?? '';
             const boundaryMatch = contentType.match(/boundary=(.+)$/);
@@ -130,7 +208,6 @@ export function annotatorPlugin(): Plugin {
               if (headerEnd === -1) continue;
               const headerStr = part.slice(0, headerEnd).toString('utf-8');
               const data = part.slice(headerEnd + 4);
-              // trim trailing \r\n--
               const trimmed = data.slice(0, data.length - 2);
 
               const nameMatch = headerStr.match(/name="([^"]+)"/);
@@ -188,7 +265,6 @@ function splitBuffer(buf: Buffer, delimiter: Buffer): Buffer[] {
   }
   parts.push(buf.slice(start));
   return parts.map(p => {
-    // 파트 시작의 \r\n 제거
     if (p.slice(0, 2).toString() === '\r\n') return p.slice(2);
     return p;
   });

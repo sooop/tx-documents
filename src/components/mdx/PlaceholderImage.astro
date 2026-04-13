@@ -1,0 +1,157 @@
+---
+interface Props {
+  /** 캡쳐해야 할 화면/장면 설명 */
+  description: string;
+  /** 캡쳐 참고 URL (선택) */
+  url?: string;
+  /** 이미지 파일명 규칙 안내 (선택) — 예: "clearance/export-declaration-apply-page-ko.png" */
+  filename?: string;
+}
+
+const { description, url, filename } = Astro.props;
+---
+
+<figure class="placeholder-image" role="img" aria-label={`[이미지 준비 중] ${description}`}>
+  <div class="placeholder-image__body">
+    <span class="placeholder-image__icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <path d="m21 15-5-5L5 21"/>
+      </svg>
+    </span>
+    <p class="placeholder-image__label">이미지 준비 중</p>
+    <p class="placeholder-image__description">{description}</p>
+    {(url || filename) && (
+      <dl class="placeholder-image__meta">
+        {url && (
+          <>
+            <dt>참고 URL</dt>
+            <dd>
+              <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+            </dd>
+          </>
+        )}
+        {filename && (
+          <>
+            <dt>저장 경로</dt>
+            <dd><code>{filename}</code></dd>
+          </>
+        )}
+      </dl>
+    )}
+  </div>
+</figure>
+
+<style>
+  .placeholder-image {
+    margin: 1.5rem 0;
+    border-radius: 6px;
+    border: 2px dashed #e2a83a;
+    background: #fffbf0;
+    overflow: hidden;
+  }
+
+  :global(.dark) .placeholder-image {
+    border-color: #8a6020;
+    background: #2a2010;
+  }
+
+  .placeholder-image__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+
+  .placeholder-image__icon {
+    color: #c07820;
+    opacity: 0.7;
+  }
+
+  :global(.dark) .placeholder-image__icon {
+    color: #d4963a;
+  }
+
+  .placeholder-image__label {
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c07820;
+    opacity: 0.8;
+  }
+
+  :global(.dark) .placeholder-image__label {
+    color: #d4963a;
+  }
+
+  .placeholder-image__description {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #4a3c28;
+    line-height: 1.5;
+  }
+
+  :global(.dark) .placeholder-image__description {
+    color: #c8b890;
+  }
+
+  .placeholder-image__meta {
+    margin: 0.5rem 0 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    text-align: left;
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .placeholder-image__meta dt {
+    font-weight: 600;
+    color: #7a5c30;
+    white-space: nowrap;
+    padding-top: 1px;
+  }
+
+  :global(.dark) .placeholder-image__meta dt {
+    color: #b8943a;
+  }
+
+  .placeholder-image__meta dd {
+    margin: 0;
+    color: #5a4828;
+    word-break: break-all;
+  }
+
+  :global(.dark) .placeholder-image__meta dd {
+    color: #a89060;
+  }
+
+  .placeholder-image__meta a {
+    color: #b06010;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  :global(.dark) .placeholder-image__meta a {
+    color: #d4963a;
+  }
+
+  .placeholder-image__meta code {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.78rem;
+    background: #f0e4c8;
+    padding: 0 0.3em;
+    border-radius: 3px;
+  }
+
+  :global(.dark) .placeholder-image__meta code {
+    background: #3a2e10;
+  }
+</style>

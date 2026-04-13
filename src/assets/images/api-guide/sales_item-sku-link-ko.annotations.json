@@ -1,0 +1,33 @@
+{
+  "imageId": "sales_item-sku-link",
+  "annotations": [
+    {
+      "id": "sales-channel-info",
+      "type": "box",
+      "number": 1,
+      "x": 1.6883239171374762,
+      "y": 9.2634011090573,
+      "width": 63.37758945386065,
+      "height": 38.61090573012939,
+      "label": {
+        "ko": "판매채널 상품 정보 — 판매채널, 상품번호, 옵션번호, 상품명, 옵션을 확인합니다",
+        "en": "Sales channel product information — channel, product number, option number, name, and option",
+        "ja": "販売チャネル商品情報 — 販売チャネル、商品番号、オプション番号、商品名、オプション"
+      }
+    },
+    {
+      "id": "sku-info",
+      "type": "box",
+      "number": 2,
+      "x": 1.694915254237288,
+      "y": 61.182994454713494,
+      "width": 32.29755178907721,
+      "height": 13.308687615526802,
+      "label": {
+        "ko": "SKU 정보 — SKU no. 검색 후 매칭기준과 사용여부를 설정합니다",
+        "en": "SKU information — search SKU no. and set matching criteria and usage status",
+        "ja": "SKU情報 — SKU番号を検索し、マッチング基準と使用有無を設定します"
+      }
+    }
+  ]
+}

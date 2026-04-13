@@ -7,6 +7,7 @@
 
   let images: ImageEntry[] = $state([]);
   let annotationMap: Set<string> = $state(new Set());
+  let originalSet: Set<string> = $state(new Set());
   let search = $state('');
   let loading = $state(false);
   let showUpload = $state(false);
@@ -24,6 +25,11 @@
       ]);
       images = imgs;
       annotationMap = new Set(anns.map(a => `${a.section}/${a.name}-${a.lang}`));
+      originalSet = new Set(
+        imgs
+          .filter(i => i.hasOriginal)
+          .map(i => `${i.section}/${i.name}-${i.lang}`)
+      );
     } finally {
       loading = false;
     }
@@ -34,7 +40,12 @@
       if (!confirm('저장하지 않은 변경사항이 있습니다. 이동하시겠습니까?')) return;
     }
 
-    const url = `/images/${img.section}/${img.name}-${lang}.png`;
+    // 원본 백업이 있으면 편집 시 원본을 사용 (모자이크가 적용되지 않은 이미지)
+    const key = `${img.section}/${img.name}-${lang}`;
+    const ext = img.filename.split('.').pop() ?? 'png';
+    const url = originalSet.has(key)
+      ? `/images/${img.section}/.originals/${img.name}-${lang}.${ext}`
+      : `/images/${img.section}/${img.name}-${lang}.${ext}`;
 
     // 이미지 자연 크기 읽기
     const { naturalWidth, naturalHeight } = await new Promise<{ naturalWidth: number; naturalHeight: number }>((resolve) => {

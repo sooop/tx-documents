@@ -1,4 +1,4 @@
-import type { Annotation, BoxAnnotation, ArrowAnnotation, LineAnnotation, HandleId } from './types';
+import type { Annotation, BoxAnnotation, ArrowAnnotation, LineAnnotation, MosaicAnnotation, HandleId } from './types';
 import { MARKER_RADIUS, BOX_STROKE_WIDTH, ARROW_STROKE_WIDTH, HIT_TOLERANCE } from './constants';
 
 /** 퍼센트 → 이미지 픽셀 좌표 */
@@ -105,6 +105,14 @@ function hitAnnotation(
     const y2 = pct2px(ann.toY, natH);
     return distToSegment(svgX, svgY, x1, y1, x2, y2) <= (ann.strokeWidth ?? ARROW_STROKE_WIDTH) / 2 + tol;
   }
+  if (ann.type === 'mosaic') {
+    const x = pct2px(ann.x, natW);
+    const y = pct2px(ann.y, natH);
+    const w = pct2px(ann.width, natW);
+    const h = pct2px(ann.height, natH);
+    return svgX >= x - tol && svgX <= x + w + tol &&
+           svgY >= y - tol && svgY <= y + h + tol;
+  }
   return false;
 }
 
@@ -174,9 +182,54 @@ export function resizeBox(
   };
 }
 
+/** Mosaic 리사이즈 핸들 위치 */
+export function getMosaicHandles(ann: MosaicAnnotation, natW: number, natH: number) {
+  const x = pct2px(ann.x, natW);
+  const y = pct2px(ann.y, natH);
+  const w = pct2px(ann.width, natW);
+  const h = pct2px(ann.height, natH);
+  return {
+    nw: { x, y },
+    n:  { x: x + w / 2, y },
+    ne: { x: x + w, y },
+    e:  { x: x + w, y: y + h / 2 },
+    se: { x: x + w, y: y + h },
+    s:  { x: x + w / 2, y: y + h },
+    sw: { x, y: y + h },
+    w:  { x, y: y + h / 2 },
+  } as Record<HandleId, { x: number; y: number }>;
+}
+
+/** Mosaic 리사이즈 */
+export function resizeMosaic(
+  ann: MosaicAnnotation,
+  handle: HandleId,
+  newSvgX: number,
+  newSvgY: number,
+  natW: number,
+  natH: number
+): Partial<MosaicAnnotation> {
+  let x = pct2px(ann.x, natW);
+  let y = pct2px(ann.y, natH);
+  let r = x + pct2px(ann.width, natW);
+  let b = y + pct2px(ann.height, natH);
+
+  if (handle.includes('w')) x = Math.min(newSvgX, r - 1);
+  if (handle.includes('e')) r = Math.max(newSvgX, x + 1);
+  if (handle.includes('n')) y = Math.min(newSvgY, b - 1);
+  if (handle.includes('s')) b = Math.max(newSvgY, y + 1);
+
+  return {
+    x: px2pct(x, natW),
+    y: px2pct(y, natH),
+    width: px2pct(r - x, natW),
+    height: px2pct(b - y, natH),
+  };
+}
+
 /** Arrow/Line 끝점 이동 */
 export function resizeLine(
-  ann: ArrowAnnotation | LineAnnotation,
+  _ann: ArrowAnnotation | LineAnnotation,
   handle: 'from' | 'to',
   newX: number,
   newY: number,
@@ -206,18 +259,19 @@ export function moveAnnotation(
       y: clamp(ann.y + dPctY, 0, 100),
     };
   }
-  if (ann.type === 'box') {
+  if (ann.type === 'box' || ann.type === 'mosaic') {
     return {
       x: clamp(ann.x + dPctX, 0, 100 - ann.width),
       y: clamp(ann.y + dPctY, 0, 100 - ann.height),
     };
   }
   // arrow | line
+  const la = ann as ArrowAnnotation | LineAnnotation;
   return {
-    fromX: clamp(ann.fromX + dPctX, 0, 100),
-    fromY: clamp(ann.fromY + dPctY, 0, 100),
-    toX: clamp(ann.toX + dPctX, 0, 100),
-    toY: clamp(ann.toY + dPctY, 0, 100),
+    fromX: clamp(la.fromX + dPctX, 0, 100),
+    fromY: clamp(la.fromY + dPctY, 0, 100),
+    toX: clamp(la.toX + dPctX, 0, 100),
+    toY: clamp(la.toY + dPctY, 0, 100),
   } as Partial<Annotation>;
 }
 

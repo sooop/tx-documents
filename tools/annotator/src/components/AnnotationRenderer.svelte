@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Annotation, HandleId } from '../lib/types';
+  import type { Annotation, HandleId, MosaicAnnotation } from '../lib/types';
   import { MARKER_RADIUS, MARKER_FONT_SIZE, DEFAULT_COLOR, BOX_STROKE_WIDTH, ARROW_STROKE_WIDTH, ARROW_HEAD_SIZE, HANDLE_RADIUS, SELECTION_COLOR } from '../lib/constants';
-  import { pct2px, getBoxHandles, getLineHandles } from '../lib/canvas-math';
+  import { pct2px, getBoxHandles, getLineHandles, getMosaicHandles } from '../lib/canvas-math';
 
   interface Props {
     annotations: Annotation[];
@@ -151,6 +151,35 @@
           onmousedown={(e) => onHandleMousedown?.(ann.id, hid as HandleId, e)}
         />
       {/each}
+    {/if}
+
+  {:else if ann.type === 'mosaic'}
+    {@const mx = px(ann.x, nw)}
+    {@const my = px(ann.y, nh)}
+    {@const mw = px(ann.width, nw)}
+    {@const mh = px(ann.height, nh)}
+    {#if editorMode}
+      <rect
+        x={mx} y={my} width={mw} height={mh}
+        fill="none"
+        stroke={selected ? SELECTION_COLOR : 'rgba(255,255,255,0.5)'}
+        stroke-width={2}
+        stroke-dasharray={selected ? 'none' : '6 3'}
+        vector-effect="non-scaling-stroke"
+        rx="2" ry="2"
+      />
+      {#if selected}
+        {@const handles = getMosaicHandles(ann as MosaicAnnotation, nw, nh)}
+        {#each Object.entries(handles) as [hid, pos]}
+          <circle
+            cx={pos.x} cy={pos.y} r={HANDLE_RADIUS}
+            fill="white" stroke={SELECTION_COLOR} stroke-width="2"
+            vector-effect="non-scaling-stroke"
+            style="cursor:nwse-resize"
+            onmousedown={(e) => onHandleMousedown?.(ann.id, hid as HandleId, e)}
+          />
+        {/each}
+      {/if}
     {/if}
   {/if}
 {/each}

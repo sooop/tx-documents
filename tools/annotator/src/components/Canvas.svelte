@@ -4,18 +4,73 @@
   import { generateId } from '../lib/id';
   import {
     clientToSvg, svgToPct, hitTest, hitHandle,
-    getBoxHandles, getLineHandles, resizeBox, resizeLine, moveAnnotation
+    getBoxHandles, getLineHandles, getMosaicHandles,
+    resizeBox, resizeLine, resizeMosaic, moveAnnotation
   } from '../lib/canvas-math';
   import { HANDLE_RADIUS } from '../lib/constants';
   import AnnotationRenderer from './AnnotationRenderer.svelte';
-  import type { HandleId, BoxAnnotation, ArrowAnnotation, LineAnnotation } from '../lib/types';
+  import type { HandleId, BoxAnnotation, ArrowAnnotation, LineAnnotation, MosaicAnnotation } from '../lib/types';
+
+  interface Props {
+    getProcessedBlob?: () => Promise<Blob | null>;
+  }
+  let { getProcessedBlob = $bindable(undefined) }: Props = $props();
 
   let svgEl: SVGSVGElement | undefined = $state();
   let containerEl: HTMLDivElement | undefined = $state();
+  let mosaicCanvas: HTMLCanvasElement | undefined = $state();
+  let imgEl: HTMLImageElement | undefined = $state();
+
+  $effect(() => {
+    getProcessedBlob = async () => {
+      if (!imgEl || !nw || !nh) return null;
+      const out = document.createElement('canvas');
+      out.width = nw;
+      out.height = nh;
+      const ctx = out.getContext('2d');
+      if (!ctx) return null;
+      ctx.drawImage(imgEl, 0, 0, nw, nh);
+      if (mosaicCanvas) ctx.drawImage(mosaicCanvas, 0, 0);
+      return new Promise<Blob | null>(resolve => out.toBlob(resolve, 'image/png'));
+    };
+  });
+
+  // 모자이크 캔버스 렌더링
+  function drawMosaics() {
+    if (!mosaicCanvas || !imgEl || !imgEl.complete || !appState.currentImage) return;
+    const ctx = mosaicCanvas.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, nw, nh);
+    const mosaics = appState.annotations.filter((a): a is MosaicAnnotation => a.type === 'mosaic');
+    for (const ann of mosaics) {
+      const rx = Math.round(ann.x * nw / 100);
+      const ry = Math.round(ann.y * nh / 100);
+      const rw = Math.round(ann.width * nw / 100);
+      const rh = Math.round(ann.height * nh / 100);
+      if (rw <= 0 || rh <= 0) continue;
+      const ps = Math.max(1, ann.pixelSize);
+      const offW = Math.max(1, Math.ceil(rw / ps));
+      const offH = Math.max(1, Math.ceil(rh / ps));
+      const off = document.createElement('canvas');
+      off.width = offW;
+      off.height = offH;
+      const offCtx = off.getContext('2d')!;
+      offCtx.drawImage(imgEl, rx, ry, rw, rh, 0, 0, offW, offH);
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(off, 0, 0, offW, offH, rx, ry, rw, rh);
+    }
+  }
+
+  $effect(() => {
+    // 의존성 추적: annotations 변경 또는 이미지 변경 시 재렌더링
+    void appState.annotations;
+    void appState.currentImage;
+    drawMosaics();
+  });
 
   // 드래그 상태
   let dragState: {
-    mode: 'move' | 'resize' | 'draw-box' | 'draw-arrow' | 'draw-line' | 'pan';
+    mode: 'move' | 'resize' | 'draw-box' | 'draw-arrow' | 'draw-line' | 'draw-mosaic' | 'pan';
     startSvgX: number;
     startSvgY: number;
     lastSvgX: number;
@@ -53,6 +108,7 @@
         if (selAnn) {
           let handles: Record<string, { x: number; y: number }> = {};
           if (selAnn.type === 'box') handles = getBoxHandles(selAnn, nw, nh);
+          else if (selAnn.type === 'mosaic') handles = getMosaicHandles(selAnn as MosaicAnnotation, nw, nh);
           else if (selAnn.type === 'arrow' || selAnn.type === 'line') handles = getLineHandles(selAnn, nw, nh);
 
           const hid = hitHandle(handles, svgX, svgY, HANDLE_RADIUS + 4);
@@ -90,6 +146,17 @@
       addAnnotation({ id, type: 'box', x, y, width: 0, height: 0, strokeColor: appState.activeColor } as BoxAnnotation);
       appState.selectedId = id;
       dragState = { mode: 'draw-box', startSvgX: svgX, startSvgY: svgY, lastSvgX: svgX, lastSvgY: svgY, drawingId: id };
+      e.preventDefault();
+      return;
+    }
+
+    if (tool === 'mosaic') {
+      const { x, y } = svgToPct(svgX, svgY, nw, nh);
+      const id = generateId('mosaic');
+      pushHistory(appState.annotations);
+      addAnnotation({ id, type: 'mosaic', x, y, width: 0, height: 0, pixelSize: appState.mosaicPixelSize } as MosaicAnnotation);
+      appState.selectedId = id;
+      dragState = { mode: 'draw-mosaic', startSvgX: svgX, startSvgY: svgY, lastSvgX: svgX, lastSvgY: svgY, drawingId: id };
       e.preventDefault();
       return;
     }
@@ -144,6 +211,8 @@
       if (!ann) return;
       if (ann.type === 'box') {
         updateAnnotation(ann.id, resizeBox(ann, dragState.handle, svgX, svgY, nw, nh));
+      } else if (ann.type === 'mosaic') {
+        updateAnnotation(ann.id, resizeMosaic(ann as MosaicAnnotation, dragState.handle, svgX, svgY, nw, nh));
       } else if (ann.type === 'arrow' || ann.type === 'line') {
         updateAnnotation(ann.id, resizeLine(ann, dragState.handle as 'from' | 'to', svgX, svgY, nw, nh));
       }
@@ -164,6 +233,18 @@
       return;
     }
 
+    if (dragState.mode === 'draw-mosaic' && dragState.drawingId) {
+      const startPct = svgToPct(dragState.startSvgX, dragState.startSvgY, nw, nh);
+      const curPct = svgToPct(svgX, svgY, nw, nh);
+      updateAnnotation(dragState.drawingId, {
+        x: Math.min(startPct.x, curPct.x),
+        y: Math.min(startPct.y, curPct.y),
+        width: Math.abs(curPct.x - startPct.x),
+        height: Math.abs(curPct.y - startPct.y),
+      });
+      return;
+    }
+
     if ((dragState.mode === 'draw-arrow' || dragState.mode === 'draw-line') && dragState.drawingId) {
       const { x, y } = svgToPct(svgX, svgY, nw, nh);
       updateAnnotation(dragState.drawingId, { toX: x, toY: y });
@@ -172,6 +253,14 @@
 
   function onMouseup(_e: MouseEvent) {
     if (!dragState) return;
+
+    if (dragState.mode === 'draw-mosaic' && dragState.drawingId) {
+      const ann = appState.annotations.find(a => a.id === dragState!.drawingId) as MosaicAnnotation | undefined;
+      if (ann && (ann.width < 0.5 || ann.height < 0.5)) {
+        appState.annotations = appState.annotations.filter(a => a.id !== dragState!.drawingId);
+        appState.selectedId = null;
+      }
+    }
 
     if (dragState.mode === 'draw-box' && dragState.drawingId) {
       const ann = appState.annotations.find(a => a.id === dragState!.drawingId) as BoxAnnotation | undefined;
@@ -271,12 +360,20 @@
     >
       <div class="image-wrap">
         <img
+          bind:this={imgEl}
           src={appState.currentImage.url}
           alt="편집 중인 이미지"
           style="display:block; max-width:none; width:{nw}px; height:{nh}px;"
           draggable="false"
+          onload={drawMosaics}
         />
         {#if nw > 0 && nh > 0}
+          <canvas
+            bind:this={mosaicCanvas}
+            width={nw}
+            height={nh}
+            style="position:absolute; top:0; left:0; pointer-events:none; z-index:1;"
+          ></canvas>
           <!-- svelte-ignore a11y_no_static_element_interactions -->
           <svg
             bind:this={svgEl}
@@ -285,7 +382,7 @@
             width={nw}
             height={nh}
             onmousedown={onMousedown}
-            style="cursor: {appState.activeTool === 'select' ? 'default' : 'crosshair'}"
+            style="cursor: {appState.activeTool === 'select' ? 'default' : 'crosshair'}; z-index:2;"
           >
             <AnnotationRenderer
               annotations={appState.annotations}

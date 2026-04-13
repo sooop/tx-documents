@@ -8,6 +8,7 @@ interface AppState {
   activeTool: ToolMode;
   activeColor: string;
   startingNumber: number;
+  mosaicPixelSize: number;
   zoom: number;
   panX: number;
   panY: number;
@@ -21,6 +22,7 @@ export const state: AppState = $state({
   activeTool: 'select',
   activeColor: PALETTE[0],
   startingNumber: 1,
+  mosaicPixelSize: 6,
   zoom: 1,
   panX: 0,
   panY: 0,

@@ -1,0 +1,18 @@
+{
+  "imageId": "channel-api-tiktok",
+  "annotations": [
+    {
+      "id": "shipping-method",
+      "type": "box",
+      "number": 1,
+      "x": 75.2858399296394,
+      "y": 40.821138211382106,
+      "width": 24.09741998225493,
+      "height": 28.8999773264665,
+      "label": {
+        "ko": "배송사 집하 방식 (Pick-up / Drop-off)",
+        "en": "Shipping Collection Method (Pick-up / Drop-off)"
+      }
+    }
+  ]
+}

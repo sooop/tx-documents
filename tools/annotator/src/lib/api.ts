@@ -39,6 +39,21 @@ export async function saveAnnotation(
   if (!res.ok) throw new Error(`saveAnnotation failed: ${res.status}`);
 }
 
+export async function saveProcessedImage(
+  section: string,
+  name: string,
+  lang: string,
+  blob: Blob
+): Promise<void> {
+  const formData = new FormData();
+  formData.append('file', blob, `${name}-${lang}.png`);
+  const res = await fetch(`${BASE}/images/${section}/${name}/${lang}`, {
+    method: 'PUT',
+    body: formData,
+  });
+  if (!res.ok) throw new Error(`saveProcessedImage failed: ${res.status}`);
+}
+
 export async function uploadImage(
   section: string,
   name: string,

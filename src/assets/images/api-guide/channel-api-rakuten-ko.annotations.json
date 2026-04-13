@@ -1,0 +1,31 @@
+{
+  "imageId": "channel-api-rakuten",
+  "annotations": [
+    {
+      "id": "api-key-expiry",
+      "type": "box",
+      "number": 1,
+      "x": 50.17475728155342,
+      "y": 25.779578606158836,
+      "width": 25.112091791703424,
+      "height": 10.849270664505669,
+      "label": {
+        "ko": "API Key 만료일 (60일 유효)",
+        "en": "API Key Expiry Date (60-day validity)"
+      }
+    },
+    {
+      "id": "rakuten-option-code",
+      "type": "box",
+      "number": 2,
+      "x": 75.37511032656664,
+      "y": 76.34197730956242,
+      "width": 23.742277140335393,
+      "height": 9.71961102106967,
+      "label": {
+        "ko": "라쿠텐 옵션코드를 풀필먼트 주문에 사용하기",
+        "en": "Use Rakuten option code for fulfillment orders"
+      }
+    }
+  ]
+}

@@ -1,13 +1,14 @@
 <script lang="ts">
   import { state as appState } from '../lib/state.svelte';
-  import { saveAnnotation } from '../lib/api';
+  import { saveAnnotation, saveProcessedImage } from '../lib/api';
   import type { ToolMode } from '../lib/types';
   import { PALETTE } from '../lib/constants';
 
   interface Props {
     onSaved?: () => void;
+    getProcessedBlob?: () => Promise<Blob | null>;
   }
-  let { onSaved }: Props = $props();
+  let { onSaved, getProcessedBlob }: Props = $props();
 
   let saving = $state(false);
   let saveError = $state('');
@@ -18,6 +19,7 @@
     { mode: 'box',    label: '박스 (M)', key: 'M', icon: '□' },
     { mode: 'arrow',  label: '화살표 (B)', key: 'B', icon: '↗' },
     { mode: 'line',   label: '직선 (X)', key: 'X', icon: '─' },
+    { mode: 'mosaic', label: '모자이크 (P)', key: 'P', icon: '▣' },
   ];
 
   async function save() {
@@ -26,6 +28,16 @@
     saveError = '';
     try {
       const { section, name, lang } = appState.currentImage;
+
+      // 모자이크가 있으면 처리된 이미지를 먼저 저장
+      const hasMosaic = appState.annotations.some(a => a.type === 'mosaic');
+      if (hasMosaic && getProcessedBlob) {
+        const blob = await getProcessedBlob();
+        if (blob) {
+          await saveProcessedImage(section, name, lang, blob);
+        }
+      }
+
       await saveAnnotation(section, name, lang, {
         imageId: name,
         annotations: appState.annotations,
@@ -94,6 +106,20 @@
       bind:value={appState.startingNumber}
     />
   </div>
+
+  {#if appState.activeTool === 'mosaic'}
+    <div class="tool-group mosaic-group">
+      <span class="label">픽셀 크기</span>
+      <input
+        type="range"
+        class="pixel-slider"
+        min="1"
+        max="20"
+        bind:value={appState.mosaicPixelSize}
+      />
+      <span class="pixel-value">{appState.mosaicPixelSize}px</span>
+    </div>
+  {/if}
 
   <div class="tool-group zoom-group">
     <button class="icon-btn" onclick={zoomOut} title="줌 아웃 (Ctrl+-)">−</button>
@@ -197,6 +223,21 @@
     padding: 2px 6px;
     font-size: 12px;
     text-align: center;
+  }
+
+  .mosaic-group { gap: 6px; }
+
+  .pixel-slider {
+    width: 80px;
+    accent-color: #4a9eff;
+    cursor: pointer;
+  }
+
+  .pixel-value {
+    font-size: 11px;
+    color: #aaa;
+    min-width: 28px;
+    text-align: right;
   }
 
   .zoom-group { gap: 4px; }

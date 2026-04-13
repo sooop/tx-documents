@@ -49,20 +49,31 @@ export interface LineAnnotation {
   strokeWidth?: number;
 }
 
-export type Annotation = BoxAnnotation | MarkerAnnotation | ArrowAnnotation | LineAnnotation;
+export interface MosaicAnnotation {
+  id: string;
+  type: 'mosaic';
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  pixelSize: number;
+}
+
+export type Annotation = BoxAnnotation | MarkerAnnotation | ArrowAnnotation | LineAnnotation | MosaicAnnotation;
 
 export interface AnnotationFile {
   imageId: string;
   annotations: Annotation[];
 }
 
-export type ToolMode = 'select' | 'marker' | 'box' | 'arrow' | 'line';
+export type ToolMode = 'select' | 'marker' | 'box' | 'arrow' | 'line' | 'mosaic';
 
 export interface ImageEntry {
   section: string;
   filename: string;
   name: string;
   lang: string;
+  hasOriginal?: boolean;
 }
 
 export interface CurrentImage {
