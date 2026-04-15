@@ -4,6 +4,10 @@
 // idle | selecting | input | capturing | done
 let currentState = 'idle';
 let capturedFiles = [];
+let bridgeAvailable = false;
+let lastCaptureParams = null;
+let isRecaptureMode = false;
+let currentLocale = 'ko'; // 현재 페이지 언어 (언어별 캡쳐 시 사용)
 
 // ── 뷰 전환 ──────────────────────────────────────────────
 
@@ -18,6 +22,24 @@ function setState(newState, data = {}) {
     document.getElementById('page-name').value = data.defaultPage || '';
     document.getElementById('node-name').value = data.defaultNode || '';
     if (data.defaultSeq != null) document.getElementById('seq-num').value = data.defaultSeq;
+    else if (!data.isRecapture) document.getElementById('seq-num').value = '';
+
+    // 브릿지 가용 여부 반영
+    if (data.bridgeAvailable !== undefined) {
+      bridgeAvailable = data.bridgeAvailable;
+    }
+    const langSection = document.getElementById('lang-section');
+    if (langSection) langSection.style.display = bridgeAvailable ? '' : 'none';
+
+    // 재캡쳐 모드 표시
+    isRecaptureMode = data.isRecapture || false;
+    const modeLabel = document.getElementById('input-mode-label');
+    if (modeLabel) {
+      modeLabel.textContent = isRecaptureMode
+        ? '동일 영역 재캡쳐 - 설정을 조정하세요'
+        : '노드가 선택되었습니다';
+    }
+
     // 사이드패널은 별도 창이므로 바로 포커스 가능
     setTimeout(() => {
       const input = document.getElementById('node-name');
@@ -64,6 +86,37 @@ async function sendToContent(message) {
   return chrome.tabs.sendMessage(tab.id, message);
 }
 
+// ── 언어 스위처 ──────────────────────────────────────────
+
+function updateLocaleSwitcher(locale) {
+  document.querySelectorAll('.btn-locale').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.locale === locale);
+  });
+}
+
+function setLocaleStatus(text) {
+  const el = document.getElementById('locale-status');
+  if (el) el.textContent = text;
+}
+
+document.querySelectorAll('.btn-locale').forEach((btn) => {
+  btn.addEventListener('click', async () => {
+    const locale = btn.dataset.locale;
+    setLocaleStatus('전환 중...');
+    try {
+      const res = await sendToContent({ type: 'SET_LOCALE', locale });
+      if (res && res.error) throw new Error(res.error);
+      updateLocaleSwitcher(locale);
+      currentLocale = locale;
+      setLocaleStatus('');
+    } catch (err) {
+      setLocaleStatus('전환 실패');
+      setTimeout(() => setLocaleStatus(''), 2500);
+      showError('언어 전환 실패: ' + err.message);
+    }
+  });
+});
+
 // ── 버튼 핸들러 ──────────────────────────────────────────
 
 document.getElementById('btn-start').addEventListener('click', async () => {
@@ -100,7 +153,23 @@ document.getElementById('btn-cancel-input').addEventListener('click', async () =
 
 document.getElementById('btn-capture').addEventListener('click', doCapture);
 
-document.getElementById('btn-retry').addEventListener('click', () => setState('idle'));
+// 동일 영역 재캡쳐: input 뷰로 돌아가서 설정 조정
+document.getElementById('btn-recapture').addEventListener('click', () => {
+  if (!lastCaptureParams) { setState('idle'); return; }
+  setState('input', {
+    defaultPage: lastCaptureParams.pageName,
+    defaultNode: lastCaptureParams.nodeName,
+    defaultSeq: lastCaptureParams.seq,
+    isRecapture: true,
+  });
+});
+
+// 새 노드 선택: idle로 돌아가고 재캡쳐 대상 초기화
+document.getElementById('btn-retry').addEventListener('click', () => {
+  lastCaptureParams = null;
+  setState('idle');
+  sendToContent({ type: 'CLEAR_RECAPTURE' }).catch(() => {});
+});
 
 document.addEventListener('keydown', (e) => {
   if (currentState === 'selecting') {
@@ -140,10 +209,24 @@ async function doCapture() {
   const nodeName = document.getElementById('node-name').value.trim() || 'node';
   const seqRaw = parseInt(document.getElementById('seq-num').value, 10);
   const seq = seqRaw >= 1 ? seqRaw : 1;
+
+  // 캡쳐 언어 결정 (브릿지 가용 시: 토글 ON이면 전체, OFF이면 현재 언어만)
+  let locales = null;
+  if (bridgeAvailable) {
+    const allLocalesToggle = document.getElementById('all-locales-toggle');
+    if (!allLocalesToggle.checked) {
+      locales = [currentLocale];
+    }
+    // 토글 ON이면 locales = null → content.js에서 전체 언어로 처리
+  }
+
+  lastCaptureParams = { pageName, nodeName, seq };
   capturedFiles = [];
   setState('capturing', { message: '캡쳐 준비 중...' });
+
+  const msgType = isRecaptureMode ? 'DO_RECAPTURE' : 'DO_CAPTURE';
   try {
-    await sendToContent({ type: 'DO_CAPTURE', pageName, nodeName, seq });
+    await sendToContent({ type: msgType, pageName, nodeName, seq, locales });
   } catch (err) {
     setState('idle');
     showError('캡쳐 명령 전송 실패: ' + err.message);
@@ -155,10 +238,13 @@ async function doCapture() {
 chrome.runtime.onMessage.addListener((message) => {
   switch (message.type) {
     case 'NODE_SELECTED':
+      currentLocale = message.currentLocale || 'ko';
+      updateLocaleSwitcher(currentLocale);
       setState('input', {
         defaultPage: message.defaultPage,
         defaultNode: message.defaultNode,
         defaultSeq: message.defaultSeq,
+        bridgeAvailable: message.bridgeAvailable,
       });
       break;
 

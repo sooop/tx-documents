@@ -135,6 +135,29 @@
   transform: rotate(0deg);
 }
 
+.sidebar-link--expand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.sidebar-link--expand svg {
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+  transition: transform 0.2s ease;
+  color: var(--color-text-muted);
+}
+
+.sidebar-link--expand.open svg {
+  transform: rotate(0deg);
+}
+
 .sidebar-children {
   list-style: none;
 }

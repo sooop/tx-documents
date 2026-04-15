@@ -384,6 +384,8 @@ temp-images에서 가져온 이미지 또는 기존 이미지를 `public/images/
 
 이미지에 번호, 박스, 화살표 표시가 필요한 경우:
 
+**어노테이션이 필요한 경우, 박스 사용 금지. 번호만 표시합니다.**
+
 `src/assets/images/{section}/{이미지이름}-{lang}.annotations.json` 파일을 작성합니다.
 
 - `imageId`는 이미지이름(언어코드·확장자 제외)

@@ -1,0 +1,149 @@
+---
+title: "CROSSMALL API 연동 가이드"
+description: "스마트십에서 CROSSMALL API를 연동하여 주문 수집 및 발송처리를 자동화하는 방법을 안내합니다."
+---
+
+<AnnotatedImage src="crossmall-logo" section="api-guide" alt="CROSSMALL 로고" />
+
+## API 연동에 관해
+
+<ApiSiteIntro lang="ko" />
+
+## 사전 준비 — CROSSMALL API 키 발급
+
+CROSSMALL은 판매자 어드민에서 회사 코드와 API Key를 확인하고, 스마트십 연동을 위한 발송완료 단계 및 배송편을 직접 설정해야 합니다.
+
+| 항목 | 설명 |
+|------|------|
+| **회사 코드(会社コード)** | CROSSMALL 기본 정보에 등록된 업체 고유 식별값 |
+| **API Key** | 기본 정보 편집 화면의 API 설정에서 확인하는 고유 키 |
+| **Shop ID** | CROSSMALL 로그인 시 사용하는 판매자 ID |
+
+### 회사 코드 확인
+
+<AnnotatedImage src="crossmall-company-code" section="api-guide" alt="CROSSMALL 基本情報編集 화면" caption="基本情報編集 화면의 会社コード 란에서 회사 코드 확인" />
+
+1. CROSSMALL에 로그인한 후 **システム設定 > 基本情報 > 基本情報** 메뉴로 이동합니다.
+2. **基本情報編集** 화면에서 **会社コード(회사 코드)** 란의 값을 복사하여 메모장 등에 보관해둡니다.
+
+### API Key 확인
+
+<AnnotatedImage src="crossmall-edit-button" section="api-guide" alt="CROSSMALL 기본 정보 하단 편집 버튼" caption="기본 정보 내역 하단의 編集 버튼 클릭" />
+
+1. **システム設定 > 基本情報 > 基本情報** 메뉴로 이동합니다.
+2. 기본 정보 내역 하단의 **編集(편집)** 버튼을 클릭합니다.
+3. 편집 화면으로 전환된 후 **API 설정** 폼의 **表示(표시)** 버튼을 클릭하면 팝업으로 API 키가 표시됩니다.
+
+<AnnotatedImage src="crossmall-api-key-popup" section="api-guide" alt="CROSSMALL API 키 표시 팝업" caption="表示 버튼을 눌러 팝업으로 API 키 확인 후 복사" />
+
+4. 표시된 API 키를 복사하여 메모장 등에 보관해둡니다.
+
+### 발송완료 단계 추가
+
+스마트십을 통해 CROSSMALL 주문을 발송처리하려면 "발송처리 완료"에 해당하는 주문 상태가 필요합니다. CROSSMALL의 기본 설정에는 이 단계가 없기 때문에 시스템 설정에서 처리 단계를 직접 추가해야 합니다.
+
+<AnnotatedImage src="crossmall-phase-settings" section="api-guide" alt="CROSSMALL 処理フェーズ 설정 화면" caption="処理フェーズ 메뉴에서 TX発送済み 단계 신규 등록" />
+
+1. **システム設定 → 処理フェーズ** 메뉴로 이동합니다.
+2. **処理フェーズ(처리 페이즈)** 목록 맨 아래에 있는 **-- 新規登錄 --** 을 선택합니다.
+3. 우측 **名称(명칭)** 필드에 `TX発送済み` 를 입력합니다.
+4. 하단의 **登錄(등록)** 버튼을 클릭하여 단계를 추가합니다.
+
+<Callout type="warning" title="명칭을 정확하게 입력하세요">
+처리 단계 명칭은 반드시 `TX発送済み` 로 정확하게 입력해주세요. 다른 명칭을 사용하면 발송처리가 작동하지 않습니다.
+</Callout>
+
+### 배송편 추가
+
+발송처리 시 CROSSMALL에서 정상적으로 배송사가 지정되도록 배송편 설정을 추가합니다. 총 6개의 배송편을 등록해야 하며, **코드와 명칭은 정확하게 입력**해야 합니다.
+
+<AnnotatedImage src="crossmall-shipping-method-list" section="api-guide" alt="CROSSMALL 配送便 목록 화면" caption="マスター登録 > 配送便 메뉴에서 배송편 신규 등록" />
+
+1. **マスター登録 → 配送便** 메뉴로 이동합니다.
+2. 배송편 목록 가장 위쪽의 **--新規登錄--** 을 클릭합니다.
+
+<AnnotatedImage src="crossmall-shipping-method-form" section="api-guide" alt="CROSSMALL 配送便 등록 폼" caption="코드·명칭·注文連携用CSV配送業者 입력 후 登錄" />
+
+3. 각 배송편에 대해 다음 정보를 입력하고 **登錄(등록)** 버튼을 클릭합니다.
+
+| コード | 名称 | 注文連携用CSV配送業者 |
+|--------|------|----------------------|
+| 009 | Sagawa | 佐川急便 |
+| 010 | Yamato | ヤマト運輸 |
+| 011 | Ecohai | エコ配 |
+| 012 | Yu-Packet | ゆうパケット |
+| 013 | Nekopos | ネコポス |
+| 13 | Yu-Pack | ゆうパック |
+
+<Callout type="warning">
+코드와 명칭이 정확히 일치하지 않으면 발송처리 시 CROSSMALL에서 올바른 배송사로 연결되지 않습니다. 위 표의 값을 그대로 등록해주세요.
+</Callout>
+
+## 스마트십에서 API 연결 추가
+
+### 신규 API 연결 추가
+
+메뉴 **주문 > 쇼핑몰 연동 > 쇼핑몰 API 설정**으로 이동합니다.
+
+1. 상단의 **[신규등록]** 버튼을 클릭합니다.
+2. 쇼핑사이트 선택 목록에서 **CROSSMALL** 을 선택합니다. 이름 일부를 입력하면 빠르게 검색할 수 있습니다.
+
+<AnnotatedImage src="crossmall-shop-select" section="api-guide" alt="스마트십 쇼핑사이트 선택 화면" caption="쇼핑사이트 목록에서 CROSSMALL 선택" />
+
+### 연결 정보 입력
+
+<AnnotatedImage src="crossmall-api-connect-form" section="api-guide" alt="스마트십 CROSSMALL API 연결 정보 입력 화면" caption="Company Code, API Key, Shop ID 입력" />
+
+| 항목 | 입력 내용 |
+|------|-----------|
+| **Company Code** | 앞 단계에서 복사한 CROSSMALL 회사 코드(会社コード) |
+| **API Key** | 앞 단계에서 복사한 CROSSMALL API 키 |
+| **Shop ID** | CROSSMALL에 로그인하는 판매자 ID |
+
+<ApiRegisterAndTest lang="ko" />
+
+## API 설정 및 연동 주문
+
+API 연동 동작(자동 주문 수집, 자동 주문 확인, 풀필먼트 출하지시 등)을 조절하는 옵션은 **[쇼핑몰 API 설정 > 주문 처리 설정]** 에서 변경할 수 있습니다.
+
+<Callout type="tip">
+옵션별 상세 설명은 [API 연동 시 주문 처리 옵션 가이드](/ko/api-guide/order-options/)를 참고하세요.
+</Callout>
+
+### 수집 가능한 주문 상태
+
+CROSSMALL에서는 **発送待機(발송대기)** 상태의 주문이 스마트십으로 수집됩니다. 송장 등록(발송처리)를 위해서는 앞서 안내한 대로 **TX発送済み** 발송완료 상태를 시스템 설정에서 반드시 추가해야 합니다.
+
+## 풀필먼트 상품 연결
+
+풀필먼트 서비스 이용 시, 판매사이트 상품과 스마트십 SKU를 연결해야 센터에서 정확한 상품을 출고할 수 있습니다.
+
+### SKU에 판매자 정의코드 등록
+
+<ApiSkuVendorCode lang="ko" />
+
+### 판매 사이트 상품에 SKU no. 등록
+
+스마트십 메뉴 **상품 및 재고 → 판매채널상품-SKU 연결**에서 CROSSMALL 상품을 SKU에 사전 등록할 수 있습니다.
+
+| 항목 | 입력 값 |
+|------|---------|
+| **SKU no.** | [검색] 버튼을 클릭하여 연결할 SKU 선택 |
+| **판매채널** | `CROSSMALL: {판매자 ID}` 선택 |
+| **상품번호** | CROSSMALL의 **商品コード(상품코드)** 항목 값 |
+| **상품명** | CROSSMALL의 **商品名(상품명)** 항목 값 |
+| **판매채널 옵션** (옵션 있는 경우) | 각 옵션값을 입력. 2가지 이상의 속성 조합인 경우 속성명을 콤마(,)로 연결 |
+
+<Callout type="info">
+주문이 먼저 수집되어 SKU와 연결되지 않은 상태라면, 판매자 출고 타입의 주문으로 생성됩니다. 주문 수정 화면에서 출고 타입을 TXFC 출고로 변경하고 상품을 교체한 뒤 **"다른 주문의 같은 상품을 모두 이 SKU로 변경"** 을 선택하면 이후 수집되는 동일 상품이 자동으로 매칭됩니다.
+</Callout>
+
+<Callout type="info">
+판매채널 상품과 SKU를 연결하는 자세한 방법은 [API 연결 후 판매사이트 설정 방법](/ko/api-guide/site-settings/)을 참고하세요.
+</Callout>
+
+## API 키 관리
+
+### 수동 주문 수집
+
+<ApiManualImport lang="ko" />

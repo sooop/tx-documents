@@ -1,0 +1,17 @@
+{
+  "imageId": "sku-map-sku-type-multi",
+  "annotations": [
+    {
+      "id": "multi-option-radio",
+      "type": "marker",
+      "number": 1,
+      "x": 44.0,
+      "y": 30.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "옵션유형: '멀티옵션' 선택",
+        "en": "Option type: select 'Multi-option'"
+      }
+    }
+  ]
+}

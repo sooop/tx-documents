@@ -2,7 +2,7 @@
   let {
     lang = 'ko',
     variant = 'bypass',
-  }: { lang?: string; variant?: 'bypass' | 'fulfillment' } = $props();
+  }: { lang?: string; variant?: 'bypass' | 'fulfillment' | 'smart-post' } = $props();
 
   // Normalize zh-hk / zh-cn → zh
   const dl = lang === 'zh-hk' || lang === 'zh-cn' ? 'zh' : lang;
@@ -117,7 +117,62 @@
     },
   };
 
-  const i18n = variant === 'fulfillment' ? i18nFulfillment : i18nBypass;
+  const i18nSmartPost: Record<string, { legend: [string, string]; steps: { title: string; label: string }[] }> = {
+    ko: {
+      legend: ['발송인 진행', '트랙스로지스 진행'],
+      steps: [
+        { title: 'Step 1', label: '택배\n신청하기' },
+        { title: 'Step 2', label: '상품정보\n입력' },
+        { title: 'Step 3', label: '배송비\n결제' },
+        { title: 'Step 4', label: '박스 포장\n(픽업 대기)' },
+        { title: 'Step 5', label: '택배사\n픽업' },
+        { title: 'Step 6', label: '집하 /\n검수' },
+        { title: 'Step 7', label: '(해당 시)\n추가배송비' },
+        { title: 'Step 8', label: '해외\n발송' },
+      ],
+    },
+    en: {
+      legend: ['Sender Process', 'TracX Logis Process'],
+      steps: [
+        { title: 'Step 1', label: 'Request\nPickup' },
+        { title: 'Step 2', label: 'Enter\nItem Info' },
+        { title: 'Step 3', label: 'Pay\nShipping Fee' },
+        { title: 'Step 4', label: 'Pack Box\n(Await Pickup)' },
+        { title: 'Step 5', label: 'Courier\nPickup' },
+        { title: 'Step 6', label: 'Sorting /\nInspection' },
+        { title: 'Step 7', label: '(If needed)\nExtra Fee' },
+        { title: 'Step 8', label: 'International\nShipment' },
+      ],
+    },
+    ja: {
+      legend: ['発送人プロセス', 'TracX Logisプロセス'],
+      steps: [
+        { title: 'Step 1', label: '宅配\n申込み' },
+        { title: 'Step 2', label: '商品情報\n入力' },
+        { title: 'Step 3', label: '送料\n決済' },
+        { title: 'Step 4', label: '梱包\n(集荷待ち)' },
+        { title: 'Step 5', label: '宅配便\n集荷' },
+        { title: 'Step 6', label: '仕分け/\n検査' },
+        { title: 'Step 7', label: '(該当時)\n追加送料' },
+        { title: 'Step 8', label: '海外\n発送' },
+      ],
+    },
+    zh: {
+      legend: ['发件人流程', 'TracX Logis流程'],
+      steps: [
+        { title: 'Step 1', label: '快递\n申请' },
+        { title: 'Step 2', label: '商品信息\n输入' },
+        { title: 'Step 3', label: '运费\n支付' },
+        { title: 'Step 4', label: '打包\n(等待取件)' },
+        { title: 'Step 5', label: '快递\n取件' },
+        { title: 'Step 6', label: '分拣/\n检验' },
+        { title: 'Step 7', label: '(如需)\n追加运费' },
+        { title: 'Step 8', label: '国际\n发运' },
+      ],
+    },
+  };
+
+  const i18n = variant === 'fulfillment' ? i18nFulfillment : variant === 'smart-post' ? i18nSmartPost : i18nBypass;
   const t = $derived(i18n[dl] ?? i18n['ko']);
 
   const row1 = $derived(t.steps.slice(0, 4));

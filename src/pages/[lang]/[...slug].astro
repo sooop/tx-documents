@@ -9,6 +9,10 @@ import PlaceholderImage from '../../components/mdx/PlaceholderImage.astro';
 import { getNavTree, getBreadcrumbs } from '../../lib/navigation';
 import { LANGUAGES, type Lang } from '../../lib/config';
 import CommonFooter from '../../components/mdx/CommonFooter.astro';
+import ApiSiteIntro from '../../components/mdx/ApiSiteIntro.astro';
+import ApiRegisterAndTest from '../../components/mdx/ApiRegisterAndTest.astro';
+import ApiManualImport from '../../components/mdx/ApiManualImport.astro';
+import ApiSkuVendorCode from '../../components/mdx/ApiSkuVendorCode.astro';
 
 const FOOTER_LANGS: Lang[] = ['ko', 'ja', 'en'];
 
@@ -44,7 +48,7 @@ const { Content, headings } = await render(doc);
   headings={headings}
   draft={doc.data.draft}
 >
-  <Content components={{ Callout, Collapse, AnnotatedImage, LogisticsFlowDiagram, PlaceholderImage }} />
+  <Content components={{ Callout, Collapse, AnnotatedImage, LogisticsFlowDiagram, PlaceholderImage, ApiSiteIntro, ApiRegisterAndTest, ApiManualImport, ApiSkuVendorCode }} />
   {doc.data.footer !== 'none' && FOOTER_LANGS.includes(lang) && (
     <CommonFooter lang={lang} />
   )}

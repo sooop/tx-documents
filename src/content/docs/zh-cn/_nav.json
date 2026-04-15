@@ -7,6 +7,13 @@
     ]
   },
   {
+    "slug": "seller-shipment",
+    "title": "卖家出货指南",
+    "children": [
+      { "slug": "seller-shipment/print-packing-label", "title": "打印包装标签（条形码标签）" }
+    ]
+  },
+  {
     "slug": "delivery",
     "title": "配送管理",
     "children": [

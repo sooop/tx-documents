@@ -1,0 +1,35 @@
+{
+  "imageId": "gift-policy-auto-settings",
+  "annotations": [
+    {
+      "id": "policy-apply-method",
+      "type": "marker",
+      "number": 1,
+      "x": 29,
+      "y": 18,
+      "label": {
+        "ko": "정책 적용 방식 — 자동 적용 또는 수동 적용 선택"
+      }
+    },
+    {
+      "id": "shipment-instruction",
+      "type": "marker",
+      "number": 2,
+      "x": 29,
+      "y": 50,
+      "label": {
+        "ko": "출하 지시 설정 — 자동 적용 선택 시 활성화"
+      }
+    },
+    {
+      "id": "gift-duplicate",
+      "type": "marker",
+      "number": 3,
+      "x": 29,
+      "y": 82,
+      "label": {
+        "ko": "사은품 중복 적용 — 정책 중복 시 처리 방식 선택"
+      }
+    }
+  ]
+}

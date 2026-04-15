@@ -1,0 +1,18 @@
+{
+  "imageId": "not-saved-order",
+  "annotations": [
+    {
+      "id": "unsaved-order-indicator",
+      "type": "marker",
+      "number": 1,
+      "x": 3.5,
+      "y": 35,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "미저장 주문 — 노란색으로 표시",
+        "en": "Unsaved order — highlighted in yellow",
+        "ja": "未保存の注文 — 黄色で表示"
+      }
+    }
+  ]
+}

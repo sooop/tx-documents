@@ -1,0 +1,41 @@
+{
+  "imageId": "sku-map-policy-excel-data",
+  "annotations": [
+    {
+      "id": "col-sku-no",
+      "type": "marker",
+      "number": 1,
+      "x": 37.0,
+      "y": 7.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "SKU no. — 매칭할 스마트십 SKU 번호",
+        "en": "SKU no. — SmartShip SKU number to match"
+      }
+    },
+    {
+      "id": "col-option-val-1",
+      "type": "marker",
+      "number": 2,
+      "x": 60.0,
+      "y": 7.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "선택옵션값 1 — 판매채널 옵션값 (첫 번째)",
+        "en": "Option value 1 — first sales channel option value"
+      }
+    },
+    {
+      "id": "col-option-val-2",
+      "type": "marker",
+      "number": 3,
+      "x": 80.0,
+      "y": 7.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "선택옵션값 2 — 판매채널 옵션값 (두 번째)",
+        "en": "Option value 2 — second sales channel option value"
+      }
+    }
+  ]
+}

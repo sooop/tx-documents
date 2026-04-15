@@ -7,12 +7,11 @@
   // ─── 상태 ─────────────────────────────────────────────
   let isSelecting = false;
   let highlightedEl = null;
-  let selectedEl = null;   // 노드 확정 후 DO_CAPTURE까지 보관
+  let selectedEl = null;       // 노드 확정 후 DO_CAPTURE까지 보관
+  let lastCapturedEl = null;   // 재캡쳐용 마지막 캡쳐 엘리먼트
   let mouseX = 0;
   let mouseY = 0;
   let overlayEl = null;
-  let captureCounter = 1;
-
   const SUPPORTED_LOCALES = ['ko', 'en', 'ja'];
 
   // ─── 유틸리티 ─────────────────────────────────────────
@@ -51,27 +50,8 @@
     return `${sanitize(pageName)}-${sanitize(nodeName)}-${formatSeq(seq)}-${locale}.png`;
   }
 
-  // ─── 페이지 내 상태 알림 (캡쳐 진행 중 하단 표시) ──────
-
-  function showStatus(message, type = '') {
-    let el = document.getElementById('__nc-status');
-    if (!el) {
-      el = document.createElement('div');
-      el.id = '__nc-status';
-      document.body.appendChild(el);
-    }
-    el.textContent = message;
-    el.className = `__nc-status-visible${type ? ` __nc-status-${type}` : ''}`;
-  }
-
-  function hideStatus() {
-    const el = document.getElementById('__nc-status');
-    if (el) el.className = '';
-  }
-
-  // 사이드패널에도 동일 메시지 전달
+  // 사이드패널에 진행 상태 전달
   function reportProgress(message, step, total) {
-    showStatus(message);
     chrome.runtime.sendMessage({ type: 'CAPTURE_PROGRESS', message, step, total }).catch(() => {});
   }
 
@@ -197,19 +177,27 @@
     if (overlayEl) { overlayEl.remove(); overlayEl = null; }
   }
 
-  function confirmSelection(el) {
+  async function confirmSelection(el) {
     if (!el) return;
     exitSelectionMode();
 
     selectedEl = el;
     el.classList.add('__nc-selected');
 
-    // 사이드패널에 노드 선택 완료 알림 → 사이드패널이 입력 폼을 보여줌
+    // 브릿지 가용 여부 및 현재 언어 조회 (입력 뷰 렌더링 전에 수행)
+    let bridgeAvail = false;
+    let locale = document.documentElement.lang || 'ko';
+    try {
+      bridgeAvail = await hasBridge();
+      if (bridgeAvail) locale = (await getCurrentLocale()) || locale;
+    } catch {}
+
     chrome.runtime.sendMessage({
       type: 'NODE_SELECTED',
       defaultPage: getDefaultPageName(),
       defaultNode: getDefaultNodeName(el),
-      defaultSeq: captureCounter,
+      bridgeAvailable: bridgeAvail,
+      currentLocale: locale,
     }).catch(() => {});
   }
 
@@ -290,27 +278,34 @@
 
   // ─── 메인 캡쳐 시퀀스 ────────────────────────────────
 
-  async function runCaptureSequence(el, pageName, nodeName, seq) {
-    captureCounter = seq + 1;
+  async function runCaptureSequence(el, pageName, nodeName, seq, requestedLocales) {
 
-    const bridgeAvailable = await hasBridge();
+    const bridgeAvail = await hasBridge();
     const originalLocale = await getCurrentLocale();
 
-    const locales = bridgeAvailable
-      ? [originalLocale, ...SUPPORTED_LOCALES.filter((l) => l !== originalLocale)]
-      : [originalLocale];
+    // 캡쳐 언어 결정: 요청된 목록이 있으면 사용, 없으면 전체
+    let captureLocales;
+    if (requestedLocales && requestedLocales.length > 0) {
+      captureLocales = bridgeAvail ? requestedLocales : [originalLocale];
+    } else {
+      captureLocales = bridgeAvail
+        ? [originalLocale, ...SUPPORTED_LOCALES.filter((l) => l !== originalLocale)]
+        : [originalLocale];
+    }
 
-    const total = locales.length;
+    const total = captureLocales.length;
     const savedFiles = [];
+    let currentLoc = originalLocale;
 
     try {
-      for (let i = 0; i < locales.length; i++) {
-        const locale = locales[i];
+      for (let i = 0; i < captureLocales.length; i++) {
+        const locale = captureLocales[i];
 
-        if (i > 0 && bridgeAvailable) {
+        if (bridgeAvail && locale !== currentLoc) {
           reportProgress(`언어 전환 중: ${locale}...`, i, total);
           await changeLocale(locale);
-          // localeReady 이후 React 리렌더링 완료까지 대기
+          currentLoc = locale;
+          // React 리렌더링 완료 대기
           await new Promise((r) => setTimeout(r, 1000));
         }
 
@@ -321,25 +316,32 @@
         chrome.runtime.sendMessage({ type: 'CAPTURE_FILE_SAVED', filename }).catch(() => {});
       }
 
-      if (bridgeAvailable && (await getCurrentLocale()) !== originalLocale) {
+      // 원래 언어로 복원
+      if (bridgeAvail && currentLoc !== originalLocale) {
         reportProgress(`원래 언어(${originalLocale})로 복원 중...`, total, total);
         await changeLocale(originalLocale);
       }
 
-      hideStatus();
       chrome.runtime.sendMessage({ type: 'CAPTURE_DONE', files: savedFiles }).catch(() => {});
     } catch (err) {
-      if (hasBridge) {
-        try { if (bridgeAvailable && (await getCurrentLocale()) !== originalLocale) await changeLocale(originalLocale); } catch {}
+      if (bridgeAvail && currentLoc !== originalLocale) {
+        try { await changeLocale(originalLocale); } catch {}
       }
-      hideStatus();
       chrome.runtime.sendMessage({ type: 'CAPTURE_ERROR', message: err.message }).catch(() => {});
     }
   }
 
   // ─── 사이드패널 / background 메시지 수신 ─────────────
 
-  chrome.runtime.onMessage.addListener((message) => {
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    // SET_LOCALE: 비동기 응답 필요
+    if (message.type === 'SET_LOCALE') {
+      changeLocale(message.locale)
+        .then(() => sendResponse({ success: true }))
+        .catch((err) => sendResponse({ error: err.message }));
+      return true; // 비동기 sendResponse 유지
+    }
+
     switch (message.type) {
       case 'START_SELECTION':
         if (isSelecting) exitSelectionMode();
@@ -364,9 +366,27 @@
 
       case 'DO_CAPTURE':
         if (!selectedEl) return;
-        const el = selectedEl;
-        clearSelection();
-        runCaptureSequence(el, message.pageName, message.nodeName, message.seq ?? captureCounter);
+        {
+          const el = selectedEl;
+          lastCapturedEl = el; // 재캡쳐용 보관
+          clearSelection();
+          runCaptureSequence(el, message.pageName, message.nodeName, message.seq ?? captureCounter, message.locales);
+        }
+        break;
+
+      case 'DO_RECAPTURE':
+        if (!lastCapturedEl) {
+          chrome.runtime.sendMessage({
+            type: 'CAPTURE_ERROR',
+            message: '재캡쳐할 노드가 없습니다. 새 노드를 선택하세요.',
+          }).catch(() => {});
+          return;
+        }
+        runCaptureSequence(lastCapturedEl, message.pageName, message.nodeName, message.seq ?? captureCounter, message.locales);
+        break;
+
+      case 'CLEAR_RECAPTURE':
+        lastCapturedEl = null;
         break;
     }
   });

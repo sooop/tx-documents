@@ -7,6 +7,13 @@
     ]
   },
   {
+    "slug": "seller-shipment",
+    "title": "販売者出荷ガイド",
+    "children": [
+      { "slug": "seller-shipment/print-packing-label", "title": "パッキングラベル（バーコードラベル）の印刷" }
+    ]
+  },
+  {
     "slug": "delivery",
     "title": "配送管理",
     "children": [

@@ -1,0 +1,53 @@
+{
+  "imageId": "sku-map-sku-option-combination",
+  "annotations": [
+    {
+      "id": "input-method-radio",
+      "type": "marker",
+      "number": 1,
+      "x": 10.0,
+      "y": 22.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "입력 방식: '옵션 조합' 선택",
+        "en": "Input method: select 'Option combination'"
+      }
+    },
+    {
+      "id": "attr-color",
+      "type": "marker",
+      "number": 2,
+      "x": 9.5,
+      "y": 58.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "속성 이름 및 속성값 입력 (색상)",
+        "en": "Attribute name and values (color)"
+      }
+    },
+    {
+      "id": "attr-power",
+      "type": "marker",
+      "number": 3,
+      "x": 9.5,
+      "y": 75.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "속성 이름 및 속성값 입력 (도수)",
+        "en": "Attribute name and values (power)"
+      }
+    },
+    {
+      "id": "register-btn",
+      "type": "marker",
+      "number": 4,
+      "x": 54.0,
+      "y": 91.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "등록하기 — 모든 조합이 SKU로 자동 생성됨",
+        "en": "Register — all combinations are auto-created as SKUs"
+      }
+    }
+  ]
+}

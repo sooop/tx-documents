@@ -1,0 +1,122 @@
+---
+title: "LINE GIFT API 연동 가이드"
+description: "스마트십에서 LINE GIFT API를 연동하여 주문 수집 및 발송처리를 자동화하는 방법을 안내합니다."
+---
+
+<AnnotatedImage src="line-gift-logo" section="api-guide" alt="LINE GIFT 로고" />
+
+## API 연동에 관해
+
+<ApiSiteIntro lang="ko" />
+
+## 사전 준비 — LINE GIFT API 키 발급
+
+LINE GIFT 연동을 위해서는 아래 정보가 필요합니다. 스마트십에서 API 연결을 설정하기 전에 LINE GIFT Shop CMS에서 앱을 등록하고 인증 정보를 확인·발급해두세요.
+
+| 항목 | 설명 |
+|------|------|
+| **Store ID** | LINE GIFT ショップID |
+| **Client ID** | LINE GIFT 앱 등록 후 발급받는 값 |
+| **Client Secret** | LINE GIFT 앱 등록 후 발급받는 값 |
+| **Public Link** | 상품 등록 후 상품 페이지에서 확인 가능한 경로 값 |
+
+### LINE GIFT 앱 등록
+
+<AnnotatedImage src="line-gift-app-create" section="api-guide" alt="LINE GIFT Shop CMS 앱 신규 등록 화면" caption="왼쪽 메뉴의 [앱] > [신규 등록]에서 Smartship 앱 생성" />
+
+1. [LINE GIFT Shop CMS](https://shop-cms.line.me/)에 접속합니다.
+2. 왼쪽 메뉴에서 **【앱】 > 【신규 등록】** 을 선택하여 앱을 생성합니다.
+3. 아래와 같이 앱 정보를 입력합니다.
+
+| 항목 | 값 |
+|------|-----|
+| **アプリ名** (앱 이름) | `Smartship` |
+| **プロダクトサイト** (제품 사이트) | `https://www.tracxlogis.com` |
+| **プロダクトロゴ** (제품 로고) | `https://dp.image-qx.com/SG/GMKT.IMG/Qxpress/2025/05/30/44450d5e-a7dd-4836-b3be-7ba78fb95403.png` |
+| **タイプ** (타입) | `web` |
+| **Redirect URIs** | `https://smartship.tracxlogis.com/ExternalSiteOrder/CallbackSiteAuth`<br/>`https://www.tracxlogis.com/ExternalSiteOrder/CallbackSiteAuth` |
+| **Javascript Origins** | `https://www.tracxlogis.com` |
+
+### Client ID / Client Secret 확인
+
+<AnnotatedImage src="line-gift-client-keys" section="api-guide" alt="LINE GIFT 앱 등록 후 발급된 client_id 및 client_secret" caption="앱 등록 완료 후 client_id 와 client_secret 확인" />
+
+앱 등록이 완료되면 **client_id** 와 **client_secret** 값을 확인할 수 있습니다. 두 값을 복사해둡니다.
+
+### Public Link 확인
+
+<AnnotatedImage src="line-gift-public-link" section="api-guide" alt="LINE GIFT 상품 상세 페이지 Public Link" caption="상품 상세 페이지 외부 공개 URL에서 뒤에서 두 번째 경로 값 확인" />
+
+상품 상세 페이지 외부 공개 URL에서 뒤에서 두 번째 경로인 **`{Public URL}`** 값을 확인합니다.
+
+```
+https://mall.line.me/sb/{Public URL}/{Product ID}
+```
+
+## 스마트십에서 API 연결 추가
+
+### 신규 API 연결 추가
+
+메뉴 **주문 > 쇼핑몰 연동 > 쇼핑몰 API 설정**으로 이동합니다.
+
+1. 상단의 **[신규등록]** 버튼을 클릭합니다.
+2. 쇼핑사이트 선택 목록에서 **LINE GIFT** 를 선택합니다.
+
+### 연결 정보 입력
+
+| 항목 | 입력 내용 |
+|------|-----------|
+| **Store ID** | LINE GIFT ショップID |
+| **Client ID** | 앱 등록 후 발급받은 client_id |
+| **Client Secret** | 앱 등록 후 발급받은 client_secret |
+| **Public Link** | 상품 공개 URL에서 확인한 `{Public URL}` 값 |
+
+1. 위 항목을 입력한 후 하단의 **[인증받기]** 버튼을 클릭합니다.
+2. 새 창으로 열리는 LINE GIFT 권한 승인 페이지에서 권한을 승인합니다.
+3. 인증이 완료되면 팝업창이 닫히고 인증 정보가 자동으로 저장됩니다.
+
+<Callout type="tip">
+권한 승인 페이지가 빈 화면으로 나오는 경우, LINE GIFT에 먼저 로그인한 후 연동을 다시 진행해주세요.
+</Callout>
+
+<ApiRegisterAndTest lang="ko" />
+
+## API 설정 및 연동 주문
+
+API 연동 동작(자동 주문 수집, 자동 주문 확인, 풀필먼트 출하지시 등)을 조절하는 옵션은 **[쇼핑몰 API 설정 > 주문 처리 설정]** 에서 변경할 수 있습니다.
+
+<Callout type="tip">
+옵션별 상세 설명은 [API 연동 시 주문 처리 옵션 가이드](/ko/api-guide/order-options/)를 참고하세요.
+</Callout>
+
+### 수집 가능한 주문 상태
+
+LINE GIFT에서는 **発送待ち(발송대기)** 상태의 주문이 수집됩니다.
+
+## 풀필먼트 상품 연결
+
+풀필먼트 서비스 이용 시, 판매사이트 상품과 스마트십 SKU를 연결해야 센터에서 정확한 상품을 출고할 수 있습니다.
+
+### SKU에 판매자 정의코드 등록
+
+<ApiSkuVendorCode lang="ko" />
+
+### 판매 사이트 상품에 SKU no. 등록
+
+LINE GIFT Shop CMS **商品 > 商品登録** 의 **商品コード(상품 코드)** 항목에 스마트십 SKU no. 또는 판매자 정의코드를 입력합니다.
+
+<Callout type="info">
+판매채널 상품과 SKU를 연결하는 자세한 방법은 [API 연결 후 판매사이트 설정 방법](/ko/api-guide/site-settings/)을 참고하세요.
+</Callout>
+
+## API 키 관리
+
+API 키가 만료되거나 재발급된 경우, 기존 키는 즉시 무효화될 수 있으므로 스마트십의 API 설정에서 Client ID와 Client Secret을 새 값으로 수정해주세요.
+
+<Callout type="warning">
+API 키가 만료되면 자동 주문 수집이 중단됩니다. 중단된 기간의 주문은 아래 방법으로 수동으로 가져와야 합니다.
+</Callout>
+
+### 수동 주문 수집
+
+<ApiManualImport lang="ko" />

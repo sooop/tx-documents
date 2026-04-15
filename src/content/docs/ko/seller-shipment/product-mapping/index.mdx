@@ -1,0 +1,63 @@
+---
+title: "판매사이트 - SmartShip 상품 매핑"
+description: "판매사이트에 등록된 상품과 SmartShip 상품을 연결하여 한국어 상품명 라벨 출력 및 SET 상품 구성을 설정하는 방법을 안내합니다."
+---
+
+판매사이트 상품과 SmartShip 상품을 매핑하면 한국어 상품명으로 라벨을 출력하거나, SKU 기반의 SET 상품을 사이트 주문에 연결할 수 있습니다.
+
+## 라벨 출력 시 한국어로 상품명을 뽑고 싶은 경우
+
+스마트십에 등록한 상품과 사이트 상품을 매핑하여 한국어 상품의 라벨을 출력합니다.
+
+### 상품 매핑 하기
+
+1. **[Step.1 상품 등록하기](/ko/seller-shipment/register-product/)** 를 통해 TM 코드를 먼저 등록합니다.
+
+2. 사이트에 **TM코드** 또는 **TM코드의 판매자 정의코드**를 판매 사이트의 상품 관리 페이지에 등록합니다.
+
+   - **단일 상품**: 판매자 상품 코드에 입력
+   - **옵션 상품**: 판매자 옵션 코드에 입력
+
+   <Collapse title="Qoo10 JP 판매자 (JQSM)인 경우">
+
+   Qoo10 JP 판매자(JQSM)는 일반 판매자 코드 입력 방식과 다를 수 있습니다. Qoo10 JP 상품 관리 페이지에서 해당 항목을 확인 후 TM코드 또는 판매자 정의코드를 등록하세요.
+
+   </Collapse>
+
+### 라벨 출력하기
+
+1. [라벨 출력 페이지](https://smartship.tracxlogis.com/Waybill/Print)에서 출력할 주문을 선택합니다.
+
+2. **표시항목 및 정렬 기준 > 상품정보위치**에서 **스마트십 상품정보**를 선택합니다.
+
+<AnnotatedImage src="product-mapping-label-settings" section="seller-shipment" alt="라벨 출력 - 상품정보위치 설정 화면" caption="라벨 출력 > 표시항목 및 정렬 기준 > 상품정보위치에서 '스마트십 상품정보' 선택 화면" />
+
+<Callout type="warning" title="매핑 이후에도 일본어로 상품명이 보이는 경우">
+주문 연동 시 스마트십 매핑 상품을 확인할 수 없으면 **사이트 기준으로 TM코드가 생성**됩니다. 이 경우 생성된 TM코드의 상품명과 옵션을 한국어로 직접 변경하여 사용하세요.
+</Callout>
+
+---
+
+## SET 상품으로 판매하는 경우
+
+SKU 관리를 활용하여 SET 상품으로 생성한 뒤 사이트 상품과 매핑합니다.
+
+### SET SKU 상품 생성하기
+
+1. **[Step.1 SKU 생성하기](/ko/fulfillment/create-sku/)** 를 통해 단일 SKU 상품을 등록합니다.
+
+   - 등록 시 생성된 기준으로 TM코드가 생성됩니다.
+   - SKU 관리에서 상품 정보를 변경하면 TM코드에도 동일하게 업데이트됩니다.
+
+<AnnotatedImage src="product-mapping-sku-create" section="seller-shipment" alt="SKU 생성하기 화면" caption="풀필먼트 > SKU 생성하기 화면" />
+
+<Callout type="tip" title="SKU와 사이트 상품 매핑하기">
+SKU 생성 시 입력한 **판매자 정의코드**를 판매 사이트의 상품 관리 페이지에 등록하세요. SKU No.를 등록하면 신규 TM코드가 생성됩니다.
+</Callout>
+
+2. [세트 SKU 관리](https://smartship.tracxlogis.com/Inventory/Bundle) 페이지에서 SET SKU를 생성합니다.
+
+   - 생성된 **SET SKU No.**를 판매 사이트에 등록합니다.
+   - 등록 방법은 위 상품 매핑 절차(2번 항목)와 동일하게 진행합니다.
+
+<AnnotatedImage src="product-mapping-set-sku" section="seller-shipment" alt="세트 SKU 관리 화면" caption="재고관리 > 세트 SKU 관리 화면" />

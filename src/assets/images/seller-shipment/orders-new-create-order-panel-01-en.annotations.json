@@ -1,0 +1,41 @@
+{
+  "imageId": "orders-new-create-order-panel-01",
+  "annotations": [
+    {
+      "id": "section-order-info",
+      "type": "box",
+      "number": 1,
+      "x": 2.2142857142857144,
+      "y": 12.17183770883055,
+      "width": 47,
+      "height": 48.806682577565624,
+      "label": {
+        "ko": "주문 정보 — 출고 타입에서 '판매자 출고' 선택"
+      }
+    },
+    {
+      "id": "section-recipient",
+      "type": "box",
+      "number": 2,
+      "x": 50,
+      "y": 12.17183770883055,
+      "width": 49,
+      "height": 49.69809069212411,
+      "label": {
+        "ko": "수취인 정보 — 배송 국가, 수취인명, 주소 입력"
+      }
+    },
+    {
+      "id": "section-product",
+      "type": "box",
+      "number": 3,
+      "x": 1,
+      "y": 84.60620525059666,
+      "width": 98,
+      "height": 8.59188544152738,
+      "label": {
+        "ko": "발송 상품 — [배송 상품 추가]로 발송할 상품 추가"
+      }
+    }
+  ]
+}

@@ -28,10 +28,26 @@
         "slug": "api-guide/sites",
         "title": "사이트별 API 연동 방법",
         "children": [
+          { "slug": "api-guide/sites/wowma", "title": "Wowma!" },
           { "slug": "api-guide/sites/qoo10-jp", "title": "Qoo10 JP" },
-          { "slug": "api-guide/sites/yahoo-jp", "title": "Yahoo JP" },
-          { "slug": "api-guide/sites/shopify", "title": "Shopify" },
-          { "slug": "api-guide/sites/shopee-sg", "title": "Shopee SG" }
+          { "slug": "api-guide/sites/rakuten", "title": "Rakuten (라쿠텐)" },
+          { "slug": "api-guide/sites/shopee-sg", "title": "Shopee" },
+          { "slug": "api-guide/sites/cafe24", "title": "Cafe24" },
+          { "slug": "api-guide/sites/kakao", "title": "카카오 쇼핑" },
+          { "slug": "api-guide/sites/naver", "title": "Naver 스마트스토어" },
+          { "slug": "api-guide/sites/coupang", "title": "쿠팡" },
+          { "slug": "api-guide/sites/11st", "title": "11번가" },
+          { "slug": "api-guide/sites/sabangnet", "title": "사방넷" },
+          { "slug": "api-guide/sites/shopline", "title": "ShopLine" },
+          { "slug": "api-guide/sites/gmarket-auction", "title": "Gmarket / Auction" },
+          { "slug": "api-guide/sites/lotte-on", "title": "롯데온" },
+          { "slug": "api-guide/sites/tiktok", "title": "TikTok Shop" },
+          { "slug": "api-guide/sites/lazada", "title": "Lazada" },
+          { "slug": "api-guide/sites/shopby", "title": "shop by" },
+          { "slug": "api-guide/sites/yahoo-jp", "title": "Yahoo! Shopping" },
+          { "slug": "api-guide/sites/line-gift", "title": "LINE GIFT" },
+          { "slug": "api-guide/sites/crossmall", "title": "CROSSMALL" },
+          { "slug": "api-guide/sites/shopify", "title": "Shopify" }
         ]
       },
       { "slug": "api-guide/order-options", "title": "API 연동 시 주문 처리 옵션 가이드" },
@@ -45,12 +61,10 @@
     "children": [
       { "slug": "seller-shipment/basics", "title": "기본 안내" },
       { "slug": "seller-shipment/register-product", "title": "상품 등록하기" },
+      { "slug": "seller-shipment/register-order", "title": "판매자 출고 주문 등록하기" },
       { "slug": "seller-shipment/gift-settings", "title": "판매자 출고 사은품 설정" },
-      { "slug": "seller-shipment/copy-order", "title": "발송처리된 주문 건 복사하기" },
-      { "slug": "seller-shipment/split-package", "title": "합포장건 분리하기" },
       { "slug": "seller-shipment/product-mapping", "title": "판매사이트 - SmartShip 상품맵핑" },
-      { "slug": "seller-shipment/bulk-replace", "title": "상품 일괄 교체" },
-      { "slug": "seller-shipment/edit-order", "title": "주문 건 수정하기" },
+      { "slug": "seller-shipment/print-packing-label", "title": "패킹라벨(바코드라벨) 출력하기" },
       { "slug": "seller-shipment/packing-notes", "title": "포장 시 유의사항" },
       { "slug": "seller-shipment/jp-export-notes", "title": "JP향 수출입 시 주의사항" }
     ]
@@ -67,10 +81,18 @@
       { "slug": "fulfillment/register-order", "title": "풀필먼트 주문 등록하기" },
       { "slug": "fulfillment/check-inventory", "title": "재고 확인하기" },
       { "slug": "fulfillment/request-export", "title": "재고 반출 요청 방법" },
-      { "slug": "fulfillment/copy-order", "title": "발송처리된 주문 건 복사하기" },
       { "slug": "fulfillment/gift-settings", "title": "풀필먼트 사은품 설정" },
-      { "slug": "fulfillment/product-sku-mapping", "title": "판매채널 상품 - SKU 맵핑" },
-      { "slug": "fulfillment/bulk-replace", "title": "상품 일괄 교체" }
+      { "slug": "fulfillment/product-sku-mapping", "title": "판매채널 상품 - SKU 맵핑" }
+    ]
+  },
+  {
+    "slug": "order-edit",
+    "title": "주문 및 화물 수정",
+    "children": [
+      { "slug": "order-edit/edit-order", "title": "주문 건 수정하기" },
+      { "slug": "order-edit/copy-order", "title": "발송처리된 주문 건 복사하기" },
+      { "slug": "order-edit/split-package", "title": "합포장건 분리하기" },
+      { "slug": "order-edit/bulk-replace", "title": "상품 일괄 교체" }
     ]
   },
   {
@@ -86,24 +108,23 @@
     "slug": "returns",
     "title": "반품 관리 / 클레임 처리",
     "children": [
-      { "slug": "returns/basics", "title": "기본 안내" },
-      { "slug": "returns/storage-period", "title": "반품 화물 보관 기간 안내" },
-      { "slug": "returns/pickup-request", "title": "반품 픽업 신청" },
-      { "slug": "returns/direct-return", "title": "직접 발송 반품 신청" },
-      { "slug": "returns/return-management", "title": "반품 주문 관리" },
+      { "slug": "returns/basics", "title": "반품 처리하기" },
       { "slug": "returns/claim-management", "title": "쇼핑몰 클레임 관리 메뉴 활용하기" }
     ]
   },
+  { "slug": "invoices", "title": "청구서 및 해외소포 수령증 발급" },
   {
-    "slug": "invoices",
-    "title": "청구서 및 해외소포 수령증 발급",
+    "slug": "faq",
+    "title": "자주 묻는 질문",
     "children": [
-      { "slug": "invoices/invoice", "title": "청구서 조회" },
-      { "slug": "invoices/tax-invoice", "title": "세금 계산서 조회 (한국)" },
-      { "slug": "invoices/overseas-receipt", "title": "해외소포 수령증 (한국)" }
+      { "slug": "faq/account", "title": "회원 가입 및 비밀번호" },
+      { "slug": "faq/txmoney", "title": "TxMoney 충전" },
+      { "slug": "faq/shipping-registration", "title": "상품·배송 등록" },
+      { "slug": "faq/invoice", "title": "세금계산서 및 해외소포수령증" },
+      { "slug": "faq/export-declaration", "title": "수출신고" },
+      { "slug": "faq/general", "title": "기타" }
     ]
   },
-  { "slug": "faq", "title": "자주 묻는 질문" },
   {
     "slug": "clearance",
     "title": "통관",

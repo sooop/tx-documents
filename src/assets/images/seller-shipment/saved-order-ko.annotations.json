@@ -1,0 +1,18 @@
+{
+  "imageId": "saved-order",
+  "annotations": [
+    {
+      "id": "saved-order-indicator",
+      "type": "marker",
+      "number": 1,
+      "x": 3.5,
+      "y": 32,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "저장 완료 주문 — 녹색으로 표시",
+        "en": "Saved order — highlighted in green",
+        "ja": "保存済みの注文 — 緑色で表示"
+      }
+    }
+  ]
+}

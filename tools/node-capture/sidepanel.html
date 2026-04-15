@@ -38,6 +38,57 @@
       color: #7aa2f7;
     }
 
+    /* ── 언어 스위처 바 ── */
+    #locale-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-bottom: 1px solid #2a2d3e;
+      flex-shrink: 0;
+      background: #1e2030;
+    }
+    .locale-bar-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #565f89;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    .locale-btn-group {
+      display: flex;
+      gap: 4px;
+    }
+    .btn-locale {
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid #414868;
+      background: #24283b;
+      color: #737aa2;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      line-height: 1.4;
+    }
+    .btn-locale:hover {
+      background: #414868;
+      color: #c0caf5;
+    }
+    .btn-locale.active {
+      background: #7aa2f7;
+      color: #1a1b26;
+      border-color: #7aa2f7;
+    }
+    #locale-status {
+      font-size: 11px;
+      color: #565f89;
+      margin-left: auto;
+      min-width: 0;
+    }
+
     /* ── 본문 ── */
     .body {
       flex: 1;
@@ -144,6 +195,59 @@
       box-shadow: 0 0 0 2px rgba(122, 162, 247, 0.18);
     }
 
+    /* ── 토글 스위치 ── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .toggle-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #a9b1d6;
+      text-transform: none;
+      letter-spacing: normal;
+      cursor: pointer;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    .toggle-input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: #414868;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 14px;
+      height: 14px;
+      background: #737aa2;
+      border-radius: 50%;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .toggle-input:checked + .toggle-track {
+      background: rgba(122, 162, 247, 0.3);
+    }
+    .toggle-input:checked + .toggle-track::after {
+      transform: translateX(16px);
+      background: #7aa2f7;
+    }
+
     /* ── 버튼 ── */
     .btn-row { display: flex; gap: 8px; justify-content: flex-end; }
     .nav-row  { display: flex; gap: 6px; }
@@ -216,6 +320,17 @@
     <span class="header-title">Node Capture</span>
   </div>
 
+  <!-- 언어 스위처 (항상 표시) -->
+  <div id="locale-bar">
+    <span class="locale-bar-label">페이지 언어</span>
+    <div class="locale-btn-group">
+      <button class="btn-locale" data-locale="ko">ko</button>
+      <button class="btn-locale" data-locale="en">en</button>
+      <button class="btn-locale" data-locale="ja">ja</button>
+    </div>
+    <span id="locale-status"></span>
+  </div>
+
   <div class="body">
     <!-- 오류 공통 표시 -->
     <div id="error-box"></div>
@@ -245,7 +360,7 @@
     <div id="view-input" class="view">
       <div class="status-badge">
         <span class="dot dot-green"></span>
-        <span>노드가 선택되었습니다</span>
+        <span id="input-mode-label">노드가 선택되었습니다</span>
       </div>
       <div class="field">
         <label>페이지명</label>
@@ -259,6 +374,16 @@
         <div class="field field-seq">
           <label>번호</label>
           <input id="seq-num" type="number" min="1" autocomplete="off" />
+        </div>
+      </div>
+      <!-- 모든 언어 캡쳐 토글 (브릿지 가용 시에만 표시) -->
+      <div id="lang-section" class="field" style="display:none">
+        <div class="toggle-row">
+          <label class="toggle-label" for="all-locales-toggle">모든 언어로 캡쳐</label>
+          <div class="toggle-switch">
+            <input type="checkbox" id="all-locales-toggle" class="toggle-input">
+            <span class="toggle-track"></span>
+          </div>
         </div>
       </div>
       <div class="btn-row">
@@ -282,7 +407,8 @@
     <div id="view-done" class="view">
       <div class="done-icon">✓</div>
       <div id="done-files" class="done-files"></div>
-      <button id="btn-retry" class="btn-primary btn-full">다시 캡쳐</button>
+      <button id="btn-recapture" class="btn-primary btn-full">동일 영역 재캡쳐</button>
+      <button id="btn-retry" class="btn-secondary btn-full">새 노드 선택</button>
     </div>
   </div>
 

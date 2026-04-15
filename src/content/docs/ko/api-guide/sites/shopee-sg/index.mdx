@@ -1,0 +1,164 @@
+---
+title: "Shopee API 연동 가이드"
+description: "스마트십에서 Shopee API를 연동하여 주문 수집 및 발송처리를 자동화하는 방법을 안내합니다."
+---
+
+<AnnotatedImage src="shopee-logo" section="api-guide" alt="Shopee 로고" />
+
+## API 연동에 관해
+
+<ApiSiteIntro lang="ko" />
+
+## 사전 준비 — Shopee API 키 발급
+
+Shopee는 **Shopee Open Platform**에서 앱을 등록하고 Live Partner ID와 Live Partner Key를 발급받아야 합니다. 또한 샵 ID를 미리 확인해두세요.
+
+| 항목 | 설명 |
+|------|------|
+| **Live Partner ID** | Shopee Open Platform에서 앱 생성 후 발급되는 ID |
+| **Live Partner Key** | Shopee Open Platform에서 앱 생성 후 발급되는 키 (약 1년 유효) |
+| **Shop ID** | Shopee 샵 URL 뒷자리 숫자값 (판매자 ID가 아님) |
+| **Access Token** | 스마트십에 Live Key를 등록한 후 Shopee 인증 과정을 통해 자동 발급 |
+
+<Callout type="warning">
+Live Partner Key는 발급 후 **약 1년** 동안 유효합니다. 만료 전에 Shopee Open Platform에서 키를 재발급하고, 스마트십 API 설정에서 수정해야 합니다.
+</Callout>
+
+### Shop ID 확인 방법
+
+1. Shopee 샵 페이지에 접속합니다.
+2. 등록된 상품 중 하나를 선택하여 상품 상세 페이지로 이동합니다.
+3. 상품 상세 페이지 주소 예시: `https://shopee.sg/Apple-iPhone-16-Pro-Max-i.442800909.24635718422`
+4. 주소에서 `-i.` 뒤의 **첫 번째 숫자(`442800909`)가 Shop ID** 입니다.
+
+### Shopee 앱 등록 절차
+
+<AnnotatedImage src="shopee-open-platform-create-app" section="api-guide" alt="Shopee Open Platform Console App List 화면" caption="Shopee Open Platform Console > App List > Create App" />
+
+1. [Shopee Open Platform](https://open.shopee.com/)에 로그인한 후 **Console** 메뉴로 이동합니다.
+2. App List 화면 하단의 **[Create App]** 버튼을 클릭합니다.
+
+<AnnotatedImage src="shopee-open-platform-basic-info" section="api-guide" alt="Shopee Create App Basic Information 입력 화면" caption="App Category, App Name, App Description, App Logo 입력 후 Submit" />
+
+3. Basic Information 영역에 아래 정보를 입력합니다.
+
+| 항목 | 입력 값 |
+|------|---------|
+| **App Category** | `Seller In-House System` 선택 |
+| **App Name** | `Smartship` (다른 이름도 가능) |
+| **App Description** | `Smartship Order Management` (다른 내용도 가능) |
+| **App Logo** | 적절한 앱 로고 이미지 |
+
+<Callout type="warning">
+App Category를 잘못 선택하면 일부 또는 전체 API의 접근 권한을 부여받지 못할 수 있습니다. 반드시 `Seller In-House System`을 선택하세요.
+</Callout>
+
+4. 정보를 입력한 후 하단 **[Submit]** 버튼을 클릭합니다. 제출 후 Test Key가 생성됩니다.
+5. Test Key로는 실제 주문에 접근할 수 없으므로, 앱 목록에서 방금 생성한 앱을 선택하고 오른쪽 상단의 **[Go Live]** 버튼을 클릭합니다.
+6. Live 전환을 위해 아래 정보를 입력한 후 제출합니다.
+
+| 항목 | 입력 값 |
+|------|---------|
+| **URL** | `https://www.tracxlogis.com/login` |
+| **Test Username** | `test_user` |
+| **Test Password** | `#qxpress-21` |
+| **IP Address** | `20.249.181.82`<br/>`20.249.181.119` |
+
+7. 간단한 심사가 끝나면 앱이 활성화되고 **Live Partner ID**와 **Live Partner Key**가 생성됩니다.
+
+## 스마트십에서 API 연결 추가
+
+### 신규 API 연결 추가
+
+메뉴 **주문 > 쇼핑몰 연동 > 쇼핑몰 API 설정**으로 이동합니다.
+
+1. 상단의 **[신규등록]** 버튼을 클릭합니다.
+2. 쇼핑사이트 선택 목록에서 **Shopee**를 선택합니다.
+
+### 연결 정보 입력
+
+<AnnotatedImage src="shopee-api-connect-form" section="api-guide" alt="스마트십 Shopee API 연결 정보 입력 화면" caption="App 이름, 사업자 등록명, Live Partner ID, Shop ID, Live Key 입력" />
+
+| 항목 | 입력 내용 |
+|------|-----------|
+| **쇼핑몰 도메인** | 샵 소재 국가의 Shopee 도메인 선택 (예: `shopee.sg`) |
+| **App 이름** | Shopee Open Platform에 등록한 앱 이름 |
+| **사업자 등록명** | Shopee에 등록한 사업자명 |
+| **Live Partner ID** | 발급받은 Live Partner ID |
+| **Shop ID** | Shopee Shop ID (샵 URL 뒷자리 숫자, 판매자 ID가 아님) |
+| **Live Key** | 발급받은 Live Partner Key |
+
+입력을 완료한 후 하단의 **[인증 받기]** 버튼을 클릭합니다.
+
+### 인증 진행
+
+<AnnotatedImage src="shopee-auth-switch-main" section="api-guide" alt="Shopee 로그인 인증 화면" caption="통합 계정 사용 시 Switch to Main account 클릭" />
+
+1. Shopee 인증창이 열리면 판매자 계정으로 로그인합니다.
+2. **통합 계정을 사용하는 경우**, 하단의 **[Switch to Main account]** 버튼을 클릭하여 Main 계정(`xxxx:main`)으로 로그인합니다.
+
+<AnnotatedImage src="shopee-auth-confirm" section="api-guide" alt="Shopee Authorize Merchant 화면" caption="인증할 샵 선택 후 Confirm Authorization 클릭" />
+
+3. 인증할 샵(국가)을 선택한 후 **[Confirm Authorization]** 버튼을 클릭합니다.
+4. 인증이 완료되면 팝업이 닫히고 인증 정보가 저장됩니다.
+
+<ApiRegisterAndTest lang="ko" />
+
+## API 설정 및 연동 주문
+
+API 연동 동작(자동 주문 수집, 자동 주문 확인, 풀필먼트 출하지시 등)을 조절하는 옵션은 **[쇼핑몰 API 설정 > 주문 처리 설정]** 에서 변경할 수 있습니다.
+
+<Callout type="tip">
+옵션별 상세 설명은 [API 연동 시 주문 처리 옵션 가이드](/ko/api-guide/order-options/)를 참고하세요.
+</Callout>
+
+### 수집 가능한 주문 상태
+
+Shopee에서는 **To Ship** 하위 상태 중 **To Process** 상태의 주문이 수집됩니다.
+
+## 풀필먼트 상품 연결
+
+풀필먼트 서비스 이용 시, 판매사이트 상품과 스마트십 SKU를 연결해야 센터에서 정확한 상품을 출고할 수 있습니다.
+
+### SKU에 판매자 정의코드 등록
+
+<ApiSkuVendorCode lang="ko" />
+
+### 판매 사이트 상품에 SKU no. 등록
+
+<AnnotatedImage src="shopee-product-sku-input" section="api-guide" alt="Shopee Seller Center 상품 SKU 입력 화면" caption="Shopee Seller Center > My Products > SKU 항목" />
+
+Shopee Seller Center **My Products** 메뉴에서 상품별로 **SKU** 항목에 스마트십 SKU no. 또는 판매자 정의코드를 입력합니다.
+
+<Callout type="info">
+판매채널 상품과 SKU를 연결하는 자세한 방법은 [API 연결 후 판매사이트 설정 방법](/ko/api-guide/site-settings/)을 참고하세요.
+</Callout>
+
+## API 키 관리
+
+### Live Partner Key 갱신하기
+
+Live Partner Key는 약 1년의 유효기간을 가집니다. 유효기간이 도래하기 전에 재발급하는 것이 안전합니다.
+
+1. [Shopee Open Platform](https://open.shopee.com/)에 접속합니다.
+2. **Console** 메뉴로 이동 후 사용 중인 앱을 선택합니다.
+3. **[Edit]** 버튼을 클릭합니다.
+4. **[Reset]** 버튼을 클릭하여 Live Key를 재발급 받습니다.
+
+### 스마트십에서 API 설정 수정하기
+
+1. 재발급이 완료되면 스마트십의 **주문 > 쇼핑몰 연동 > 쇼핑몰 API 설정** 페이지로 이동합니다.
+2. 해당 Shopee 샵을 선택합니다.
+3. **Live Key** 항목의 **[Edit]** 버튼을 클릭하면 필드를 수정할 수 있습니다.
+4. 신규로 발급받은 Live Key를 입력한 후, 오른쪽 **[토큰 갱신]** 버튼을 클릭합니다.
+5. Shopee 인증 페이지가 열리면 판매자 정보를 입력하여 인증을 완료합니다.
+6. 인증이 완료되면 접속 토큰이 갱신됩니다.
+7. 하단 **[연결 테스트하기]** 버튼을 클릭하여 API 접속이 정상 작동하는지 확인합니다.
+
+<Callout type="warning">
+토큰이 만료되거나 키를 갱신한 기간 동안 수집되지 않은 주문은 아래 방법으로 수동으로 가져와야 합니다.
+</Callout>
+
+### 수동 주문 수집
+
+<ApiManualImport lang="ko" />

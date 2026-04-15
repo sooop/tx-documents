@@ -1,0 +1,35 @@
+---
+/**
+ * 수동 주문 수집 공통 섹션
+ * API 키 만료 등으로 자동 수집이 중단된 기간의 주문을 수동으로 가져오는 절차입니다.
+ *
+ * @prop lang 현재 페이지 언어 (향후 다국어 지원용, 현재는 'ko'만 구현)
+ */
+import AnnotatedImage from './AnnotatedImage.astro';
+
+interface Props {
+  lang?: string;
+}
+
+const { lang = 'ko' } = Astro.props;
+---
+
+{lang === 'ko' && (
+  <>
+    <p>메뉴 <strong>주문 &gt; 쇼핑몰 연동 &gt; 쇼핑몰 주문 연동</strong>에서 중단된 기간의 주문을 직접 가져올 수 있습니다.</p>
+
+    <AnnotatedImage
+      src="manual-api-import"
+      section="api-guide"
+      alt="쇼핑몰 주문 연동 수동 수집 화면"
+      caption="주문 > 쇼핑몰 연동 > 쇼핑몰 주문 연동"
+    />
+
+    <ol>
+      <li>쇼핑몰 주문 연동 페이지로 이동합니다.</li>
+      <li>판매사이트 및 샵을 선택합니다.</li>
+      <li>주문 연동일 날짜 범위를 선택합니다. (최대 1주일)</li>
+      <li><strong>[주문 가져오기]</strong> 버튼을 클릭합니다.</li>
+    </ol>
+  </>
+)}

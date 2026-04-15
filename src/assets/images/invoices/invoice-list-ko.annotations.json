@@ -1,0 +1,49 @@
+{
+  "imageId": "invoice-list",
+  "annotations": [
+    {
+      "id": "select-invoice",
+      "type": "marker",
+      "number": 1,
+      "x": 4.0,
+      "y": 9.5,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "원하는 인보이스 선택"
+      }
+    },
+    {
+      "id": "view-receipt",
+      "type": "marker",
+      "number": 2,
+      "x": 63.0,
+      "y": 31.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "선택한 영수증 확인"
+      }
+    },
+    {
+      "id": "subtotal",
+      "type": "marker",
+      "number": 3,
+      "x": 14.0,
+      "y": 41.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "선택한 인보이스의 소계 확인 (소계 행 클릭 시 상세 내역 조회 가능)"
+      }
+    },
+    {
+      "id": "excel-download",
+      "type": "marker",
+      "number": 4,
+      "x": 93.0,
+      "y": 57.5,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "엑셀 다운로드 — 여러 월의 상세 내역을 한번에 다운로드할 수 있습니다"
+      }
+    }
+  ]
+}

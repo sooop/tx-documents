@@ -46,7 +46,6 @@ export async function getNavTree(lang: string): Promise<NavItem[]> {
   if (!loader) return [];
   const items = await loader();
   const filtered = filterDevItems(items);
-  if (!import.meta.env.DEV) return filtered;
   const existingSlugs = buildContentSlugs(lang);
   return annotateContentExists(filtered, existingSlugs);
 }

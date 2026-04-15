@@ -1,0 +1,27 @@
+{
+  "imageId": "overseas-receipt-list",
+  "annotations": [
+    {
+      "id": "preview",
+      "type": "marker",
+      "number": 1,
+      "x": 64.0,
+      "y": 50.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "미리보기 — 해당 월의 수령증을 화면에서 바로 확인"
+      }
+    },
+    {
+      "id": "download",
+      "type": "marker",
+      "number": 2,
+      "x": 82.0,
+      "y": 50.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "다운로드 — 해당 거래 기간의 상세 데이터 파일로 저장"
+      }
+    }
+  ]
+}

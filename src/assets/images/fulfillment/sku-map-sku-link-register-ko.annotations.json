@@ -1,0 +1,53 @@
+{
+  "imageId": "sku-map-sku-link-register",
+  "annotations": [
+    {
+      "id": "sku-no-search",
+      "type": "marker",
+      "number": 1,
+      "x": 18.0,
+      "y": 22.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "SKU no. 검색 또는 직접 입력",
+        "en": "Search or enter SKU no. directly"
+      }
+    },
+    {
+      "id": "option-val-1",
+      "type": "marker",
+      "number": 2,
+      "x": 18.0,
+      "y": 55.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "옵션값 1 입력 (정책에서 설정한 순서대로)",
+        "en": "Option value 1 (in the order defined in policy)"
+      }
+    },
+    {
+      "id": "option-val-2",
+      "type": "marker",
+      "number": 3,
+      "x": 52.0,
+      "y": 55.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "옵션값 2 입력",
+        "en": "Option value 2"
+      }
+    },
+    {
+      "id": "save-btn",
+      "type": "marker",
+      "number": 4,
+      "x": 77.0,
+      "y": 88.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "저장하기",
+        "en": "Save"
+      }
+    }
+  ]
+}

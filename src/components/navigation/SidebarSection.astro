@@ -16,36 +16,63 @@ const hasChildren = item.children && item.children.length > 0;
 const href = `/${lang}/${item.slug}/`;
 const isOpen = isActive || isParentOfActive;
 const isMissingContent = import.meta.env.DEV && item.hasContent === false && !hasChildren;
+const isExpandOnly = hasChildren && item.hasContent === false;
 ---
 
 <li class:list={['sidebar-item', { active: isActive, expanded: isParentOfActive }]}>
   <div class="sidebar-row">
-    <a href={href} class:list={['sidebar-link', `depth-${depth}`, { current: isActive, 'no-content': isMissingContent }]}>
-      {item.title}
-    </a>
-    {
-      hasChildren && (
-        <button
-          class:list={['sidebar-toggle', { open: isOpen }]}
-          aria-expanded={String(isOpen)}
-          aria-label="하위 항목 펼치기/접기"
+    {isExpandOnly ? (
+      <button
+        class:list={['sidebar-link', 'sidebar-link--expand', `depth-${depth}`, { open: isOpen }]}
+        data-sidebar-toggle
+        aria-expanded={String(isOpen)}
+      >
+        {item.title}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
-        </button>
-      )
-    }
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+    ) : (
+      <>
+        <a href={href} class:list={['sidebar-link', `depth-${depth}`, { current: isActive, 'no-content': isMissingContent }]}>
+          {item.title}
+        </a>
+        {
+          hasChildren && (
+            <button
+              class:list={['sidebar-toggle', { open: isOpen }]}
+              data-sidebar-toggle
+              aria-expanded={String(isOpen)}
+              aria-label="하위 항목 펼치기/접기"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+          )
+        }
+      </>
+    )}
   </div>
   {
     hasChildren && (
@@ -63,7 +90,7 @@ const isMissingContent = import.meta.env.DEV && item.hasContent === false && !ha
 
 <script>
   function initSidebarToggles() {
-    document.querySelectorAll<HTMLButtonElement>('.sidebar-toggle').forEach((toggle) => {
+    document.querySelectorAll<HTMLButtonElement>('[data-sidebar-toggle]').forEach((toggle) => {
       // 이미 리스너가 등록된 버튼은 건너뜀
       if (toggle.dataset.initialized) return;
       toggle.dataset.initialized = 'true';

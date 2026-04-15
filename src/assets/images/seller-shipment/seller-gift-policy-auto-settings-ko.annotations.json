@@ -1,0 +1,50 @@
+{
+  "imageId": "seller-gift-policy-auto-settings",
+  "annotations": [
+    {
+      "id": "policy-method",
+      "type": "marker",
+      "number": 1,
+      "x": 14.0,
+      "y": 20.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "정책 적용 방식",
+        "en": "Policy application method",
+        "ja": "ポリシー適用方式",
+        "zh-hk": "政策適用方式",
+        "zh-cn": "政策应用方式"
+      }
+    },
+    {
+      "id": "dispatch-settings",
+      "type": "marker",
+      "number": 2,
+      "x": 14.0,
+      "y": 50.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "출하 지시 설정 (풀필먼트 주문 전용)",
+        "en": "Dispatch instruction settings (Fulfillment orders only)",
+        "ja": "出荷指示設定（フルフィルメント注文専用）",
+        "zh-hk": "出貨指示設定（僅限履行訂單）",
+        "zh-cn": "出货指示设置（仅限履行订单）"
+      }
+    },
+    {
+      "id": "gift-overlap",
+      "type": "marker",
+      "number": 3,
+      "x": 14.0,
+      "y": 80.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "사은품 중복 적용 방식",
+        "en": "Duplicate gift application method",
+        "ja": "景品重複適用方式",
+        "zh-hk": "贈品重複適用方式",
+        "zh-cn": "赠品重复适用方式"
+      }
+    }
+  ]
+}

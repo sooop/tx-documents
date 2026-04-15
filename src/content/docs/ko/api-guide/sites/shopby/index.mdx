@@ -1,0 +1,113 @@
+---
+title: "shop by API 연동 가이드"
+description: "스마트십에서 NHN Commerce Shop by API를 연동하여 주문 수집 및 발송처리를 자동화하는 방법을 안내합니다."
+---
+
+<AnnotatedImage src="shopby-logo" section="api-guide" alt="shop by 로고" />
+
+## API 연동에 관해
+
+<ApiSiteIntro lang="ko" />
+
+## 사전 준비 — Shop by 앱스토어에서 스마트십 설치
+
+Shop by는 자체 앱스토어를 통해 스마트십 앱을 간편하게 설치할 수 있습니다. 앱 설치 후 스마트십을 실행하는 과정에서 API 연동은 자동으로 설정되므로 별도로 API 키를 발급받을 필요가 없습니다.
+
+### Shop by 앱스토어에서 스마트십 검색
+
+<AnnotatedImage src="shopby-appstore-search" section="api-guide" alt="Shop by 앱스토어 스마트십 검색 화면" caption="Shop by 앱스토어에서 스마트십 앱 검색" />
+
+1. Shop by 앱스토어에 접속하여 검색창에 **스마트십**을 입력합니다.
+2. 스마트십 앱 상세 화면으로 이동합니다.
+
+### 스마트십 앱 설치
+
+<AnnotatedImage src="shopby-app-install" section="api-guide" alt="Shop by 스마트십 앱 설치 화면" caption="앱을 설치할 쇼핑몰 선택 후 동의 항목 체크 및 설치" />
+
+1. 스마트십 앱 상세 화면에서 **[설치하기]** 버튼을 클릭합니다.
+2. 앱을 설치할 쇼핑몰을 선택합니다.
+3. 동의 항목에 체크한 후 **[설치]** 버튼을 클릭합니다.
+
+### 설치된 스마트십 앱 실행
+
+<AnnotatedImage src="shopby-installed-apps" section="api-guide" alt="Shop by 쇼핑몰 관리자 앱 설치 목록" caption="쇼핑몰 관리자의 앱 설치 목록에서 스마트십 실행" />
+
+설치가 완료되면 쇼핑몰 관리자의 **앱 설치 목록**에서 스마트십 앱을 확인할 수 있습니다. **[실행]** 버튼을 클릭하여 스마트십을 시작합니다.
+
+## 스마트십 계정 인증하기
+
+스마트십 앱을 실행하면 스마트십 계정 연동 화면이 표시됩니다.
+
+<AnnotatedImage src="shopby-account-connect" section="api-guide" alt="Shop by - 스마트십 계정 연결 화면" caption="기존 계정에 연결 선택 후 스마트십 아이디/비밀번호로 인증" />
+
+1. **기존 계정에 연결**을 선택합니다.
+2. 목록에 표시되는 이메일/아이디 중에서 사용 중인 스마트십 계정을 선택합니다.
+   - 목록에 없는 경우 **직접 입력**을 사용해주세요.
+3. 스마트십 비밀번호를 입력하여 계정을 인증합니다.
+
+계정 인증이 성공하면 연동 설정이 자동으로 진행됩니다. 인증된 이후에는 Shop by 쇼핑몰 관리자에서 스마트십 앱을 실행할 때 스마트십에 자동으로 로그인됩니다.
+
+<AnnotatedImage src="shopby-connect-complete" section="api-guide" alt="Shop by 연동 완료 후 스마트십 주문 관리 화면" caption="연결 완료 후 주문 관리 페이지에서 최근 주문 자동 수집 시작" />
+
+연결이 완료되면 주문 관리 페이지에서 최근 주문을 자동으로 수집하기 시작합니다. API 설정 화면에서 Shop by API가 이미 연동되어 있는 것을 확인할 수 있습니다.
+
+## API 설정 및 연동 주문
+
+API 연동 동작(자동 주문 수집, 자동 주문 확인, 풀필먼트 출하지시 등)을 조절하는 옵션은 **[쇼핑몰 API 설정 > 주문 처리 설정]** 에서 변경할 수 있습니다.
+
+<AnnotatedImage src="shopby-api-settings" section="api-guide" alt="스마트십 Shop by API 주문 처리 설정" caption="쇼핑몰 API 설정 > 주문 처리 설정에서 옵션 조정" />
+
+<Callout type="tip">
+옵션별 상세 설명은 [API 연동 시 주문 처리 옵션 가이드](/ko/api-guide/order-options/)를 참고하세요. Shop by의 채널별 추가 옵션(예상 배송일자 업데이트, 재고 동기화 설정 등)도 해당 페이지에서 확인할 수 있습니다.
+</Callout>
+
+### 수집 가능한 주문 상태
+
+<AnnotatedImage src="shopby-order-status" section="api-guide" alt="Shop by 연동 가능 주문 상태" caption="Shop by에서 스마트십으로 수집되는 주문 상태" />
+
+Shop by API를 통해 다음 상태의 주문을 수집합니다.
+
+- **결제완료** 상태 주문
+- **상품 준비중** 상태 주문
+- **배송 준비중** 상태 주문
+
+취소된 주문은 수집 대상에서 제외됩니다.
+
+<Callout type="info">
+기본적으로 자동 주문 수집은 작동을 시작하는 당일부터의 주문을 수집합니다. 인증 키 만료 등의 사유로 자동 주문이 중지된 후 재설정한 경우, 주문이 수집되지 않은 기간의 주문은 반드시 수동으로 API 주문 연동을 실행해야 수집됩니다.
+</Callout>
+
+## 풀필먼트 상품 연결
+
+풀필먼트 서비스 이용 시, 판매사이트 상품과 스마트십 SKU를 연결해야 센터에서 정확한 상품을 출고할 수 있습니다.
+
+### SKU에 판매자 정의코드 등록
+
+<AnnotatedImage src="shopby-sku-vendor-code" section="api-guide" alt="스마트십 SKU 관리 - 판매자 정의 코드 입력" caption="재고 > SKU 관리에서 판매자 정의 코드 입력" />
+
+<ApiSkuVendorCode lang="ko" />
+
+### 판매 사이트 상품에 SKU no. 등록
+
+<AnnotatedImage src="shopby-product-code" section="api-guide" alt="Shop by 상품 등록 상품관리코드 입력" caption="Shop by 서비스 어드민 > 상품 관리 > 상품 등록에서 상품관리코드/옵션 관리 코드 입력" />
+
+Shop by 서비스 어드민 **상품 관리 > 상품 등록** 또는 상품 조회/수정 화면에서 상품별로 코드를 입력합니다.
+
+| 상품 유형 | 입력 항목 | 입력 값 |
+|-----------|-----------|---------|
+| 옵션이 없는 단일 상품 | 상품관리코드 | 스마트십 SKU no. 또는 판매자 정의코드 |
+| 옵션이 있는 선택 상품 (일체형/분리형) | 각 옵션의 옵션 관리 코드 | 각 옵션의 SKU no. 또는 판매자 정의코드 |
+
+<Callout type="warning">
+선택형 옵션은 풀필먼트 주문으로 사용할 수 없습니다. 풀필먼트 주문은 일체형 또는 분리형 옵션의 상품만 지원합니다.
+</Callout>
+
+<Callout type="info">
+판매채널 상품과 SKU를 연결하는 자세한 방법은 [API 연결 후 판매사이트 설정 방법](/ko/api-guide/site-settings/)을 참고하세요.
+</Callout>
+
+## API 키 관리
+
+### 수동 주문 수집
+
+<ApiManualImport lang="ko" />

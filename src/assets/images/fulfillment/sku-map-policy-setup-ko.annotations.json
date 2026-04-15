@@ -1,0 +1,53 @@
+{
+  "imageId": "sku-map-policy-setup",
+  "annotations": [
+    {
+      "id": "shop-select",
+      "type": "marker",
+      "number": 1,
+      "x": 10.5,
+      "y": 38.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "판매채널 Shop 선택",
+        "en": "Select sales channel shop"
+      }
+    },
+    {
+      "id": "target-type",
+      "type": "marker",
+      "number": 2,
+      "x": 33.0,
+      "y": 38.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "지정 상품 번호 (지정 / 전체 선택)",
+        "en": "Target product: specific or all products"
+      }
+    },
+    {
+      "id": "product-no",
+      "type": "marker",
+      "number": 3,
+      "x": 58.0,
+      "y": 38.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "상품번호 입력",
+        "en": "Enter product number"
+      }
+    },
+    {
+      "id": "option-count",
+      "type": "marker",
+      "number": 4,
+      "x": 84.0,
+      "y": 38.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "조합할 옵션의 수 — SKU 1개를 결정하는 옵션 항목 수",
+        "en": "Number of options to combine per SKU"
+      }
+    }
+  ]
+}

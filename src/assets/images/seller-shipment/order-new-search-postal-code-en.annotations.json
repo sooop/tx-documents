@@ -1,0 +1,21 @@
+{
+  "imageId": "order-new-search-postal-code",
+  "annotations": [
+    {
+      "id": "marker-1776070886356-7",
+      "type": "marker",
+      "number": 1,
+      "x": 50.36390101892285,
+      "y": 44.527363184079604
+    },
+    {
+      "id": "arrow-1776070891291-8",
+      "type": "arrow",
+      "fromX": 54.87627365356623,
+      "fromY": 47.76119402985074,
+      "toX": 33.770014556040756,
+      "toY": 67.66169154228857,
+      "strokeColor": "oklch(51.4% 0.222 16.935)"
+    }
+  ]
+}

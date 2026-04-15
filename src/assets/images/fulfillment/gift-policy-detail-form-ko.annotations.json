@@ -1,0 +1,55 @@
+{
+  "imageId": "gift-policy-detail-form",
+  "annotations": [
+    {
+      "id": "policy-name",
+      "type": "marker",
+      "number": 1,
+      "x": 17,
+      "y": 7,
+      "label": {
+        "ko": "정책명 입력"
+      }
+    },
+    {
+      "id": "policy-date",
+      "type": "marker",
+      "number": 2,
+      "x": 17,
+      "y": 23,
+      "label": {
+        "ko": "정책 적용 기준일 — 결제일 또는 주문일 선택 후 날짜 범위 입력"
+      }
+    },
+    {
+      "id": "order-type",
+      "type": "marker",
+      "number": 3,
+      "x": 17,
+      "y": 50,
+      "label": {
+        "ko": "정책 적용 주문 타입 — 풀필먼트 또는 판매자 출고 선택"
+      }
+    },
+    {
+      "id": "qty-limit",
+      "type": "marker",
+      "number": 4,
+      "x": 17,
+      "y": 65,
+      "label": {
+        "ko": "사은품 지급 수량 제한 — 제한 수량 또는 제한 없음 선택"
+      }
+    },
+    {
+      "id": "conditions",
+      "type": "marker",
+      "number": 5,
+      "x": 5,
+      "y": 82,
+      "label": {
+        "ko": "판매 사이트 / 결제 금액 / 포함 상품 조건 설정"
+      }
+    }
+  ]
+}

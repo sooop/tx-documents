@@ -85,8 +85,7 @@ function hitAnnotation(
   if (ann.type === 'marker') {
     const cx = pct2px(ann.x, natW);
     const cy = pct2px(ann.y, natH);
-    const r = ann.markerRadius ?? MARKER_RADIUS;
-    return Math.hypot(svgX - cx, svgY - cy) <= r + tol;
+    return Math.hypot(svgX - cx, svgY - cy) <= MARKER_RADIUS + tol;
   }
   if (ann.type === 'box') {
     const x = pct2px(ann.x, natW);

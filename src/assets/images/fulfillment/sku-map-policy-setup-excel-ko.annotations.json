@@ -1,0 +1,65 @@
+{
+  "imageId": "sku-map-policy-setup-excel",
+  "annotations": [
+    {
+      "id": "site-select",
+      "type": "marker",
+      "number": 1,
+      "x": 7.0,
+      "y": 52.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "Site — 판매 샵 선택",
+        "en": "Site — select the sales shop"
+      }
+    },
+    {
+      "id": "option-count",
+      "type": "marker",
+      "number": 2,
+      "x": 28.0,
+      "y": 52.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "SKU에 매칭할 옵션 항목 수",
+        "en": "Number of option items to match per SKU"
+      }
+    },
+    {
+      "id": "set-count",
+      "type": "marker",
+      "number": 3,
+      "x": 52.0,
+      "y": 52.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "주문당 구성할 세트의 상품 수",
+        "en": "Number of SKUs per set per order"
+      }
+    },
+    {
+      "id": "product-no",
+      "type": "marker",
+      "number": 4,
+      "x": 73.0,
+      "y": 52.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "판매채널 상품번호 입력",
+        "en": "Enter sales channel product number"
+      }
+    },
+    {
+      "id": "file-select",
+      "type": "marker",
+      "number": 5,
+      "x": 93.5,
+      "y": 75.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "엑셀 파일 선택",
+        "en": "Select Excel file"
+      }
+    }
+  ]
+}

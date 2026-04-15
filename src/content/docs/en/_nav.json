@@ -7,6 +7,13 @@
     ]
   },
   {
+    "slug": "seller-shipment",
+    "title": "Seller Shipment Guide",
+    "children": [
+      { "slug": "seller-shipment/print-packing-label", "title": "Printing Packing Labels (Barcode Labels)" }
+    ]
+  },
+  {
     "slug": "delivery",
     "title": "Delivery Management",
     "children": [

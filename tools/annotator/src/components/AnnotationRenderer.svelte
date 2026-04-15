@@ -99,8 +99,7 @@
   {:else if ann.type === 'marker'}
     {@const mx = px(ann.x, nw)}
     {@const my = px(ann.y, nh)}
-    {@const r = ann.markerRadius ?? MARKER_RADIUS}
-    <circle cx={mx} cy={my} r={r}
+    <circle cx={mx} cy={my} r={MARKER_RADIUS}
       fill={selected ? SELECTION_COLOR : DEFAULT_COLOR}
       stroke={selected ? 'white' : 'none'} stroke-width="2"
       vector-effect="non-scaling-stroke"

@@ -1,0 +1,57 @@
+{
+  "imageId": "orders-new-item-replace-panel",
+  "annotations": [
+    {
+      "id": "product-checkbox",
+      "type": "marker",
+      "number": 1,
+      "x": 5.5,
+      "y": 44,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "교체할 대상 상품 체크",
+        "en": "Check products to replace",
+        "ja": "交換対象商品のチェック"
+      }
+    },
+    {
+      "id": "order-count",
+      "type": "marker",
+      "number": 2,
+      "x": 52,
+      "y": 44,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "포함된 주문 수",
+        "en": "Number of orders included",
+        "ja": "含まれる注文数"
+      }
+    },
+    {
+      "id": "replacement-slot",
+      "type": "marker",
+      "number": 3,
+      "x": 26,
+      "y": 79,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "교체품 선택 슬롯",
+        "en": "Replacement item selection slot",
+        "ja": "交換品選択スロット"
+      }
+    },
+    {
+      "id": "execute-button",
+      "type": "marker",
+      "number": 4,
+      "x": 87,
+      "y": 93,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "상품 교체 실행 버튼",
+        "en": "Execute item replacement button",
+        "ja": "商品交換実行ボタン"
+      }
+    }
+  ]
+}

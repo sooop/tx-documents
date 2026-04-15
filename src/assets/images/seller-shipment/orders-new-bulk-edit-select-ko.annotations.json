@@ -1,0 +1,31 @@
+{
+  "imageId": "orders-new-bulk-edit-select",
+  "annotations": [
+    {
+      "id": "bulk-edit-edit-order",
+      "type": "marker",
+      "number": 1,
+      "x": 9,
+      "y": 13,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "주문 수정",
+        "en": "Edit Order",
+        "ja": "注文修正"
+      }
+    },
+    {
+      "id": "bulk-edit-bulk-attr",
+      "type": "marker",
+      "number": 2,
+      "x": 9,
+      "y": 19,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "상품속성 일괄변경",
+        "en": "Batch Attribute Change",
+        "ja": "商品属性一括変更"
+      }
+    }
+  ]
+}

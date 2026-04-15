@@ -1,0 +1,53 @@
+{
+  "imageId": "sku-map-qoo10-option-setting",
+  "annotations": [
+    {
+      "id": "option-row-1",
+      "type": "marker",
+      "number": 1,
+      "x": 4.0,
+      "y": 23.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "색1 — 첫 번째 렌즈의 색상 옵션 항목",
+        "en": "Color 1 — color option for the first lens"
+      }
+    },
+    {
+      "id": "option-row-2",
+      "type": "marker",
+      "number": 2,
+      "x": 4.0,
+      "y": 36.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "도수1 — 첫 번째 렌즈의 도수 옵션 항목",
+        "en": "Power 1 — power option for the first lens"
+      }
+    },
+    {
+      "id": "option-row-3",
+      "type": "marker",
+      "number": 3,
+      "x": 4.0,
+      "y": 49.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "색2 — 두 번째 렌즈의 색상 옵션 항목",
+        "en": "Color 2 — color option for the second lens"
+      }
+    },
+    {
+      "id": "option-row-4",
+      "type": "marker",
+      "number": 4,
+      "x": 4.0,
+      "y": 62.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "도수2 — 두 번째 렌즈의 도수 옵션 항목",
+        "en": "Power 2 — power option for the second lens"
+      }
+    }
+  ]
+}

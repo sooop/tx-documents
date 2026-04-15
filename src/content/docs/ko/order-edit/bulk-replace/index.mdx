@@ -1,0 +1,44 @@
+---
+title: "상품 일괄 교체"
+description: "여러 주문에 포함된 특정 상품을 일괄로 다른 상품으로 교체하는 방법을 안내합니다."
+---
+
+여러 주문에 포함되어 있는 특정 상품을 일괄로 다른 상품으로 교체하는 기능입니다.
+
+<Callout type="info">
+일부 상품이 SKU에 올바르게 매칭되지 않은 경우 상품 → SKU로 일괄 매칭할 수 있으며, TX 3PL 풀필먼트 출고 주문의 경우에는 특정 SKU를 다른 SKU로 일괄 교체하는 데 활용할 수 있습니다.
+</Callout>
+
+## 적용 가능 범위
+
+출고 방식에 따라 상품 일괄 교체가 가능한 주문 범위가 다릅니다.
+
+**판매자 출고 주문**
+
+송장/라벨 출력 전의 주문에만 적용 가능합니다. 아래와 같이 **주문확인됨** 상태까지의 주문에 적용할 수 있습니다.
+
+<AnnotatedImage src="orders-new-item-replace-range-seller" section="seller-shipment" alt="판매자 출고 주문 적용 가능 범위" caption="판매자 출고: 주문확인됨 상태 이전의 주문에 적용 가능합니다." />
+
+**풀필먼트 출고 주문**
+
+풀필먼트 출하지시 대기 이전의 주문에만 적용 가능합니다. 아래와 같이 **출하지시 대기** 상태까지의 주문에 적용할 수 있습니다.
+
+<AnnotatedImage src="orders-new-item-replace-range-ff" section="seller-shipment" alt="풀필먼트 출고 주문 적용 가능 범위" caption="풀필먼트 출고: 출하지시 대기 상태 이전의 주문에 적용 가능합니다." />
+
+---
+
+## 상품 교체 순서
+
+1. 상품을 교체할 주문들을 선택합니다.
+
+   <AnnotatedImage src="orders-new-item-replace-select" section="seller-shipment" alt="교체할 주문 선택" caption="교체할 주문들을 먼저 선택합니다." />
+
+2. 상단 메뉴에서 **[패킹관리 → 상품일괄교체]** 를 선택합니다.
+
+3. 상품교체 패널이 표시됩니다. 상단에서 교체할 대상 상품을 체크합니다. 각 상품에는 포함된 주문 수가 표시됩니다.
+
+4. 하단에는 선택한 상품마다 슬롯이 표시됩니다. 각 상품에 대해서 교체품을 선택하세요.
+
+5. 모든 교체품을 선택한 후 **[상품 교체 실행]** 버튼을 클릭합니다.
+
+   <AnnotatedImage src="orders-new-item-replace-panel" section="seller-shipment" alt="상품 일괄 교체 패널" caption="① 교체할 대상 상품 체크 → ② 포함된 주문 수 확인 → ③ 교체품 선택 → ④ 상품 교체 실행" />

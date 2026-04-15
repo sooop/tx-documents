@@ -1,0 +1,95 @@
+{
+  "imageId": "seller-gift-policy-detail-form",
+  "annotations": [
+    {
+      "id": "policy-name",
+      "type": "marker",
+      "number": 1,
+      "x": 13.0,
+      "y": 7.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "정책명",
+        "en": "Policy name",
+        "ja": "ポリシー名",
+        "zh-hk": "政策名稱",
+        "zh-cn": "政策名称"
+      }
+    },
+    {
+      "id": "policy-date",
+      "type": "marker",
+      "number": 2,
+      "x": 13.0,
+      "y": 22.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "정책 적용 기준일 및 기간",
+        "en": "Policy application reference date and period",
+        "ja": "ポリシー適用基準日と期間",
+        "zh-hk": "政策適用基準日及期間",
+        "zh-cn": "政策应用基准日及期间"
+      }
+    },
+    {
+      "id": "active-status",
+      "type": "marker",
+      "number": 3,
+      "x": 13.0,
+      "y": 36.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "활성화 여부",
+        "en": "Activation status",
+        "ja": "有効化の有無",
+        "zh-hk": "啟用狀態",
+        "zh-cn": "启用状态"
+      }
+    },
+    {
+      "id": "order-type",
+      "type": "marker",
+      "number": 4,
+      "x": 13.0,
+      "y": 50.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "정책 적용 주문 타입 → [판매자 출고 주문에 적용] 선택",
+        "en": "Policy order type → Select [Apply to seller-shipment orders]",
+        "ja": "ポリシー適用注文タイプ → [販売者出庫注文に適用] を選択",
+        "zh-hk": "政策適用訂單類型 → 選擇[適用於賣家出貨訂單]",
+        "zh-cn": "政策应用订单类型 → 选择[适用于卖家出货订单]"
+      }
+    },
+    {
+      "id": "gift-qty-limit",
+      "type": "marker",
+      "number": 5,
+      "x": 13.0,
+      "y": 64.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "사은품 지급 수량 제한",
+        "en": "Gift quantity limit",
+        "ja": "景品支給数量制限",
+        "zh-hk": "贈品發放數量限制",
+        "zh-cn": "赠品发放数量限制"
+      }
+    },
+    {
+      "id": "conditions",
+      "type": "marker",
+      "number": 6,
+      "x": 4.0,
+      "y": 77.0,
+      "markerRadius": 1.5,
+      "label": {
+        "ko": "적용 조건 설정 (판매 사이트 / 결제 금액 / 포함 상품)",
+        "en": "Condition settings (Sales site / Payment amount / Included items)",
+        "ja": "適用条件設定（販売サイト / 決済金額 / 含む商品）",
+        "zh-hk": "適用條件設定（銷售網站 / 付款金額 / 包含商品）",
+        "zh-cn": "适用条件设置（销售网站 / 付款金额 / 包含商品）"
+      }
+    }
+  ]
+}
