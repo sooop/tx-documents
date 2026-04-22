@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/common/Header.astro';
 import Sidebar from '../components/navigation/Sidebar.astro';
@@ -41,7 +42,12 @@ const {
     </aside>
     <main class="docs-content">
       <Breadcrumbs items={breadcrumbs} lang={lang} />
-      {draft && <div class="draft-banner">{t(lang, 'draft.label')}</div>}
+      {draft && (
+        <div class="draft-banner">
+          <Icon name="lucide:file-warning" class="draft-banner-icon" aria-hidden="true" />
+          <span>{t(lang, 'draft.label')}</span>
+        </div>
+      )}
       <article class="prose">
         <h1>{title}</h1>
         <slot />
@@ -106,13 +112,7 @@ const {
     if (e.key === 'Escape') closeZoom();
   });
 
-  // 외부 링크는 새 창으로 열기
-  document.querySelectorAll<HTMLAnchorElement>('.prose a[href]').forEach((a) => {
-    if (/^https?:\/\//.test(a.getAttribute('href') ?? '')) {
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-    }
-  });
+  // 외부 링크의 target/_rel 은 rehypeExternalLinks 플러그인이 빌드 타임에 주입
 
   // .annotated-image 안에 있는 img는 ImageAnnotationViewer가 처리하므로 제외
   document.querySelectorAll<HTMLImageElement>('.prose img').forEach((img) => {

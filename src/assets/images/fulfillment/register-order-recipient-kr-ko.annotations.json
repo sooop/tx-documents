@@ -1,0 +1,32 @@
+{
+  "imageId": "register-order-recipient-kr",
+  "annotations": [
+    {
+      "id": "zip",
+      "type": "marker",
+      "number": 1,
+      "x": 58.0,
+      "y": 23.0,
+      "markerRadius": 2.2,
+      "label": { "ko": "우편번호 입력 — 자릿수가 맞으면 자동 검색" }
+    },
+    {
+      "id": "address",
+      "type": "marker",
+      "number": 2,
+      "x": 30.0,
+      "y": 49.0,
+      "markerRadius": 2.2,
+      "label": { "ko": "주소 자동 입력 (후보가 1개인 경우)" }
+    },
+    {
+      "id": "detail",
+      "type": "marker",
+      "number": 3,
+      "x": 30.0,
+      "y": 70.0,
+      "markerRadius": 2.2,
+      "label": { "ko": "상세 주소만 직접 입력" }
+    }
+  ]
+}

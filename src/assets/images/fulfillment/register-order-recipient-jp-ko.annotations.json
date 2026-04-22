@@ -1,0 +1,23 @@
+{
+  "imageId": "register-order-recipient-jp",
+  "annotations": [
+    {
+      "id": "zip",
+      "type": "marker",
+      "number": 1,
+      "x": 33.0,
+      "y": 45.0,
+      "markerRadius": 2.2,
+      "label": { "ko": "우편번호 입력 — 자동 검색 실행" }
+    },
+    {
+      "id": "candidates",
+      "type": "marker",
+      "number": 2,
+      "x": 33.0,
+      "y": 78.0,
+      "markerRadius": 2.2,
+      "label": { "ko": "후보 주소 목록에서 클릭해 선택" }
+    }
+  ]
+}

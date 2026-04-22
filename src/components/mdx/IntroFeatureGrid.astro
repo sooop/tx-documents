@@ -1,0 +1,204 @@
+---
+import { Icon } from 'astro-icon/components';
+
+/*
+ * 팔레트 — 역사적 안료 보색 쌍 (고채도)
+ *
+ * a: 1차색 (좌측 테두리 · 아이콘 배경 · 제목)
+ * b: 2차색 (우상단 코너 삼각형 · 보조 장식)
+ *
+ * 네 쌍이 서로 색을 공유(echo)하여 전체적인 팔레트 통일감을 만든다:
+ *   card 1의 a == card 3의 b (lapis)
+ *   card 2의 a == card 4의 b (malachite)
+ */
+const features = [
+  {
+    icon: 'solar:earth-bold-duotone',
+    title: '다국가 배송 지원',
+    description: '일본·미국·싱가포르·대만·중국·홍콩 등 주요 해외 국가로 경쟁력 있는 특송 서비스를 제공합니다.',
+    a: '#1852a4',   // Lapis Lazuli — 중세 필사본 청금석
+    b: '#d45610',   // Realgar — 동아시아 안료, 주황
+  },
+  {
+    icon: 'solar:cpu-bolt-bold-duotone',
+    title: 'API 자동 연동',
+    description: '네이버·쿠팡·카페24 등 주요 쇼핑몰과 자동으로 주문을 연동하여 수작업 없이 처리합니다.',
+    a: '#1c7a42',   // Malachite — 구리 녹청, 식물도감 초록
+    b: '#bf2858',   // Madder Rose — 꼭두서니 염료
+  },
+  {
+    icon: 'solar:box-bold-duotone',
+    title: '풀필먼트 서비스',
+    description: '상품 입고부터 보관·포장·출고까지 원스톱으로 처리하는 물류 센터 서비스를 이용하세요.',
+    a: '#c4281a',   // Cinnabar — 진사, 동아시아 주홍
+    b: '#1852a4',   // Azurite — 남동석 (card 1 lapis와 동일 — 에코)
+  },
+  {
+    icon: 'solar:route-bold-duotone',
+    title: '실시간 배송 추적',
+    description: '발송 이후 배송 현황을 실시간으로 조회하고, 수취인에게 추적 링크를 공유할 수 있습니다.',
+    a: '#c27810',   // Yellow Ochre — 황토, 동굴벽화부터 쓰인 안료
+    b: '#1c7a42',   // Verdigris (card 2 malachite와 동일 — 에코)
+  },
+];
+---
+
+<section class="intro-features" aria-label="주요 기능 목록">
+  <div class="intro-features-grid">
+    {features.map((f, i) => (
+      <article
+        class="feature-card"
+        style={`--i:${i}; --a:${f.a}; --b:${f.b}`}
+      >
+        {/* 우상단 삼각형 코너 — 2차 안료색 */}
+        <div class="feature-corner" aria-hidden="true" />
+
+        {/* 아이콘 (1차색 배경, 흰 아이콘) */}
+        <div class="feature-icon-wrap" aria-hidden="true">
+          <Icon name={f.icon} class="feature-icon" />
+        </div>
+
+        <div class="feature-body">
+          <h3 class="feature-title">{f.title}</h3>
+          <p class="feature-desc">{f.description}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .intro-features {
+    margin: 0.5rem 0 2rem;
+  }
+
+  .intro-features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
+  }
+
+  /* ── 카드 ──────────────────────────────────── */
+  .feature-card {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem 1.3rem 1.3rem;
+
+    background: #ffffff;
+    border: 1px solid #e4e0db;
+    border-left: 4px solid var(--a);
+    border-radius: 0 10px 10px 0;
+
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+
+    animation: featureIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i) * 0.1s);
+
+    transition:
+      transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1),
+      box-shadow 0.2s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-3px) translateX(1px);
+    box-shadow:
+      -4px 10px 28px -6px color-mix(in srgb, var(--a) 22%, transparent),
+      0 2px 8px -2px rgba(0,0,0,0.06);
+  }
+
+  /* ── 우상단 삼각형 코너 ─────────────────── */
+  .feature-corner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    /* CSS 삼각형 트릭: 우상단 직각삼각형 */
+    border-style: solid;
+    border-width: 0 34px 34px 0;
+    border-color: transparent var(--b) transparent transparent;
+    transition: border-width 0.2s ease;
+  }
+
+  .feature-card:hover .feature-corner {
+    border-width: 0 40px 40px 0;
+  }
+
+  /* ── 아이콘 래퍼 (1차색 solid, 흰 아이콘) ── */
+  .feature-icon-wrap {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--a);
+    position: relative;
+    z-index: 1;
+    transition:
+      transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.25s ease;
+  }
+
+  .feature-card:hover .feature-icon-wrap {
+    transform: scale(1.06);
+    box-shadow: 0 4px 14px -2px color-mix(in srgb, var(--a) 40%, transparent);
+  }
+
+  .feature-icon {
+    width: 30px;
+    height: 30px;
+    color: #ffffff;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .feature-card:hover .feature-icon {
+    transform: scale(1.08) rotate(-4deg);
+  }
+
+  /* ── 텍스트 ───────────────────────────────── */
+  .feature-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .feature-title {
+    font-family: var(--font-display, sans-serif);
+    font-size: 0.96rem;
+    font-weight: 700;
+    color: var(--a);
+    margin: 0;
+    line-height: 1.4;
+    letter-spacing: -0.015em;
+  }
+
+  .feature-desc {
+    font-size: 0.845rem;
+    color: #4a4038;
+    line-height: 1.72;
+    margin: 0;
+    word-break: keep-all;
+  }
+
+  /* ── 진입 애니메이션 ─────────────────────── */
+  @keyframes featureIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── 모바일 ──────────────────────────────── */
+  @media (max-width: 640px) {
+    .intro-features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

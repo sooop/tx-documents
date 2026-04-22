@@ -1,4 +1,6 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 interface Props {
   title: string;
   open?: boolean;
@@ -8,7 +10,10 @@ const { title, open = false } = Astro.props;
 ---
 
 <details class="details-block" open={open}>
-  <summary class="details-block-title">{title}</summary>
+  <summary class="details-block-title">
+    <Icon name="lucide:chevron-right" class="details-block-chevron" aria-hidden="true" />
+    <span>{title}</span>
+  </summary>
   <div class="details-block-content">
     <slot />
   </div>

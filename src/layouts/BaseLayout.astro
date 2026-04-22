@@ -11,6 +11,7 @@ interface Props {
 
 const { title, description, lang } = Astro.props;
 const pageTitle = `${title} - ${SITE_TITLE}`;
+const isDev = import.meta.env.DEV;
 ---
 
 <!doctype html>
@@ -22,9 +23,186 @@ const pageTitle = `${title} - ${SITE_TITLE}`;
     <meta name="generator" content={Astro.generator} />
     {description && <meta name="description" content={description} />}
     <title>{pageTitle}</title>
+    <!-- Pretendard Variable (Korean/Latin primary) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+    <!-- Noto Sans KR (Google Fonts fallback — ensures CJK coverage on all platforms) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" />
   </head>
   <body>
     <slot />
+    {isDev && (
+      <script is:inline>
+        (function () {
+          var tooltip = document.createElement('div');
+          tooltip.setAttribute('data-dev-img-tooltip', '');
+          tooltip.style.cssText = [
+            'position:fixed',
+            'z-index:99999',
+            'background:rgba(12,12,12,0.93)',
+            'color:#e5e7eb',
+            'padding:8px 12px',
+            'border-radius:8px',
+            'font-family:Consolas,Monaco,ui-monospace,monospace',
+            'font-size:12px',
+            'line-height:1.5',
+            'max-width:520px',
+            'min-width:180px',
+            'opacity:0',
+            'transition:opacity 0.15s',
+            'border:1px solid rgba(255,255,255,0.12)',
+            'box-shadow:0 6px 24px rgba(0,0,0,0.65)',
+            'backdrop-filter:blur(8px)',
+            'pointer-events:auto',
+            'top:0',
+            'left:0',
+          ].join(';');
+          document.body.appendChild(tooltip);
+
+          var hideTimer = null;
+          var activeImg = null;
+
+          function getFilename(src) {
+            return (src.split('/').pop() || src).split('?')[0];
+          }
+
+          function mkBtn(label) {
+            var btn = document.createElement('button');
+            btn.textContent = label;
+            btn.style.cssText = [
+              'flex-shrink:0',
+              'background:rgba(255,255,255,0.13)',
+              'border:none',
+              'color:#fff',
+              'padding:2px 9px',
+              'border-radius:4px',
+              'cursor:pointer',
+              'font-size:11px',
+              'font-family:inherit',
+              'transition:background 0.1s',
+            ].join(';');
+            return btn;
+          }
+
+          function copyText(text, btn) {
+            navigator.clipboard.writeText(text).then(function () {
+              btn.textContent = '✓ 복사됨';
+              btn.style.background = 'rgba(34,197,94,0.5)';
+              setTimeout(function () {
+                btn.textContent = '복사';
+                btn.style.background = '';
+              }, 1600);
+            });
+          }
+
+          function buildTooltip(src) {
+            tooltip.innerHTML = '';
+            var filename = getFilename(src);
+
+            // 경로 행
+            var pathRow = document.createElement('div');
+            pathRow.style.cssText = 'display:flex;align-items:flex-start;gap:6px;';
+
+            var pathLabel = document.createElement('span');
+            pathLabel.textContent = '경로';
+            pathLabel.style.cssText = 'color:#9ca3af;font-size:10px;white-space:nowrap;padding-top:2px;min-width:28px;';
+
+            var pathText = document.createElement('span');
+            pathText.textContent = src;
+            pathText.style.cssText = 'flex:1;word-break:break-all;color:#d1d5db;';
+
+            var copyPathBtn = mkBtn('복사');
+            copyPathBtn.onclick = function (e) { e.stopPropagation(); copyText(src, copyPathBtn); };
+
+            pathRow.appendChild(pathLabel);
+            pathRow.appendChild(pathText);
+            pathRow.appendChild(copyPathBtn);
+
+            // 파일명 행
+            var fileRow = document.createElement('div');
+            fileRow.style.cssText = 'display:flex;align-items:center;gap:6px;border-top:1px solid rgba(255,255,255,0.09);padding-top:5px;margin-top:4px;';
+
+            var fileLabel = document.createElement('span');
+            fileLabel.textContent = '파일';
+            fileLabel.style.cssText = 'color:#9ca3af;font-size:10px;white-space:nowrap;min-width:28px;';
+
+            var fileText = document.createElement('span');
+            fileText.textContent = filename;
+            fileText.style.cssText = 'flex:1;color:#fbbf24;word-break:break-all;';
+
+            var copyFileBtn = mkBtn('복사');
+            copyFileBtn.onclick = function (e) { e.stopPropagation(); copyText(filename, copyFileBtn); };
+
+            fileRow.appendChild(fileLabel);
+            fileRow.appendChild(fileText);
+            fileRow.appendChild(copyFileBtn);
+
+            tooltip.appendChild(pathRow);
+            tooltip.appendChild(fileRow);
+          }
+
+          function positionTooltip(img) {
+            var rect = img.getBoundingClientRect();
+            var x = rect.left;
+            var y = rect.bottom + 8;
+
+            var tw = 520;
+            var th = 90;
+
+            if (x + tw > window.innerWidth - 8) {
+              x = Math.max(8, window.innerWidth - tw - 8);
+            }
+            if (y + th > window.innerHeight - 8) {
+              y = Math.max(8, rect.top - th - 8);
+            }
+
+            tooltip.style.left = x + 'px';
+            tooltip.style.top = y + 'px';
+          }
+
+          function showTooltip(img) {
+            clearTimeout(hideTimer);
+            activeImg = img;
+            var src = img.getAttribute('src') || img.src || '';
+            buildTooltip(src);
+            positionTooltip(img);
+            tooltip.style.opacity = '1';
+          }
+
+          function hideTooltip() {
+            hideTimer = setTimeout(function () {
+              tooltip.style.opacity = '0';
+              activeImg = null;
+            }, 200);
+          }
+
+          document.addEventListener('mouseover', function (e) {
+            var el = e.target;
+            while (el && el.tagName !== 'IMG') el = el.parentElement;
+            if (el && el.tagName === 'IMG' && !tooltip.contains(el)) {
+              showTooltip(el);
+            }
+          });
+
+          document.addEventListener('mouseout', function (e) {
+            var el = e.target;
+            while (el && el.tagName !== 'IMG') el = el.parentElement;
+            if (el && el.tagName === 'IMG') {
+              var to = e.relatedTarget;
+              if (to && (tooltip === to || tooltip.contains(to))) return;
+              hideTooltip();
+            }
+          });
+
+          tooltip.addEventListener('mouseenter', function () { clearTimeout(hideTimer); });
+          tooltip.addEventListener('mouseleave', hideTooltip);
+
+          window.addEventListener('scroll', function () {
+            if (activeImg) positionTooltip(activeImg);
+          }, { passive: true });
+        })();
+      </script>
+    )}
   </body>
 </html>

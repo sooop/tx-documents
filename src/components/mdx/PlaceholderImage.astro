@@ -1,4 +1,6 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 interface Props {
   /** 캡쳐해야 할 화면/장면 설명 */
   description: string;
@@ -13,14 +15,7 @@ const { description, url, filename } = Astro.props;
 
 <figure class="placeholder-image" role="img" aria-label={`[이미지 준비 중] ${description}`}>
   <div class="placeholder-image__body">
-    <span class="placeholder-image__icon" aria-hidden="true">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <path d="m21 15-5-5L5 21"/>
-      </svg>
-    </span>
+    <Icon name="solar:gallery-wide-bold-duotone" class="placeholder-image__icon" aria-hidden="true" />
     <p class="placeholder-image__label">이미지 준비 중</p>
     <p class="placeholder-image__description">{description}</p>
     {(url || filename) && (
@@ -68,8 +63,10 @@ const { description, url, filename } = Astro.props;
   }
 
   .placeholder-image__icon {
+    width: 40px;
+    height: 40px;
     color: #c07820;
-    opacity: 0.7;
+    opacity: 0.75;
   }
 
   :global(.dark) .placeholder-image__icon {

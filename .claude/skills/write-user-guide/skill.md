@@ -1,3 +1,7 @@
+---
+name: write-user-guide
+description: SmartShip Guide의 온라인 가이드 사이트의 페이지를 추가/개선하기 위해  기능 및 작업별 사용자매뉴얼 및 업무 가이드를 작성합니다. 
+---
 # SKILL: 가이드 페이지 콘텐츠 작성
 
 AI 에이전트가 주어진 문서(원고, 기획안, 메모 등)와 이미지 파일을 바탕으로 SmartShip Guide 사이트의 가이드 페이지를 작성하는 방법을 안내합니다. 원고는 대화를 통해 직접 전달하며, 관련 이미지는 임시 이미지 폴더에서 찾도록 합니다. 임시 이미지 폴더에 언어별 이미지가 있는 경우 모두 사용하도록 하며, 어노테이션은 기본적으로 주요 언어 (ko 혹은 en)하나에 대해서만 작성하고 복사하도록 합니다.
@@ -286,16 +290,16 @@ src/content/docs/{lang}/_nav.json
 
 ## 6. 임시 이미지 자동 처리
 
-원고 작업 시 이미지 파일을 `public/temp-images/`에 미리 넣어두면, 에이전트가 이미지 내용을 분석하여 이름을 자동으로 결정하고 적절한 경로로 복사합니다.
+원고 작업 시 이미지 파일을 `public/temp-image/`에 미리 넣어두면, 에이전트가 이미지 내용을 분석하여 이름을 자동으로 결정하고 적절한 경로로 복사합니다.
 
 ### 임시 이미지 처리 절차
 
-#### 6-1. temp-images 스캔
+#### 6-1. temp-image 스캔
 
-작업 시작 시 `public/temp-images/`에 파일이 있는지 확인합니다.
+작업 시작 시 `public/temp-image/`에 파일이 있는지 확인합니다.
 
 ```bash
-ls public/temp-images/
+ls public/temp-image/
 ```
 
 파일이 있으면 이미지 자동 처리를 진행합니다.
@@ -324,7 +328,7 @@ ls public/temp-images/
 이름과 경로가 결정되면 `cp` 명령으로 복사합니다. **Read/Write 도구 사용 금지.**
 
 ```bash
-cp public/temp-images/{원본파일명} public/images/{section}/{이미지이름}-{lang}.png
+cp public/temp-image/{원본파일명} public/images/{section}/{이미지이름}-{lang}.png
 ```
 
 복사 후 반드시 존재 여부 확인:
@@ -333,21 +337,21 @@ cp public/temp-images/{원본파일명} public/images/{section}/{이미지이름
 ls public/images/{section}/
 ```
 
-#### 6-4. 작업 완료 후 temp-images 정리
+#### 6-4. 작업 완료 후 temp-image 정리
 
 MDX 파일 작성까지 모든 작업이 완료된 후, 사용한 임시 이미지를 삭제합니다.
 
 ```bash
-rm public/temp-images/{사용한파일명}
+rm public/temp-image/{사용한파일명}
 ```
 
 삭제 후 확인:
 
 ```bash
-ls public/temp-images/
+ls public/temp-image/
 ```
 
-> **주의:** temp-images 전체를 일괄 삭제(`rm -rf`)하지 않고, 이번 작업에서 사용한 파일만 개별 삭제합니다. 다른 작업을 위해 미리 넣어둔 파일이 있을 수 있습니다.
+> **주의:** temp-image 전체를 일괄 삭제(`rm -rf`)하지 않고, 이번 작업에서 사용한 파일만 개별 삭제합니다. 다른 작업을 위해 미리 넣어둔 파일이 있을 수 있습니다.
 
 ---
 
@@ -355,9 +359,9 @@ ls public/temp-images/
 
 새 가이드 페이지를 추가할 때 다음 순서로 진행합니다:
 
-### 단계 1: 임시 이미지 처리 (temp-images에 파일이 있는 경우)
+### 단계 1: 임시 이미지 처리 (temp-image에 파일이 있는 경우)
 
-`public/temp-images/`를 스캔하고, 파일이 있으면 **섹션 6**의 절차에 따라 이미지 이름을 결정합니다. 이미지 복사는 파일 경로가 결정된 후(단계 2 이후) 수행합니다.
+`public/temp-image/`를 스캔하고, 파일이 있으면 **섹션 6**의 절차에 따라 이미지 이름을 결정합니다. 이미지 복사는 파일 경로가 결정된 후(단계 2 이후) 수행합니다.
 
 ### 단계 2: 파일 경로 결정
 
@@ -365,9 +369,9 @@ ls public/temp-images/
 
 ### 단계 3: 이미지 파일 배치
 
-temp-images에서 가져온 이미지 또는 기존 이미지를 `public/images/{section}/` 에 배치합니다.
+temp-image에서 가져온 이미지 또는 기존 이미지를 `public/images/{section}/` 에 배치합니다.
 
-- temp-images 이미지: `cp` 명령으로 복사 (섹션 6-3 참고)
+- temp-image 이미지: `cp` 명령으로 복사 (섹션 6-3 참고)
 - 파일명: `{이미지이름}-{lang}.png`
 - 한국어 이미지만 있어도 모든 언어 페이지에서 표시됨
 
@@ -401,7 +405,7 @@ temp-images에서 가져온 이미지 또는 기존 이미지를 `public/images/
 
 ### 단계 7: 임시 이미지 정리
 
-모든 작업이 완료된 후 섹션 6-4에 따라 이번 작업에서 사용한 temp-images 파일을 삭제합니다.
+모든 작업이 완료된 후 섹션 6-4에 따라 이번 작업에서 사용한 temp-image 파일을 삭제합니다.
 
 ---
 

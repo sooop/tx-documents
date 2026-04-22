@@ -1,0 +1,65 @@
+---
+/**
+ * Flag — 인라인 국기 컴포넌트
+ *
+ * 사용 예:
+ *   <Flag code="jp" />
+ *   <Flag code="us" label="미국" />
+ *   <Flag code="sg" label="싱가포르" size="lg" />
+ *
+ * code: ISO 3166-1 alpha-2 소문자 (jp, us, sg, tw, cn, hk, ...)
+ */
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  code: string;
+  label?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { code, label, size = 'md' } = Astro.props;
+const lc = code.toLowerCase();
+
+const sizeMap = {
+  sm: { flag: '1rem',   gap: '0.3rem', text: '0.82rem' },
+  md: { flag: '1.25rem', gap: '0.4rem', text: '0.9rem'  },
+  lg: { flag: '1.6rem',  gap: '0.5rem', text: '1rem'    },
+};
+const s = sizeMap[size];
+---
+
+<span
+  class="flag-chip"
+  style={`--flag-w:${s.flag};--chip-gap:${s.gap};--label-size:${s.text}`}
+  title={label ?? lc.toUpperCase()}
+>
+  <Icon name={`flagpack:${lc}`} class="flag-chip__icon" aria-hidden="true" />
+  {label && <span class="flag-chip__label">{label}</span>}
+</span>
+
+<style>
+  .flag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--chip-gap, 0.4rem);
+    vertical-align: middle;
+    line-height: 1;
+  }
+
+  .flag-chip__icon {
+    /* flagpack 아이콘은 4:3 비율 SVG */
+    width: var(--flag-w, 1.25rem);
+    height: auto;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent);
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .flag-chip__label {
+    font-size: var(--label-size, 0.9rem);
+    font-weight: 500;
+    color: var(--color-text);
+    white-space: nowrap;
+  }
+</style>

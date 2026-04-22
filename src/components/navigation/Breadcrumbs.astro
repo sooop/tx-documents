@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import type { BreadcrumbItem } from '../../lib/navigation';
 import type { Lang } from '../../lib/config';
 
@@ -19,7 +20,7 @@ const { items, lang } = Astro.props;
             {i < items.length - 1 ? (
               <>
                 <a href={`/${lang}/${item.slug}/`}>{item.title}</a>
-                <span class="separator" aria-hidden="true">/</span>
+                <Icon name="lucide:chevron-right" class="breadcrumb-chevron" aria-hidden="true" />
               </>
             ) : (
               <span aria-current="page">{item.title}</span>

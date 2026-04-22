@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import type { MarkdownHeading } from 'astro';
 import type { Lang } from '../../lib/config';
 import { t } from '../../i18n/ui';
@@ -15,7 +16,10 @@ const filteredHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 {
   filteredHeadings.length > 0 && (
     <nav class="toc" aria-label={t(lang, 'nav.toc')}>
-      <p class="toc-title">{t(lang, 'nav.toc')}</p>
+      <p class="toc-title">
+        <Icon name="lucide:list" class="toc-title-icon" aria-hidden="true" />
+        <span>{t(lang, 'nav.toc')}</span>
+      </p>
       <ul>
         {filteredHeadings.map((heading) => (
           <li class={`toc-depth-${heading.depth}`}>

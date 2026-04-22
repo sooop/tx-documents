@@ -1,0 +1,287 @@
+---
+import { Icon } from 'astro-icon/components';
+
+/*
+ * 팔레트 — 5가지 역사적 안료
+ * Prussian Blue / Orpiment / Verdigris / Sienna / Carmine
+ * 연결선은 인접한 두 색의 그라디언트로 처리 (안료 팔레트 효과)
+ */
+const steps = [
+  {
+    icon: 'solar:user-check-rounded-bold-duotone',
+    num: '01',
+    title: '회원가입 및\n사업자 인증',
+    detail: '사업자 계정 생성 후 사업자 등록증 인증',
+    accent: '#1c4e7a',   // Prussian Blue
+    accentBg: '#eef3f8',
+  },
+  {
+    icon: 'solar:wallet-money-bold-duotone',
+    num: '02',
+    title: '배송비 충전\n(TxMoney)',
+    detail: 'TxMoney 선불 충전 후 배송비로 사용',
+    accent: '#8a6b1a',   // Orpiment Gold
+    accentBg: '#f7f3ea',
+  },
+  {
+    icon: 'solar:checklist-bold-duotone',
+    num: '03',
+    title: '주문 등록',
+    detail: '직접 입력 또는 API 자동 연동',
+    accent: '#2d6a4c',   // Verdigris
+    accentBg: '#eef5f1',
+  },
+  {
+    icon: 'solar:delivery-bold-duotone',
+    num: '04',
+    title: '상품 포장\n및 발송',
+    detail: '포장 라벨 출력 후 택배사에 발송',
+    accent: '#a0492a',   // Terra di Siena
+    accentBg: '#f8f1ee',
+  },
+  {
+    icon: 'solar:route-bold-duotone',
+    num: '05',
+    title: '배송 추적\n및 관리',
+    detail: '수취인 현지 배달까지 실시간 추적',
+    accent: '#8a3455',   // Carmine
+    accentBg: '#f7eef3',
+  },
+];
+---
+
+<section class="intro-flow" aria-label="이용 흐름">
+  <div class="flow-steps" role="list">
+    {steps.map((step, i) => {
+      const nextAccent = steps[i + 1]?.accent ?? step.accent;
+      return (
+        <div
+          class="flow-step"
+          role="listitem"
+          style={`--i:${i}; --accent:${step.accent}; --accent-bg:${step.accentBg}; --next-accent:${nextAccent}`}
+        >
+          {/* 아이콘 래퍼 */}
+          <div class="step-icon-wrap" aria-hidden="true">
+            <Icon name={step.icon} class="step-icon" />
+          </div>
+
+          {/* 번호 노드 (아이콘 정중앙 아래) */}
+          <div class="step-node" aria-hidden="true">
+            <span class="step-num">{step.num}</span>
+          </div>
+
+          {/* 텍스트 */}
+          <div class="step-text">
+            <p class="step-title" set:html={step.title.replace(/\n/g, '<br/>')} />
+            <p class="step-detail">{step.detail}</p>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+  /* ── 치수 변수 ─────────────────────────────── */
+  .intro-flow {
+    --icon-h: 58px;
+    --node-r: 18px;
+    --col-gap: 0.65rem;
+    margin: 0.5rem 0 2rem;
+    overflow: visible;
+  }
+
+  /* ── 5열 그리드 ────────────────────────────── */
+  .flow-steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .flow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--col-gap);
+    position: relative;
+    animation: stepIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i) * 0.11s + 0.05s);
+    cursor: default;
+  }
+
+  /*
+   * 연결선: 인접 두 안료색의 그라디언트
+   * top = 아이콘높이 + gap + 노드반지름 (노드 원 중심)
+   * left ~ right = 각 셀의 노드 테두리 사이
+   */
+  .flow-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--icon-h) + var(--col-gap) + var(--node-r));
+    left: calc(50% + var(--node-r));
+    width: calc(100% - var(--node-r) * 2);
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--accent) 55%, transparent) 0%,
+      color-mix(in srgb, var(--next-accent) 55%, transparent) 100%
+    );
+    z-index: 0;
+  }
+
+  /* ── 아이콘 래퍼 ──────────────────────────── */
+  .step-icon-wrap {
+    width: var(--icon-h);
+    height: var(--icon-h);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: var(--accent-bg);
+    border: 1.5px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    transition:
+      transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.25s ease;
+  }
+
+  .flow-step:hover .step-icon-wrap {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px -4px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+
+  .step-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--accent);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .flow-step:hover .step-icon {
+    transform: scale(1.12) rotate(-4deg);
+  }
+
+  /* ── 번호 노드 ────────────────────────────── */
+  .step-node {
+    width: calc(var(--node-r) * 2);
+    height: calc(var(--node-r) * 2);
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow:
+      0 0 0 3px var(--accent-bg),
+      0 0 0 5px color-mix(in srgb, var(--accent) 28%, transparent);
+    position: relative;
+    z-index: 1;
+    transition:
+      transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.22s ease;
+  }
+
+  .flow-step:hover .step-node {
+    transform: scale(1.15);
+    box-shadow:
+      0 0 0 3px var(--accent-bg),
+      0 0 0 7px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+
+  .step-num {
+    font-family: var(--font-display, sans-serif);
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    user-select: none;
+  }
+
+  /* ── 텍스트 ───────────────────────────────── */
+  .step-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0 0.3rem;
+  }
+
+  .step-title {
+    font-family: var(--font-display, sans-serif);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.45;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .step-detail {
+    font-size: 0.74rem;
+    color: color-mix(in srgb, var(--accent) 50%, #5a5048);
+    line-height: 1.5;
+    margin: 0;
+    word-break: keep-all;
+  }
+
+  /* ── 진입 애니메이션 ─────────────────────── */
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── 모바일: 세로 타임라인 ───────────────── */
+  @media (max-width: 700px) {
+    .flow-steps {
+      grid-template-columns: 1fr;
+    }
+
+    .flow-step {
+      flex-direction: row;
+      align-items: flex-start;
+      text-align: left;
+      gap: 0.9rem;
+      padding-bottom: 1.5rem;
+    }
+
+    /* 데스크탑 수평 연결선 숨김 */
+    .flow-step::after {
+      display: none;
+    }
+
+    /* 수직 연결선 (icon-wrap 아래 중앙에서 다음 step까지) */
+    .flow-step:not(:last-child) .step-icon-wrap::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 1.5rem;
+      background: linear-gradient(
+        180deg,
+        var(--accent) 0%,
+        var(--next-accent) 100%
+      );
+      opacity: 0.45;
+      z-index: 0;
+    }
+
+    .step-node {
+      display: none;
+    }
+
+    .step-icon-wrap {
+      flex-shrink: 0;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .step-text {
+      padding: 0;
+      padding-top: 0.3rem;
+    }
+  }
+</style>

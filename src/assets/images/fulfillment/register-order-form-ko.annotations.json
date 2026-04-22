@@ -1,0 +1,41 @@
+{
+  "imageId": "register-order-form",
+  "annotations": [
+    {
+      "id": "basic-info",
+      "type": "marker",
+      "number": 1,
+      "x": 5.5,
+      "y": 12.5,
+      "markerRadius": 1.5,
+      "label": { "ko": "기본 정보 — 서비스 타입 · 창고 · 발송인" }
+    },
+    {
+      "id": "delivery-settings",
+      "type": "marker",
+      "number": 2,
+      "x": 5.5,
+      "y": 40.0,
+      "markerRadius": 1.5,
+      "label": { "ko": "배송 설정 — 배송 등급 · 참조 주문번호 · 비고" }
+    },
+    {
+      "id": "recipient",
+      "type": "marker",
+      "number": 3,
+      "x": 53.0,
+      "y": 12.5,
+      "markerRadius": 1.5,
+      "label": { "ko": "수취인 정보 — 배송 국가에 맞춰 입력 항목 구성" }
+    },
+    {
+      "id": "items",
+      "type": "marker",
+      "number": 4,
+      "x": 4.5,
+      "y": 72.5,
+      "markerRadius": 1.5,
+      "label": { "ko": "주문 상품 — 상품 추가 버튼으로 SKU 선택" }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "imageId": "register-order-sku-selector",
+  "annotations": [
+    {
+      "id": "auto-list",
+      "type": "marker",
+      "number": 1,
+      "x": 11.0,
+      "y": 25.5,
+      "markerRadius": 2.0,
+      "label": { "ko": "창이 열리면 전체 SKU가 자동으로 조회됨" }
+    },
+    {
+      "id": "grid-filter",
+      "type": "marker",
+      "number": 2,
+      "x": 86.0,
+      "y": 25.5,
+      "markerRadius": 2.0,
+      "label": { "ko": "그리드 필터 — SKU 번호·판매자코드·상품명·옵션명의 일부만 입력해도 즉시 필터링" }
+    },
+    {
+      "id": "confirm",
+      "type": "marker",
+      "number": 3,
+      "x": 94.5,
+      "y": 94.0,
+      "markerRadius": 2.0,
+      "label": { "ko": "선택 후 [완료] 클릭" }
+    }
+  ]
+}

@@ -13,6 +13,10 @@ import ApiSiteIntro from '../../components/mdx/ApiSiteIntro.astro';
 import ApiRegisterAndTest from '../../components/mdx/ApiRegisterAndTest.astro';
 import ApiManualImport from '../../components/mdx/ApiManualImport.astro';
 import ApiSkuVendorCode from '../../components/mdx/ApiSkuVendorCode.astro';
+import IntroFeatureGrid from '../../components/mdx/IntroFeatureGrid.astro';
+import IntroFlowStepper from '../../components/mdx/IntroFlowStepper.astro';
+import Flag from '../../components/mdx/Flag.astro';
+import CountryTable from '../../components/mdx/CountryTable.astro';
 
 const FOOTER_LANGS: Lang[] = ['ko', 'ja', 'en'];
 
@@ -48,7 +52,7 @@ const { Content, headings } = await render(doc);
   headings={headings}
   draft={doc.data.draft}
 >
-  <Content components={{ Callout, Collapse, AnnotatedImage, LogisticsFlowDiagram, PlaceholderImage, ApiSiteIntro, ApiRegisterAndTest, ApiManualImport, ApiSkuVendorCode }} />
+  <Content components={{ Callout, Collapse, AnnotatedImage, LogisticsFlowDiagram, PlaceholderImage, ApiSiteIntro, ApiRegisterAndTest, ApiManualImport, ApiSkuVendorCode, IntroFeatureGrid, IntroFlowStepper, Flag, CountryTable }} />
   {doc.data.footer !== 'none' && FOOTER_LANGS.includes(lang) && (
     <CommonFooter lang={lang} />
   )}

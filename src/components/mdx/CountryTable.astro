@@ -1,0 +1,269 @@
+---
+/**
+ * CountryTable — 지원 국가 목록 (국기 + 배송 정보)
+ * intro 페이지의 국가 테이블 및 Collapse를 대체합니다.
+ */
+import { Icon } from 'astro-icon/components';
+
+interface Country {
+  code: string;
+  name: string;
+  method: string;
+  days: string;
+  note?: string;
+}
+
+const mainCountries: Country[] = [
+  { code: 'jp', name: '일본',    method: '특송',       days: '2–4일' },
+  { code: 'us', name: '미국',    method: '특송 / 일반', days: '5–10일' },
+  { code: 'sg', name: '싱가포르', method: '특송',       days: '3–5일' },
+  { code: 'tw', name: '대만',    method: '특송',       days: '3–5일' },
+  { code: 'cn', name: '중국',    method: '특송',       days: '5–8일' },
+  { code: 'hk', name: '홍콩',    method: '특송',       days: '3–5일' },
+];
+
+const moreCountries: Country[] = [
+  { code: 'th', name: '태국',      method: '특송', days: '5–8일' },
+  { code: 'vn', name: '베트남',    method: '특송', days: '5–8일' },
+  { code: 'my', name: '말레이시아', method: '특송', days: '5–8일' },
+  { code: 'id', name: '인도네시아', method: '특송', days: '7–10일' },
+  { code: 'ph', name: '필리핀',    method: '특송', days: '7–10일' },
+  { code: 'au', name: '호주',      method: '특송', days: '5–8일' },
+  { code: 'gb', name: '영국',      method: '특송', days: '7–10일' },
+  { code: 'de', name: '독일',      method: '특송', days: '7–10일' },
+  { code: 'ca', name: '캐나다',    method: '특송', days: '7–10일' },
+  { code: 'fr', name: '프랑스',    method: '특송', days: '7–10일' },
+];
+
+const allCountries = [...mainCountries, ...moreCountries];
+---
+
+<div class="ct-wrap">
+  <table class="ct-table">
+    <thead>
+      <tr>
+        <th class="ct-th ct-th--country">국가</th>
+        <th class="ct-th">배송 방식</th>
+        <th class="ct-th ct-th--days">예상 소요일</th>
+      </tr>
+    </thead>
+    <tbody>
+      {mainCountries.map((c) => (
+        <tr class="ct-row">
+          <td class="ct-td ct-td--country">
+            <div class="ct-country-inner">
+              <Icon name={`flagpack:${c.code}`} class="ct-flag" aria-hidden="true" />
+              <span class="ct-name">{c.name}</span>
+            </div>
+          </td>
+          <td class="ct-td">
+            <span class="ct-method">{c.method}</span>
+          </td>
+          <td class="ct-td ct-td--days">{c.days}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <details class="ct-more">
+    <summary class="ct-more-trigger">
+      <Icon name="lucide:chevron-right" class="ct-more-chevron" aria-hidden="true" />
+      <span>추가 지원 국가 더 보기</span>
+      <span class="ct-more-count">+{moreCountries.length}개국</span>
+    </summary>
+    <table class="ct-table ct-table--more">
+      <tbody>
+        {moreCountries.map((c) => (
+          <tr class="ct-row">
+            <td class="ct-td ct-td--country">
+              <div class="ct-country-inner">
+                <Icon name={`flagpack:${c.code}`} class="ct-flag" aria-hidden="true" />
+                <span class="ct-name">{c.name}</span>
+              </div>
+            </td>
+            <td class="ct-td">
+              <span class="ct-method">{c.method}</span>
+            </td>
+            <td class="ct-td ct-td--days">{c.days}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="ct-footnote">
+      위 국가 외에도 추가 목적지를 지원합니다. 자세한 내용은
+      <a href="../country-notes/common/">국가별 유의사항</a>을 참고하세요.
+    </p>
+  </details>
+</div>
+
+<style>
+  /* ── 래퍼 ─────────────────────────────────── */
+  .ct-wrap {
+    margin: 0.5rem 0 1.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 0.9rem;
+  }
+
+  /* ── 테이블 ────────────────────────────────── */
+  .ct-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin: 0;
+  }
+
+  .ct-table--more {
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* ── 헤더 ─────────────────────────────────── */
+  .ct-th {
+    padding: 0.55rem 0.9rem;
+    background: var(--color-sidebar-bg);
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-align: left;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .ct-th--country { width: 42%; }
+  .ct-th--days    { width: 25%; }
+
+  /* ── 행 ────────────────────────────────────── */
+  .ct-row {
+    border-bottom: 1px solid var(--color-border);
+    transition: background 0.12s;
+  }
+
+  .ct-row:last-child {
+    border-bottom: none;
+  }
+
+  .ct-row:nth-child(even) {
+    background: color-mix(in srgb, var(--color-sidebar-bg) 50%, transparent);
+  }
+
+  .ct-row:hover {
+    background: color-mix(in srgb, var(--color-primary) 5%, transparent);
+  }
+
+  /* ── 셀 ─────────────────────────────────────── */
+  .ct-td {
+    padding: 0.6rem 0.9rem;
+    vertical-align: middle;
+    color: var(--color-text);
+    line-height: 1.4;
+  }
+
+  .ct-country-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .ct-td--days {
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.85rem;
+  }
+
+  /* ── 국기 ─────────────────────────────────── */
+  .ct-flag {
+    width: 1.55rem;      /* 4:3 비율에서 높이는 auto */
+    height: auto;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-border) 80%, transparent);
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .ct-name {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* ── 배송 방식 배지 ─────────────────────────── */
+  .ct-method {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-heading-accent);
+    background: color-mix(in srgb, var(--color-heading-accent) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-heading-accent) 20%, transparent);
+    border-radius: 4px;
+    padding: 0.1rem 0.45rem;
+    white-space: nowrap;
+  }
+
+  /* ── "더 보기" 토글 ─────────────────────────── */
+  .ct-more {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .ct-more-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 0.9rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    background: var(--color-primary-light);
+    list-style: none;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .ct-more-trigger::-webkit-details-marker { display: none; }
+
+  .ct-more-trigger:hover {
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  }
+
+  .ct-more-chevron {
+    width: 0.85rem;
+    height: 0.85rem;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .ct-more[open] .ct-more-chevron {
+    transform: rotate(90deg);
+  }
+
+  .ct-more-count {
+    margin-left: auto;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    background: var(--color-sidebar-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 0.05rem 0.5rem;
+  }
+
+  /* ── 각주 ─────────────────────────────────── */
+  .ct-footnote {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-sidebar-bg);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .ct-footnote a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
+    text-underline-offset: 2px;
+  }
+</style>

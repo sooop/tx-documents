@@ -3,8 +3,12 @@ export interface NavItem {
   title: string;
   devOnly?: boolean;
   hasContent?: boolean;
+  icon?: string;
+  accent?: 'default' | 'teal';
   children?: NavItem[];
 }
+
+import { navIconTable } from './nav-icons';
 
 const navModules = import.meta.glob<NavItem[]>('/src/content/docs/**/_nav.json', {
   import: 'default',
@@ -40,6 +44,19 @@ function annotateContentExists(items: NavItem[], existingSlugs: Set<string>): Na
   }));
 }
 
+/** 루트 레벨(depth 0) 항목에만 icon/accent 를 nav-icons 테이블에서 주입한다. */
+function annotateIconsBySlug(items: NavItem[]): NavItem[] {
+  return items.map((item) => {
+    const entry = navIconTable[item.slug];
+    return {
+      ...item,
+      icon: entry?.icon,
+      accent: entry?.accent ?? 'default',
+      // children 은 depth 1+ 이므로 아이콘 주입 불필요
+    };
+  });
+}
+
 export async function getNavTree(lang: string): Promise<NavItem[]> {
   const key = `/src/content/docs/${lang}/_nav.json`;
   const loader = navModules[key];
@@ -47,7 +64,8 @@ export async function getNavTree(lang: string): Promise<NavItem[]> {
   const items = await loader();
   const filtered = filterDevItems(items);
   const existingSlugs = buildContentSlugs(lang);
-  return annotateContentExists(filtered, existingSlugs);
+  const annotated = annotateContentExists(filtered, existingSlugs);
+  return annotateIconsBySlug(annotated);
 }
 
 export interface BreadcrumbItem {

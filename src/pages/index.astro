@@ -1,3 +1,55 @@
 ---
-return Astro.redirect('/ko/');
+// Build-time: collect which languages have an intro page
+const introFiles = import.meta.glob('/src/content/docs/*/intro/index.mdx');
+const langsWithIntro: string[] = [
+  ...new Set(
+    Object.keys(introFiles).map((p) => p.split('/')[4])
+  ),
+];
+
+const SUPPORTED_LANGS = ['ko', 'en', 'ja', 'zh-hk', 'zh-cn'];
 ---
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SmartShip Guide</title>
+    <noscript>
+      <meta http-equiv="refresh" content="0; url=/ko/intro" />
+    </noscript>
+    <script define:vars={{ langsWithIntro, SUPPORTED_LANGS }}>
+      (function () {
+        function detectLang() {
+          const prefs = Array.from(navigator.languages || [navigator.language]);
+          for (const pref of prefs) {
+            const lower = pref.toLowerCase();
+            if (SUPPORTED_LANGS.includes(lower)) return lower;
+            if (lower.startsWith('zh')) {
+              const variant =
+                lower.includes('hk') || lower.includes('tw') || lower.includes('mo')
+                  ? 'zh-hk'
+                  : 'zh-cn';
+              if (SUPPORTED_LANGS.includes(variant)) return variant;
+            }
+            const prefix = lower.split('-')[0];
+            const found = SUPPORTED_LANGS.find((l) => l === prefix);
+            if (found) return found;
+          }
+          return null;
+        }
+
+        function resolveTarget() {
+          const detected = detectLang();
+          if (detected && langsWithIntro.includes(detected)) return detected;
+          if (langsWithIntro.includes('en')) return 'en';
+          if (langsWithIntro.includes('ko')) return 'ko';
+          return langsWithIntro[0] || 'ko';
+        }
+
+        window.location.replace('/' + resolveTarget() + '/intro');
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

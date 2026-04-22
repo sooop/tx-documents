@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import type { Lang } from '../../lib/config';
 
 interface Props {
@@ -13,8 +14,8 @@ const strings = {
     centerCol: '센터',
     addressCol: '주소',
     centers: [
-      { name: '한국 센터', address: '(22362) 인천 중구 영종순환로 900번길 30 영종아레나스 물류센터 3층 트랙스로지스' },
-      { name: '일본 센터', address: '(273-0017) 千葉県船橋市西浦3-4-2、北エントランス2F' },
+      { name: '한국 센터', address: '(22362) 인천 중구 영종순환로 900번길 30 영종아레나스 물류센터 3층 트랙스로지스', flag: 'kr' },
+      { name: '일본 센터', address: '(273-0017) 千葉県船橋市西浦3-4-2、北エントランス2F', flag: 'jp' },
     ],
     contactTitle: '문의하기',
     contactNote: '채팅 상담 시 찾으시는 내용이 없으면 <strong>출발국 기준</strong>으로 문의해 주세요.',
@@ -22,10 +23,10 @@ const strings = {
     chatCol: '채팅 상담',
     emailCol: '이메일',
     contacts: [
-      { region: '한국 (배송 및 기타)', email: 'help-kr@tracxlogis.com' },
-      { region: '한국 센터', email: 'yjc@tracxlogis.com' },
-      { region: '일본', email: 'help-jp@tracxlogis.com' },
-      { region: '싱가포르', email: 'help-sg@tracxlogis.com' },
+      { region: '한국 (배송 및 기타)', email: 'help-kr@tracxlogis.com', flag: 'kr' },
+      { region: '한국 센터',           email: 'yjc@tracxlogis.com',     flag: 'kr' },
+      { region: '일본',                email: 'help-jp@tracxlogis.com', flag: 'jp' },
+      { region: '싱가포르',            email: 'help-sg@tracxlogis.com', flag: 'sg' },
     ],
     chatLabel: '채팅 상담',
     noChat: '—',
@@ -35,8 +36,8 @@ const strings = {
     centerCol: 'センター',
     addressCol: '住所',
     centers: [
-      { name: '韓国センター', address: '(22362) 仁川広域市中区永宗循環路900番ギル30 永宗アレーナス物流センター3F TracX Logis' },
-      { name: '日本センター', address: '(273-0017) 千葉県船橋市西浦3-4-2、北エントランス2F' },
+      { name: '韓国センター', address: '(22362) 仁川広域市中区永宗循環路900番ギル30 永宗アレーナス物流センター3F TracX Logis', flag: 'kr' },
+      { name: '日本センター', address: '(273-0017) 千葉県船橋市西浦3-4-2、北エントランス2F', flag: 'jp' },
     ],
     contactTitle: 'お問い合わせ',
     contactNote: 'チャットサポートで内容が見つからない場合は、<strong>出発国を基準</strong>にお問い合わせください。',
@@ -44,10 +45,10 @@ const strings = {
     chatCol: 'チャットサポート',
     emailCol: 'メール',
     contacts: [
-      { region: '韓国（配送・その他）', email: 'help-kr@tracxlogis.com' },
-      { region: '韓国センター', email: 'yjc@tracxlogis.com' },
-      { region: '日本', email: 'help-jp@tracxlogis.com' },
-      { region: 'シンガポール', email: 'help-sg@tracxlogis.com' },
+      { region: '韓国（配送・その他）', email: 'help-kr@tracxlogis.com', flag: 'kr' },
+      { region: '韓国センター',         email: 'yjc@tracxlogis.com',     flag: 'kr' },
+      { region: '日本',                 email: 'help-jp@tracxlogis.com', flag: 'jp' },
+      { region: 'シンガポール',         email: 'help-sg@tracxlogis.com', flag: 'sg' },
     ],
     chatLabel: 'チャットサポート',
     noChat: '—',
@@ -57,8 +58,8 @@ const strings = {
     centerCol: 'Center',
     addressCol: 'Address',
     centers: [
-      { name: 'Korea Center', address: '(22362) 3F TracX Logis, Yongjong Arenas Logistics Center, 30, Yongjong-sunhwan-ro 900beon-gil, Jung-gu, Incheon' },
-      { name: 'Japan Center', address: '(273-0017) 千葉県船橋市西浦3-4-2、北エントランス2F' },
+      { name: 'Korea Center', address: '(22362) 3F TracX Logis, Yongjong Arenas Logistics Center, 30, Yongjong-sunhwan-ro 900beon-gil, Jung-gu, Incheon', flag: 'kr' },
+      { name: 'Japan Center', address: '(273-0017) 千葉県船橋市西浦3-4-2、北エントランス2F', flag: 'jp' },
     ],
     contactTitle: 'Contact Us',
     contactNote: 'If you cannot find what you are looking for in the chat, please contact us based on your <strong>country of departure</strong>.',
@@ -66,69 +67,232 @@ const strings = {
     chatCol: 'Chat Support',
     emailCol: 'Email',
     contacts: [
-      { region: 'Korea (Shipping & Others)', email: 'help-kr@tracxlogis.com' },
-      { region: 'Korea Center', email: 'yjc@tracxlogis.com' },
-      { region: 'Japan', email: 'help-jp@tracxlogis.com' },
-      { region: 'Singapore', email: 'help-sg@tracxlogis.com' },
+      { region: 'Korea (Shipping & Others)', email: 'help-kr@tracxlogis.com', flag: 'kr' },
+      { region: 'Korea Center',              email: 'yjc@tracxlogis.com',     flag: 'kr' },
+      { region: 'Japan',                     email: 'help-jp@tracxlogis.com', flag: 'jp' },
+      { region: 'Singapore',                 email: 'help-sg@tracxlogis.com', flag: 'sg' },
     ],
     chatLabel: 'Chat Support',
     noChat: '—',
   },
 } as const;
 
-// 채팅 상담 링크가 없는 지역 (싱가포르)
 const NO_CHAT_INDEX = 3;
 
 const s = strings[lang as keyof typeof strings];
 ---
 
-<hr />
+<div class="cf-appendix not-prose">
 
-<h2>{s.centersTitle}</h2>
+  <!-- 센터 정보 -->
+  <section class="cf-block">
+    <p class="cf-label">{s.centersTitle}</p>
+    <table class="cf-table">
+      <thead>
+        <tr>
+          <th>{s.centerCol}</th>
+          <th>{s.addressCol}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {s.centers.map((c) => (
+          <tr>
+            <td>
+              <span class="cf-name">
+                <Icon name={`flagpack:${c.flag}`} class="cf-flag" aria-hidden="true" />
+                {c.name}
+              </span>
+            </td>
+            <td class="cf-address">{c.address}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
 
-<table>
-  <thead>
-    <tr>
-      <th>{s.centerCol}</th>
-      <th>{s.addressCol}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {s.centers.map((c) => (
-      <tr>
-        <td><strong>{c.name}</strong></td>
-        <td>{c.address}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+  <!-- 문의하기 -->
+  <section class="cf-block">
+    <p class="cf-label">{s.contactTitle}</p>
+    <p class="cf-note" set:html={s.contactNote} />
+    <table class="cf-table">
+      <thead>
+        <tr>
+          <th>{s.regionCol}</th>
+          <th>{s.chatCol}</th>
+          <th>{s.emailCol}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {s.contacts.map((c, i) => (
+          <tr>
+            <td>
+              <span class="cf-name">
+                <Icon name={`flagpack:${c.flag}`} class="cf-flag" aria-hidden="true" />
+                {c.region}
+              </span>
+            </td>
+            <td>
+              {i === NO_CHAT_INDEX
+                ? <span class="cf-no-chat">{s.noChat}</span>
+                : (
+                  <a class="cf-action-link" href="https://livechat.tracxlogis.com" target="_blank" rel="noopener noreferrer">
+                    <Icon name="lucide:message-circle" class="cf-action-icon" aria-hidden="true" />
+                    {s.chatLabel}
+                  </a>
+                )
+              }
+            </td>
+            <td class="cf-email-cell">
+              <a class="cf-action-link" href={`mailto:${c.email}`}>
+                <Icon name="lucide:mail" class="cf-action-icon" aria-hidden="true" />
+                <span>{c.email}</span>
+              </a>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
 
-<hr />
+</div>
 
-<h2>{s.contactTitle}</h2>
+<style>
+  /* ── 전체 래퍼 ── */
+  .cf-appendix {
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    /* prose 내 font/color 리셋 */
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: var(--color-text);
+  }
 
-<p set:html={s.contactNote} />
+  /* ── 섹션 레이블 (h2 대신) ── */
+  .cf-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    margin: 0 0 0.85rem;
+    padding-left: 0.6rem;
+    border-left: 2px solid var(--color-primary);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-primary);
+    line-height: 1;
+  }
 
-<table>
-  <thead>
-    <tr>
-      <th>{s.regionCol}</th>
-      <th>{s.chatCol}</th>
-      <th>{s.emailCol}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {s.contacts.map((c, i) => (
-      <tr>
-        <td>{c.region}</td>
-        <td>
-          {i === NO_CHAT_INDEX
-            ? s.noChat
-            : <a href="https://livechat.tracxlogis.com" target="_blank" rel="noopener noreferrer">{s.chatLabel}</a>
-          }
-        </td>
-        <td>{c.email}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+  /* ── contactNote ── */
+  .cf-note {
+    margin: 0 0 0.85rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    line-height: 1.55;
+  }
+
+  .cf-note strong {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  /* ── 테이블 ── */
+  .cf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: inherit;
+  }
+
+  .cf-table thead th {
+    padding: 0 1rem 0.4rem 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-text-muted);
+    text-align: left;
+    border: none;
+    background: transparent;
+    white-space: nowrap;
+  }
+
+  .cf-table thead th:last-child {
+    padding-right: 0;
+  }
+
+  .cf-table tbody td {
+    padding: 0.5rem 1rem 0.5rem 0;
+    border: none;
+    border-top: 1px solid color-mix(in srgb, var(--color-border) 55%, transparent);
+    vertical-align: middle;
+    background: transparent;
+  }
+
+  .cf-table tbody td:last-child {
+    padding-right: 0;
+  }
+
+  /* ── 국기 + 이름 ── */
+  .cf-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    font-weight: 500;
+  }
+
+  .cf-flag {
+    width: 1.1em;
+    height: auto;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+
+  /* ── 주소 ── */
+  .cf-address {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+  }
+
+  /* ── 채팅/이메일 링크 ── */
+  .cf-action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    white-space: nowrap;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.15s;
+  }
+
+  .cf-action-link:hover {
+    opacity: 0.75;
+    text-decoration: none;
+  }
+
+  .cf-action-icon {
+    width: 0.88em;
+    height: 0.88em;
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  /* ── 이메일 셀: 이메일 주소는 줄바꿈 허용, 아이콘과 첫 단어는 묶음 ── */
+  .cf-email-cell .cf-action-link {
+    white-space: normal;
+    word-break: break-all;
+  }
+
+  .cf-email-cell .cf-action-link .cf-action-icon {
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 0.1em;
+  }
+
+  /* ── 채팅 없음 ── */
+  .cf-no-chat {
+    color: var(--color-text-muted);
+  }
+</style>

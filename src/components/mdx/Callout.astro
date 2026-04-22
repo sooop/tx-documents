@@ -1,14 +1,37 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 interface Props {
   type?: 'info' | 'warning' | 'danger' | 'tip';
   title?: string;
 }
 
 const { type = 'info', title } = Astro.props;
+
+const titleIconMap = {
+  info: 'solar:info-circle-bold',
+  warning: 'solar:danger-triangle-bold',
+  danger: 'solar:shield-warning-bold',
+  tip: 'solar:lightbulb-bold',
+} as const;
+
+const bgIconMap = {
+  info: 'solar:info-circle-bold',
+  warning: 'solar:danger-triangle-bold',
+  danger: 'solar:shield-warning-bold',
+  tip: 'solar:lightbulb-bold',
+} as const;
 ---
 
 <aside class={`callout callout-${type}`} role="note">
-  {title && <p class="callout-title">{title}</p>}
+  {title ? (
+    <p class="callout-title">
+      <Icon name={titleIconMap[type]} class="callout-icon" aria-hidden="true" />
+      <span>{title}</span>
+    </p>
+  ) : (
+    <Icon name={bgIconMap[type]} class="callout-icon callout-icon--floating" aria-hidden="true" />
+  )}
   <div class="callout-content">
     <slot />
   </div>
