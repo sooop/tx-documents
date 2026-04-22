@@ -16,6 +16,18 @@
   let naturalHeight = $state(0);
   let imageLoaded = $state(false);
   let modalOpen = $state(false);
+  let thumbSvgWidth = $state(0);
+  let modalSvgWidth = $state(0);
+
+  // 표시 크기에 상관없이 일정한 화면 픽셀 크기를 유지하기 위한 스케일.
+  // SVG viewBox는 naturalWidth 기준이므로, (natural / displayed)만큼 곱해야
+  // 실제 화면에서 일정한 px로 렌더된다.
+  const thumbScale = $derived(
+    thumbSvgWidth > 0 && naturalWidth > 0 ? naturalWidth / thumbSvgWidth : 1,
+  );
+  const modalScale = $derived(
+    modalSvgWidth > 0 && naturalWidth > 0 ? naturalWidth / modalSvgWidth : 1,
+  );
 
   const MARKER_RADIUS = 14;
   const MARKER_FONT_SIZE = 13;
@@ -83,8 +95,9 @@
       <svg
         class="annotation-overlay"
         viewBox={`0 0 ${naturalWidth} ${naturalHeight}`}
+        bind:clientWidth={thumbSvgWidth}
       >
-        {@render annotationLayer()}
+        {@render annotationLayer(thumbScale, 'thumb')}
       </svg>
     {/if}
     <div class="zoom-hint" aria-hidden="true">
@@ -125,8 +138,9 @@
             <svg
               class="annotation-overlay"
               viewBox={`0 0 ${naturalWidth} ${naturalHeight}`}
+              bind:clientWidth={modalSvgWidth}
             >
-              {@render annotationLayer()}
+              {@render annotationLayer(modalScale, 'modal')}
             </svg>
           {/if}
         </div>
@@ -138,19 +152,23 @@
   </div>
 {/if}
 
-{#snippet annotationLayer()}
+{#snippet annotationLayer(scale: number, id: string)}
+  {@const markerR = MARKER_RADIUS * scale}
+  {@const markerFont = MARKER_FONT_SIZE * scale}
+  {@const arrowSize = ARROW_HEAD_SIZE * scale}
+  {@const arrowId = `arrowhead-${id}`}
   <defs>
     <marker
-      id="arrowhead"
-      markerWidth={ARROW_HEAD_SIZE}
-      markerHeight={ARROW_HEAD_SIZE * 0.7}
-      refX={ARROW_HEAD_SIZE}
-      refY={ARROW_HEAD_SIZE * 0.35}
+      id={arrowId}
+      markerWidth={arrowSize}
+      markerHeight={arrowSize * 0.7}
+      refX={arrowSize}
+      refY={arrowSize * 0.35}
       orient="auto"
       markerUnits="userSpaceOnUse"
     >
       <polygon
-        points={`0 0, ${ARROW_HEAD_SIZE} ${ARROW_HEAD_SIZE * 0.35}, 0 ${ARROW_HEAD_SIZE * 0.7}`}
+        points={`0 0, ${arrowSize} ${arrowSize * 0.35}, 0 ${arrowSize * 0.7}`}
         fill={DEFAULT_COLOR}
       />
     </marker>
@@ -171,23 +189,23 @@
         rx="3" ry="3"
       />
       {#if ann.number != null}
-        {@const mx = bx - MARKER_RADIUS * 0.3}
-        {@const my = by - MARKER_RADIUS * 0.3}
-        <circle cx={mx} cy={my} r={MARKER_RADIUS} fill={ann.strokeColor ?? DEFAULT_COLOR} />
+        {@const mx = bx - markerR * 0.3}
+        {@const my = by - markerR * 0.3}
+        <circle cx={mx} cy={my} r={markerR} fill={ann.strokeColor ?? DEFAULT_COLOR} />
         <text
           x={mx} y={my}
           text-anchor="middle" dominant-baseline="central"
-          fill="white" font-size={MARKER_FONT_SIZE} font-weight="700"
+          fill="white" font-size={markerFont} font-weight="700"
         >{ann.number}</text>
       {/if}
     {:else if ann.type === 'marker'}
       {@const mx = px(ann.x, naturalWidth)}
       {@const my = px(ann.y, naturalHeight)}
-      <circle cx={mx} cy={my} r={MARKER_RADIUS} fill={DEFAULT_COLOR} />
+      <circle cx={mx} cy={my} r={markerR} fill={DEFAULT_COLOR} />
       <text
         x={mx} y={my}
         text-anchor="middle" dominant-baseline="central"
-        fill="white" font-size={MARKER_FONT_SIZE} font-weight="700"
+        fill="white" font-size={markerFont} font-weight="700"
       >{ann.number}</text>
     {:else if ann.type === 'arrow'}
       <line
@@ -195,7 +213,7 @@
         x2={px(ann.toX, naturalWidth)} y2={px(ann.toY, naturalHeight)}
         stroke={ann.strokeColor ?? DEFAULT_COLOR}
         stroke-width={ARROW_STROKE_WIDTH}
-        marker-end="url(#arrowhead)"
+        marker-end={`url(#${arrowId})`}
         vector-effect="non-scaling-stroke"
       />
     {:else if ann.type === 'line'}
@@ -305,6 +323,8 @@
     overflow: auto;
     flex: 1;
     min-height: 0;
+    /* 이미지 바깥으로 나간 마커/번호가 잘리지 않도록 여유 공간 확보 */
+    padding: 24px;
   }
 
   .modal-image-wrap .image-container {
@@ -315,7 +335,8 @@
   .modal-image-wrap img {
     width: auto;
     max-width: 100%;
-    max-height: 80vh;
+    /* padding(24px × 2)만큼 빼서 스크롤이 생기지 않도록 */
+    max-height: calc(80vh - 48px);
     height: auto;
     display: block;
   }
