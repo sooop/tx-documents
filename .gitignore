@@ -21,5 +21,8 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
+# 어노테이션 작업용 원본 이미지 (배포 불필요)
+public/images/**/.originals/
+
 # jetbrains setting folder
 .idea/
